@@ -1,0 +1,67 @@
+name: "🐛 Bug Report / تقرير خطأ"
+description: "Report a reproducible bug, crash, or unexpected behavior in Tidy."
+title: "[Bug]: "
+labels: ["type:bug", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please provide detailed steps to reproduce.
+        شكراً لإبلاغك عن المشكلة. يُرجى تزويدنا بالخطوات التفصيلية لإعادة إنتاجها.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Affected Package or Application / المكون المتأثر"
+      description: "Which part of the Tidy ecosystem is experiencing the bug?"
+      options:
+        - "@tidy/core (SQLite Engine, Memory, Micro-Apps)"
+        - "@tidy/cli (Terminal Interface, Clack Wizard)"
+        - "@tidy/mcp (Stdio Model Context Protocol Server)"
+        - "@tidy/skill (Agent Skill, Dispatcher, References)"
+        - "apps/desktop (Electron Studio GUI)"
+        - "apps/web (Web Management Console)"
+        - "General / Documentation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description / وصف المشكلة"
+      description: "Clear and concise explanation of what happened."
+      placeholder: "When running command X or opening view Y, the system failed with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to Reproduce / خطوات إعادة الإنتاج"
+      description: "Commands or actions to trigger the behavior."
+      placeholder: |
+        1. Run 'node bin/tidy.js ...'
+        2. Execute query '...'
+        3. See error '...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected Behavior / السلوك المتوقع"
+      description: "What did you expect to happen instead?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment Information / بيئة التشغيل"
+      description: "OS, Node.js version, and database state."
+      value: |
+        - OS: [e.g. Windows 11 / macOS Sonoma / Ubuntu 24.04]
+        - Node.js Version: [e.g. v22.12.0]
+        - Tidy Version: [e.g. 1.3.0]
+    validations:
+      required: true

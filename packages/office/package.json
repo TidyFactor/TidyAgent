@@ -1,0 +1,27 @@
+{
+  "name": "@tidy/office",
+  "version": "1.0.0",
+  "description": "Sovereign Personal & Small Business Office Suite Pack for Tidy Ecosystem (CRM, Invoicing, Proposals, Cashflow, Calendar)",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node tests/run.js"
+  },
+  "keywords": [
+    "tidy",
+    "office",
+    "crm",
+    "invoicing",
+    "proposals",
+    "cashflow",
+    "sovereign"
+  ],
+  "author": "TidyFactor Team",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "peerDependencies": {
+    "@tidy/core": ">=1.4.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "tidy",
+  "version": "1.4.0",
+  "displayName": "Tidy — Sovereign Personal Assistant",
+  "description": "Sovereign Personal Assistant Agent with persistent SQLite Memory, CLI engine, and local Stdio MCP Server",
+  "license": "Apache-2.0",
+  "tier": "community",
+  "ecosystem": "TidyFactor",
+  "voice": "concise_expert",
+  "locale": "ar",
+  "author": "TidyFactor Team"
+}

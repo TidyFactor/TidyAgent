@@ -1,0 +1,22 @@
+{
+  "name": "@tidy/mcp",
+  "version": "1.4.1",
+  "description": "Tidy Local Stdio Model Context Protocol (MCP) Server",
+  "main": "src/server.js",
+  "bin": {
+    "tidy-mcp": "src/server.js"
+  },
+  "license": "Apache-2.0",
+  "author": "TidyFactor Team",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "keywords": [
+    "tidy",
+    "tidyfactor",
+    "mcp",
+    "model-context-protocol",
+    "stdio",
+    "json-rpc"
+  ]
+}

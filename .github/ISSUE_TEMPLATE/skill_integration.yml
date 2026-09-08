@@ -1,0 +1,40 @@
+name: "🧩 Community Skill Integration / دمج مهارة مجتمعية"
+description: "Propose integrating a new TidyFactor Skills-LAB skill as a managed subagent in Tidy."
+title: "[Skill]: Integrate tidyfactor-"
+labels: ["area:skills", "type:integration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tidy automatically bridges community skills into context-injected subagents.
+        يقوم تايدي بتحويل مهارات Skills-LAB المجتمعية تلقائياً إلى وكلاء فرعيين محقوني السياق.
+
+  - type: input
+    id: skill_name
+    attributes:
+      label: "Skill Name / اسم المهارة"
+      placeholder: "tidyfactor-marketing, tidyfactor-next, etc."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: "Operational Domain / المجال التشغيلي"
+      options:
+        - "tech (Coding, Frameworks, Architecture)"
+        - "marketing (Campaigns, Social, Growth, Copy)"
+        - "design (UI, UX, Layout, Styling)"
+        - "docs (Documentation, References, Guides)"
+        - "ops (GitHub, Infrastructure, Hygiene, CI/CD)"
+        - "general"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: "Autonomous Use Case / سيناريو الاستخدام"
+      description: "How will Tidy agents leverage this skill during tasks or brief synthesis?"
+    validations:
+      required: true

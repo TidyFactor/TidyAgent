@@ -1,0 +1,56 @@
+{
+  "name": "@tidy/desktop",
+  "version": "1.4.1",
+  "description": "Tidy Studio — Windows & Cross-Platform Sovereign Personal Assistant Management Desktop Application",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:nsis": "electron-builder --win nsis",
+    "build:portable": "electron-builder --win portable",
+    "generate-icons": "node scripts/generate_icons.js"
+  },
+  "license": "Apache-2.0",
+  "author": "TidyFactor Team",
+  "devDependencies": {
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.tidyfactor.tidy",
+    "productName": "Tidy Studio",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "Tidy-Studio-${target}-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Tidy Studio",
+      "uninstallDisplayName": "Tidy Studio Sovereign Assistant"
+    },
+    "portable": {
+      "artifactName": "Tidy-Studio-Portable-${version}.exe"
+    },
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    }
+  }
+}

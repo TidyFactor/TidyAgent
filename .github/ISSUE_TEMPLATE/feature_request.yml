@@ -1,0 +1,50 @@
+name: "✨ Feature Request / طلب ميزة جديدة"
+description: "Suggest a new idea, capability, micro-app, or architecture improvement for Tidy."
+title: "[Feature]: "
+labels: ["type:feature", "status:discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make Tidy more sovereign, faster, or more useful? Let us know!
+        هل لديك فكرة لجعل تايدي أكثر سيادية أو سرعة أو فائدة؟ يسعدنا سماع اقتراحك!
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Target Domain / المجال المستهدف"
+      options:
+        - "Cognitive Memory & FTS5 Recall"
+        - "Sub-Agents & Skills Orchestration"
+        - "Micro-Apps (Tasks, Snippets, Journal, Vault)"
+        - "CLI & Terminal Experience"
+        - "MCP Protocol & IDE Agent Tools"
+        - "Desktop Studio GUI (Electron)"
+        - "Web Console Dashboard"
+        - "Developer Experience & Documentation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or Opportunity / المشكلة أو الفرصة"
+      description: "What friction or missing capability does this feature solve?"
+      placeholder: "Currently, doing X requires Y, which is slow or cumbersome because..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution / الحل المقترح"
+      description: "Describe how you envision this working from a user or architectural standpoint."
+      placeholder: "Add a command / tool / view that..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered / بدائل تمت دراستها"
+      description: "Did you consider other approaches or workarounds?"

@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tidy Studio — Sovereign Assistant & Memory OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  </noscript>
+  <link rel="stylesheet" href="qahera.css">
+  <link rel="stylesheet" href="qahera-themes.css">
+  <link rel="stylesheet" href="css/01-variables.css">
+  <link rel="stylesheet" href="css/02-layout.css">
+  <link rel="stylesheet" href="css/03-components.css">
+  <link rel="stylesheet" href="css/04-apps.css">
+</head>
+<body data-theme="zeitoun" data-mode="light">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg class="qhr-icon qhr-icon--brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+        </div>
+        <div class="brand-text">
+          <h2>Tidy Studio</h2>
+          <span class="version-pill">v1.4.1 Sovereign</span>
+        </div>
+      </div>
+
+      <div class="workspace-badge" id="currentWorkspaceBadge">
+        <span class="badge-dot"></span>
+        <div class="badge-info">
+          <span class="badge-label">Active Workspace</span>
+          <span class="badge-name" id="activeWorkspaceName">General Workspace</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">PLATFORM</div>
+        <button class="nav-item active" data-tab="overview">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg></span> Overview
+        </button>
+        <button class="nav-item" data-tab="memory">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span> Memory Explorer
+        </button>
+        <button class="nav-item" data-tab="tasks">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span> Tasks Board
+        </button>
+        <button class="nav-item" data-tab="subagents">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg></span> Subagents Hub
+        </button>
+
+        <div class="nav-section-title">MICRO-APPS</div>
+        <button class="nav-item" data-tab="snippets">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></span> Code Snippets
+        </button>
+        <button class="nav-item" data-tab="journal">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></span> Daily Journal
+        </button>
+        <button class="nav-item" data-tab="vault">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span> Vault & Secrets
+        </button>
+
+        <div class="nav-section-title">OFFICE SUITE</div>
+        <button class="nav-item" data-tab="crm">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span> CRM Pipeline
+        </button>
+        <button class="nav-item" data-tab="invoices">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg></span> Invoices & Billing
+        </button>
+        <button class="nav-item" data-tab="cashflow">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></span> Cashflow & P&L
+        </button>
+
+        <div class="nav-section-title">SYSTEM</div>
+        <button class="nav-item" data-tab="settings">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span> Settings & Health
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="storage-status">
+          <span class="status-indicator online"></span>
+          <span class="status-text" id="storagePathLabel">SQLite SSOT: Active</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-bar">
+        <div class="top-bar-start">
+          <div class="global-search-wrap">
+            <span class="search-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></span>
+            <input type="text" id="globalSearchInput" placeholder="Quick Search Memory (FTS5 BM25)... Press / to focus" />
+            <span class="search-kbd-hint"><kbd>/</kbd></span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-theme-toggle" id="btnToggleTheme" title="Toggle Theme (Dark / Light)">
+            <span id="themeToggleIcon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          </button>
+
+          <button class="btn-lang-toggle" id="btnToggleLang" title="Toggle Language / تبديل اللغة">
+            <span id="langToggleIcon"></span>
+          </button>
+
+          <div class="select-container">
+            <select id="workspaceSelector" class="workspace-select" title="Switch Workspace Context">
+              <option value="ctx_general">General Workspace</option>
+              <option value="ctx_dev">Software Engineering (dev) •</option>
+              <option value="ctx_marketing">Marketing Growth</option>
+              <option value="ctx_personal">Personal Assistant</option>
+            </select>
+          </div>
+
+          <!-- Unified "+ New" Dropdown CTA -->
+          <div class="qhr-dropdown" id="quickNewDropdown">
+            <button class="btn btn-primary qhr-dropdown-trigger" id="btnQuickNew" type="button" aria-haspopup="true" aria-expanded="false">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+              <span id="btnQuickNewText">جديد</span>
+              <svg class="qhr-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="qhr-dropdown-menu" id="quickNewMenu" role="menu">
+              <button class="qhr-dropdown-item" data-action="new-memory" role="menuitem">
+                <span class="dropdown-item-icon memory-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleMemory">+ ذاكرة جديدة</span>
+                  <span class="dropdown-item-desc" id="itemDescMemory">حفظ قرار أو حقيقة في SQLite</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-invoice" role="menuitem">
+                <span class="dropdown-item-icon invoice-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleInvoice">+ فاتورة جديدة</span>
+                  <span class="dropdown-item-desc" id="itemDescInvoice">إصدار مطالبة مالية رسمية</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-task" role="menuitem">
+                <span class="dropdown-item-icon task-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleTask">+ مهمة جديدة</span>
+                  <span class="dropdown-item-desc" id="itemDescTask">إسناد مهمة بأولوية وسياق</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-proposal" role="menuitem">
+                <span class="dropdown-item-icon proposal-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleProposal">+ عرض تجاري</span>
+                  <span class="dropdown-item-desc" id="itemDescProposal">إنشاء مقترح تعاقد وصفقة</span>
+                </div>
+              </button>
+
+              <div class="qhr-dropdown-divider"></div>
+
+              <button class="qhr-dropdown-item" data-action="new-client" role="menuitem">
+                <span class="dropdown-item-icon client-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleClient">+ عميل جديد</span>
+                  <span class="dropdown-item-desc" id="itemDescClient">إضافة جهة أو شركة إلى الـ CRM</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-expense" role="menuitem">
+                <span class="dropdown-item-icon expense-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleExpense">+ تسجيل مصروف</span>
+                  <span class="dropdown-item-desc" id="itemDescExpense">قيد تكاليف تشغيلية وخوادم</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-snippet" role="menuitem">
+                <span class="dropdown-item-icon snippet-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleSnippet">+ قصاصة برمجية</span>
+                  <span class="dropdown-item-desc" id="itemDescSnippet">حفظ قالب أو كود متكرر</span>
+                </div>
+              </button>
+
+              <button class="qhr-dropdown-item" data-action="new-journal" role="menuitem">
+                <span class="dropdown-item-icon journal-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title" id="itemTitleJournal">+ تدوينة يومية</span>
+                  <span class="dropdown-item-desc" id="itemDescJournal">تسجيل إنجاز أو فكرة لليوم</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Tab Content Container -->
+      <div class="content-body">
+        
+        <!-- Tab 1: Overview -->
+        <section class="tab-pane active" id="pane-overview">
+          <div class="section-header">
+            <div class="section-title-block">
+              <div class="section-kicker">
+                <span class="kicker-dot"></span>
+                <span class="kicker-text" id="kickerOverview">SOVEREIGN ENGINE & MEMORY TELEMETRY</span>
+              </div>
+              <h1 id="headerTitleOverview">System Overview</h1>
+              <p class="subtitle" id="headerSubtitleOverview">Real-time telemetry and state of your sovereign SQLite database</p>
+            </div>
+            <button class="btn btn-sm btn-outline btn-refresh" id="btnRefreshStats">
+              <span class="btn-icon-spin"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>
+              <span id="btnRefreshText">Refresh</span>
+            </button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon cyan">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              </div>
+              <div class="stat-details">
+                <div class="stat-header-row">
+                  <span class="stat-label">Stored Memories</span>
+                  <span class="stat-chip cyan">FTS5 BM25</span>
+                </div>
+                <span class="stat-value" id="statMemoriesCount">--</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon yellow">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <div class="stat-details">
+                <div class="stat-header-row">
+                  <span class="stat-label">Pending Tasks</span>
+                  <span class="stat-chip yellow">ACTIVE</span>
+                </div>
+                <span class="stat-value" id="statTasksCount">--</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon purple">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+              </div>
+              <div class="stat-details">
+                <div class="stat-header-row">
+                  <span class="stat-label">Subagents Loaded</span>
+                  <span class="stat-chip purple">DISPATCHER</span>
+                </div>
+                <span class="stat-value" id="statSubagentsCount">4</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <div class="stat-details">
+                <div class="stat-header-row">
+                  <span class="stat-label">Engine Mode</span>
+                  <span class="stat-chip green">SQLITE SSOT</span>
+                </div>
+                <span class="stat-value">WAL (Active)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-column-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title-wrap">
+                  <span class="panel-dot cyan"></span>
+                  <h3 id="panelHeaderRecentMemories">Recent Memories & Decisions</h3>
+                </div>
+                <button class="link-btn" data-goto="memory" id="linkViewAllMemories">View All →</button>
+              </div>
+              <div class="panel-body" id="overviewRecentMemories">
+                <div class="skeleton-loader">Loading memories...</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title-wrap">
+                  <span class="panel-dot amber"></span>
+                  <h3 id="panelHeaderTopTasks">Top Priority Tasks</h3>
+                </div>
+                <button class="link-btn" data-goto="tasks" id="linkManageTasks">Manage Tasks →</button>
+              </div>
+              <div class="panel-body" id="overviewTopTasks">
+                <div class="skeleton-loader">Loading tasks...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 2: Memory Explorer -->
+        <section class="tab-pane" id="pane-memory">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleMemory">Memory Explorer</h1>
+              <p class="subtitle" id="headerSubtitleMemory">Search, filter, and inspect persistent facts, rules, and architectural decisions</p>
+            </div>
+            <button class="btn btn-primary" id="btnCreateMemory">+ Add Memory Node</button>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Filter by Category:</label>
+              <select id="memoryCategoryFilter" class="form-select">
+                <option value="">All Categories</option>
+                <option value="fact">Fact</option>
+                <option value="decision">Decision</option>
+                <option value="pattern">Pattern</option>
+                <option value="preference">Preference</option>
+                <option value="task">Task</option>
+                <option value="rule">Rule</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Tier:</label>
+              <select id="memoryTierFilter" class="form-select">
+                <option value="">All Tiers</option>
+                <option value="core">Core (Permanent)</option>
+                <option value="project">Project</option>
+                <option value="session">Session</option>
+                <option value="ephemeral">Ephemeral</option>
+              </select>
+            </div>
+
+            <div class="search-input-wrap">
+              <input type="text" id="memorySearchInput" class="form-input" placeholder="Search with FTS5 BM25..." />
+            </div>
+          </div>
+
+          <div class="memory-cards-grid" id="memoryListContainer">
+            <div class="skeleton-loader">Loading memory nodes...</div>
+          </div>
+        </section>
+
+        <!-- Tab 3: Tasks Board -->
+        <section class="tab-pane" id="pane-tasks">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleTasks">Tasks Management</h1>
+              <p class="subtitle" id="headerSubtitleTasks">SQLite-backed task tracking with priority triage and status lifecycle</p>
+            </div>
+            <button class="btn btn-primary" id="btnCreateTask">+ New Task</button>
+          </div>
+
+          <div class="tasks-container">
+            <div class="task-column">
+              <div class="column-header urgent">
+                <span class="column-header-title">
+                  <svg class="qhr-icon qhr-icon--danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+                  <span id="labelUrgentTasks">Urgent Priority</span>
+                </span>
+                <span class="count-badge" id="countUrgentTasks">0</span>
+              </div>
+              <div class="task-cards-list" id="urgentTasksList"></div>
+            </div>
+
+            <div class="task-column">
+              <div class="column-header high">
+                <span class="column-header-title">
+                  <svg class="qhr-icon qhr-icon--warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  <span id="labelHighTasks">High Priority</span>
+                </span>
+                <span class="count-badge" id="countHighTasks">0</span>
+              </div>
+              <div class="task-cards-list" id="highTasksList"></div>
+            </div>
+
+            <div class="task-column">
+              <div class="column-header medium">
+                <span class="column-header-title">
+                  <svg class="qhr-icon qhr-icon--info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                  <span id="labelMediumTasks">Medium / Normal</span>
+                </span>
+                <span class="count-badge" id="countMediumTasks">0</span>
+              </div>
+              <div class="task-cards-list" id="mediumTasksList"></div>
+            </div>
+
+            <div class="task-column">
+              <div class="column-header completed">
+                <span class="column-header-title">
+                  <svg class="qhr-icon qhr-icon--success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                  <span id="labelCompletedTasks">Completed</span>
+                </span>
+                <span class="count-badge" id="countCompletedTasks">0</span>
+              </div>
+              <div class="task-cards-list" id="completedTasksList"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 4: Subagents Hub -->
+        <section class="tab-pane" id="pane-subagents">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleSubagents">Subagents & Community Skills Hub</h1>
+              <p class="subtitle" id="headerSubtitleSubagents">Autonomous AI subagents and community skills with 3-Ring Context Window injection</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" id="btnScanCommunitySkills">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span id="btnTextScanSkills">Scan Skills</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="subagents-grid" id="subagentsListContainer">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div class="panel subagent-runner-panel">
+            <div class="panel-header">
+              <h3>Direct Subagent Dispatcher & Brief Synthesizer</h3>
+            </div>
+            <div class="panel-body">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label>Target Subagent / Skill:</label>
+                  <select id="dispatchAgentSelect" class="form-select">
+                    <option value="planner">@planner — Task & Priority Strategist</option>
+                    <option value="coder">@coder — Software Engineer & Code Reviewer</option>
+                    <option value="researcher">@researcher — Research & Knowledge Synthesizer</option>
+                    <option value="scribe">@scribe — Decisions & Documentation Logger</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Task Instruction or Mission:</label>
+                <textarea id="dispatchTaskPrompt" class="form-textarea" rows="3" placeholder="Enter instructions for the agent..."></textarea>
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="btnDispatchSubagent">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>Dispatch Subagent</span>
+                </button>
+                <button class="btn btn-secondary" id="btnGenerateBrief">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  <span>Generate Task Brief (3-Ring Context)</span>
+                </button>
+              </div>
+
+              <div class="subagent-result-box" id="subagentResultBox" style="display: none;">
+                <h4>Execution Output:</h4>
+                <pre id="subagentResultText"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 5: Snippets -->
+        <section class="tab-pane" id="pane-snippets">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleSnippets">Code Snippets Library</h1>
+              <p class="subtitle" id="headerSubtitleSnippets">Reusable prompt templates, configurations, and code patterns</p>
+            </div>
+            <button class="btn btn-primary" id="btnCreateSnippet">+ Add Snippet</button>
+          </div>
+
+          <div class="snippets-grid" id="snippetsListContainer"></div>
+        </section>
+
+        <!-- Tab 6: Journal -->
+        <section class="tab-pane" id="pane-journal">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleJournal">Daily Worklog & Journal</h1>
+              <p class="subtitle" id="headerSubtitleJournal">Session notes, personal reflections, and worklog history</p>
+            </div>
+            <button class="btn btn-primary" id="btnCreateJournal">+ Log Entry</button>
+          </div>
+
+          <div class="journal-timeline" id="journalListContainer"></div>
+        </section>
+
+        <!-- Tab 7: Vault -->
+        <section class="tab-pane" id="pane-vault">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleVault">Vault & Secret Keys</h1>
+              <p class="subtitle" id="headerSubtitleVault">Secure local key-value configuration stored directly in SQLite</p>
+            </div>
+            <button class="btn btn-primary" id="btnCreateVaultSecret">+ Add Secret Key</button>
+          </div>
+
+          <div class="panel">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Secret Key</th>
+                  <th>Value</th>
+                  <th>Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="vaultTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Tab 8: Settings & Health -->
+        <section class="tab-pane" id="pane-settings">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleSettings">Settings & SQLite Diagnostics</h1>
+              <p class="subtitle" id="headerSubtitleSettings">Database location, performance PRAGMAs, and system identity</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><h3>Storage Diagnostics</h3></div>
+            <div class="panel-body">
+              <div class="diagnostic-row">
+                <span class="diag-label">SQLite Database Path</span>
+                <span class="diag-value mono" id="diagDbPath">~/.tidy/tidy.db</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Journal Mode:</span>
+                <span class="diag-value">WAL (Write-Ahead Logging)</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">FTS5 Tokenizer:</span>
+                <span class="diag-value">unicode61 remove_diacritics 2</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Cache Size:</span>
+                <span class="diag-value">-64000 (64MB RAM Memory Cache)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header"><h3>Database Operations & Maintenance</h3></div>
+            <div class="panel-body">
+              <p class="subtitle" style="margin-bottom: 16px;">Perform atomic SQLite operations, WAL truncation, and integrity checks.</p>
+              <div class="db-actions-grid">
+                <div class="db-action-card">
+                  <div class="db-action-info">
+                    <h4>Snapshot Backup</h4>
+                    <p>Creates an atomic VACUUM INTO snapshot of the database.</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btnDbBackup">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span>Create Backup</span>
+                  </button>
+                </div>
+                <div class="db-action-card">
+                  <div class="db-action-info">
+                    <h4>Checkpoint WAL</h4>
+                    <p>Flushes and truncates the WAL journal into the main database file.</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btnDbCheckpoint">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <span>Checkpoint WAL</span>
+                  </button>
+                </div>
+                <div class="db-action-card">
+                  <div class="db-action-info">
+                    <h4>Integrity Check</h4>
+                    <p>Executes PRAGMA integrity_check to verify structural health.</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btnDbIntegrity">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    <span>Run Integrity Check</span>
+                  </button>
+                </div>
+              </div>
+              <div id="dbActionResult" class="db-action-result" style="display: none; margin-top: 14px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: CRM Pipeline (@tidy/office) -->
+        <section class="tab-pane" id="pane-crm">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleCrm">CRM & Client Pipeline</h1>
+              <p class="subtitle" id="headerSubtitleCrm">B2B client accounts, lead statuses, deal values, and AI executive dossiers</p>
+            </div>
+            <button class="btn btn-primary" id="btnOpenNewClient">+ Add Client</button>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Status Filter:</label>
+              <select id="crmStatusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="lead">Lead</option>
+                <option value="prospect">Prospect</option>
+                <option value="active">Active Client</option>
+                <option value="inactive">Inactive</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+            <div class="search-input-wrap">
+              <input type="text" id="crmSearchInput" class="form-input" placeholder="Search clients by name, company, email..." />
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="crmClientsTable">
+              <thead>
+                <tr>
+                  <th>Client / Company</th>
+                  <th>Status</th>
+                  <th>Budget / Deal</th>
+                  <th>Contact</th>
+                  <th>Created</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="crmClientsTableBody">
+                <tr><td colspan="6" class="skeleton-loader">Loading CRM accounts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Tab: Invoices & Billing (@tidy/office) -->
+        <section class="tab-pane" id="pane-invoices">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleInvoices">Invoices & Billing Engine</h1>
+              <p class="subtitle" id="headerSubtitleInvoices">Itemized invoices, automatic tax calculations, line item discounts, and payment tracking</p>
+            </div>
+            <button class="btn btn-primary" id="btnOpenNewInvoice">+ Issue Invoice</button>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Status Filter:</label>
+              <select id="invoicesStatusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="draft">Draft</option>
+                <option value="pending">Pending Payment</option>
+                <option value="paid">Paid</option>
+                <option value="partially_paid">Partially Paid</option>
+                <option value="overdue">Overdue</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="invoicesTable">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Client</th>
+                  <th>Status</th>
+                  <th>Subtotal</th>
+                  <th>Tax</th>
+                  <th>Total Amount</th>
+                  <th>Due Date</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoicesTableBody">
+                <tr><td colspan="8" class="skeleton-loader">Loading invoices...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Tab: Cashflow & P&L (@tidy/office) -->
+        <section class="tab-pane" id="pane-cashflow">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleCashflow">Cashflow & Financial Telemetry</h1>
+              <p class="subtitle" id="headerSubtitleCashflow">Operational expenses, collected revenue, net cashflow profit, and pending receivables</p>
+            </div>
+            <button class="btn btn-primary" id="btnOpenNewExpense">+ Record Expense</button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <div class="stat-details">
+                <span class="stat-label">Collected Revenue</span>
+                <span class="stat-value" id="statCollectedRevenue">$0.00</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon yellow">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <div class="stat-details">
+                <span class="stat-label">Total Expenses</span>
+                <span class="stat-value" id="statTotalExpenses">$0.00</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon cyan">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+              <div class="stat-details">
+                <span class="stat-label">Net Profit (Cashflow)</span>
+                <span class="stat-value" id="statNetProfit">$0.00</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-details">
+                <span class="stat-label">Pending Receivables</span>
+                <span class="stat-value" id="statPendingReceivables">$0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-column-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Recent Operational Expenses</h3>
+              </div>
+              <div class="panel-body" id="cashflowExpensesList">
+                <div class="skeleton-loader">Loading expenses...</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Expense Breakdown by Category</h3>
+              </div>
+              <div class="panel-body" id="cashflowCategoryBreakdown">
+                <div class="skeleton-loader">Loading category distribution...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 11: Settings & Health -->
+        <section class="tab-pane" id="pane-settings">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">
+                <span class="kicker-dot"></span>
+                <span id="kickerSettings">تخصيص المنظومة وتفضيلات أطلس القاهرة</span>
+              </div>
+              <h1 id="headerTitleSettings">الإعدادات وتخصيص المظهر</h1>
+              <p class="subtitle" id="headerSubtitleSettings">التحكم في الهوية البصرية، اختيار ثيمات أحياء القاهرة الـ 12، وإدارة صحة قاعدة بيانات SQLite</p>
+            </div>
+            <button class="btn btn-secondary" id="btnResetThemeSettings" title="إعادة ضبط الهوية الافتراضية">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span id="btnResetThemeText">إعادة ضبط الافتراضي</span>
+            </button>
+          </div>
+
+          <!-- Section 1: Cairo Design Atlas Themes -->
+          <div class="panel" style="margin-bottom: 24px;">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-dot cyan"></span>
+                <h3 id="panelHeaderThemes">أطلس تصميم القاهرة — Cairo Design Atlas (12 ثيماً معمارياً)</h3>
+              </div>
+              <span class="badge lead" id="activeThemePill">الزيتون (zeitoun) نشط</span>
+            </div>
+            <div class="panel-body">
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" id="themeGalleryHelp">
+                اختر الحي القاهري المفضل لمنظومتك. تنعكس فلسفة التصميم المعمارية فوراً على كافة البطاقات والألوان وحواف العناصر:
+              </p>
+              <div class="theme-gallery-grid" id="themeGalleryGrid">
+                <!-- Injected dynamically via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Database Health & Maintenance -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-dot amber"></span>
+                <h3 id="panelHeaderDbMaintenance">صيانة قاعدة بيانات SQLite السيادية (SSOT)</h3>
+              </div>
+              <span class="badge paid">WAL Mode (Active)</span>
+            </div>
+            <div class="panel-body">
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" id="dbMaintenanceHelp">
+                عمليات إدارة وصيانة محرك البيانات المدمج. جميع الإجراءات فورية ولا تعطل قراءة أو كتابة الذاكرة:
+              </p>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+                <button class="btn btn-secondary" id="btnDbCheckpoint">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  <span id="btnTextCheckpoint">تنفيذ WAL Checkpoint</span>
+                </button>
+                <button class="btn btn-secondary" id="btnDbIntegrity">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  <span id="btnTextIntegrity">فحص السلامة Integrity Check</span>
+                </button>
+                <button class="btn btn-secondary" id="btnDbBackup">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                  <span id="btnTextBackup">إنشاء نسخة احتياطية Backup</span>
+                </button>
+              </div>
+              <div id="dbActionResult" style="display: none; font-family: var(--font-mono); font-size: 12.5px; padding: 12px 14px; background: var(--qhr-surface-muted, #F1F5F9); border: 1px solid var(--qhr-border-subtle, #CBD5E1); border-radius: 6px; color: var(--text-primary);">
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: New Memory -->
+  <div class="modal-backdrop" id="modalNewMemory">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Store New Memory / Decision</h3>
+        <button class="modal-close" data-close="modalNewMemory">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Memory Content (Fact, Rule, or Architectural Decision):</label>
+          <textarea id="inputMemoryContent" class="form-textarea" rows="4" placeholder="Enter memory details..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Category:</label>
+            <select id="inputMemoryCategory" class="form-select">
+              <option value="fact">Fact</option>
+              <option value="decision" selected>Decision</option>
+              <option value="pattern">Pattern</option>
+              <option value="preference">Preference</option>
+              <option value="rule">Rule</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Importance Rating:</label>
+            <select id="inputMemoryImportance" class="form-select">
+              <option value="5">★★★★★ 5 - Critical</option>
+              <option value="4">★★★★☆ 4 - High</option>
+              <option value="3" selected>★★★☆☆ 3 - Medium</option>
+              <option value="2">★★☆☆☆ 2 - Low</option>
+              <option value="1">★☆☆☆☆ 1 - Ephemeral</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewMemory">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveMemorySubmit">Save Memory</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Task -->
+  <div class="modal-backdrop" id="modalNewTask">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create New Task</h3>
+        <button class="modal-close" data-close="modalNewTask">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Task Title:</label>
+          <input type="text" id="inputTaskTitle" class="form-input" placeholder="e.g. Implement authentication middleware" />
+        </div>
+        <div class="form-group">
+          <label>Description (optional):</label>
+          <textarea id="inputTaskDescription" class="form-textarea" rows="3" placeholder="Additional details..."></textarea>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Domain Tag:</label>
+            <select id="inputTaskDomain" class="form-select">
+              <option value="general" selected>General</option>
+              <option value="tech">Tech / Dev</option>
+              <option value="marketing">Marketing & Growth</option>
+              <option value="design">Design & UI</option>
+              <option value="docs">Docs & Architecture</option>
+              <option value="ops">Operations</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Assigned Agent:</label>
+            <select id="inputTaskAgent" class="form-select">
+              <option value="">(Unassigned)</option>
+              <option value="coder">@coder</option>
+              <option value="planner">@planner</option>
+              <option value="marketing">@marketing</option>
+              <option value="design">@design</option>
+              <option value="doc">@doc</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Priority Level:</label>
+          <select id="inputTaskPriority" class="form-select">
+            <option value="urgent">Urgent Priority</option>
+            <option value="high">High Priority</option>
+            <option value="medium" selected>Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewTask">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveTaskSubmit">Create Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Task Brief Viewer -->
+  <div class="modal-backdrop" id="modalTaskBrief">
+    <div class="modal-dialog" style="max-width: 720px; width: 90%;">
+      <div class="modal-header">
+        <h3 id="briefModalTitle">Task Brief (3-Ring Context)</h3>
+        <button class="modal-close" data-close="modalTaskBrief">×</button>
+      </div>
+      <div class="modal-body">
+        <pre id="briefContentText" style="white-space: pre-wrap; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; max-height: 480px; overflow-y: auto; background: var(--bg-surface-2); padding: 16px; border-radius: 8px; border: 1px solid var(--border-subtle); color: var(--text-primary);"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalTaskBrief">Close</button>
+        <button class="btn btn-primary" id="btnCopyBrief">
+          <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          <span>Copy Markdown Brief</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Snippet -->
+  <div class="modal-backdrop" id="modalNewSnippet">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Code Snippet</h3>
+        <button class="modal-close" data-close="modalNewSnippet">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Snippet Title:</label>
+          <input type="text" id="inputSnippetTitle" class="form-input" placeholder="e.g. SQLite WAL Initialization" />
+        </div>
+        <div class="form-group">
+          <label>Language:</label>
+          <select id="inputSnippetLanguage" class="form-select">
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="python">Python</option>
+            <option value="sql">SQL</option>
+            <option value="bash">Bash / Shell</option>
+            <option value="json">JSON</option>
+            <option value="markdown">Markdown</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Code / Prompt Template:</label>
+          <textarea id="inputSnippetCode" class="form-textarea" rows="6" placeholder="Paste code or template here..." style="font-family: var(--font-mono);"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma-separated):</label>
+          <input type="text" id="inputSnippetTags" class="form-input" placeholder="sqlite, pragma, perf" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewSnippet">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveSnippetSubmit">Save Snippet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Journal Entry -->
+  <div class="modal-backdrop" id="modalNewJournal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Log Daily Journal Entry</h3>
+        <button class="modal-close" data-close="modalNewJournal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Title / Focus:</label>
+          <input type="text" id="inputJournalTitle" class="form-input" placeholder="e.g. Phase 2 Desktop Studio Completion" />
+        </div>
+        <div class="form-group">
+          <label>Mood / State:</label>
+          <select id="inputJournalMood" class="form-select">
+            <option value="focused">Focused</option>
+            <option value="productive">Productive</option>
+            <option value="reflective">Reflective</option>
+            <option value="creative">Creative</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Journal Notes & Reflections:</label>
+          <textarea id="inputJournalEntry" class="form-textarea" rows="6" placeholder="What was achieved today? Key insights or blockers..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewJournal">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveJournalSubmit">Save Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Vault Secret -->
+  <div class="modal-backdrop" id="modalNewVaultSecret">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Vault Secret</h3>
+        <button class="modal-close" data-close="modalNewVaultSecret">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Secret Key Name:</label>
+          <input type="text" id="inputVaultKey" class="form-input" placeholder="e.g. ANTHROPIC_API_KEY" style="font-family: var(--font-mono); text-transform: uppercase;" />
+        </div>
+        <div class="form-group">
+          <label>Secret Value:</label>
+          <textarea id="inputVaultValue" class="form-textarea" rows="3" placeholder="Enter sensitive token or credential..." style="font-family: var(--font-mono);"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewVaultSecret">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveVaultSubmit">Save Secret</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Deletion -->
+  <div class="modal-backdrop" id="modalConfirmDelete">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>Confirm Deletion</h3>
+        <button class="modal-close" data-close="modalConfirmDelete">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmDeleteText" style="color: var(--text-secondary); line-height: 1.5;">Are you sure you want to delete this item? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalConfirmDelete">Cancel</button>
+        <button class="btn btn-danger" id="btnConfirmDeleteSubmit" style="background: var(--accent-red); color: white; border: none;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New CRM Client -->
+  <div class="modal-backdrop" id="modalNewClient">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add New B2B Client</h3>
+        <button class="modal-close" data-close="modalNewClient">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Client / Contact Name:</label>
+          <input type="text" id="inputClientName" class="form-input" placeholder="e.g. Acme Corp or John Doe" />
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Company:</label>
+            <input type="text" id="inputClientCompany" class="form-input" placeholder="e.g. Acme Industries" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Industry:</label>
+            <input type="text" id="inputClientIndustry" class="form-input" placeholder="e.g. Fintech, SaaS" />
+          </div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Email:</label>
+            <input type="email" id="inputClientEmail" class="form-input" placeholder="contact@acme.com" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Phone:</label>
+            <input type="text" id="inputClientPhone" class="form-input" placeholder="+1 555-0199" />
+          </div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Status:</label>
+            <select id="inputClientStatus" class="form-select">
+              <option value="lead" selected>Lead</option>
+              <option value="prospect">Prospect</option>
+              <option value="active">Active Client</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Budget / Deal Value (USD):</label>
+            <input type="number" id="inputClientBudget" class="form-input" placeholder="5000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes / Context:</label>
+          <textarea id="inputClientNotes" class="form-textarea" rows="3" placeholder="Initial client requirements, expectations..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewClient">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveClientSubmit">Save Client</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Invoice -->
+  <div class="modal-backdrop" id="modalNewInvoice">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3>Issue Official Invoice</h3>
+        <button class="modal-close" data-close="modalNewInvoice">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Target Client:</label>
+            <select id="inputInvoiceClient" class="form-select"></select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Due Date:</label>
+            <input type="date" id="inputInvoiceDueDate" class="form-input" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Service / Product Line Items:</label>
+          <div id="invoiceItemsContainer" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="invoice-item-row" style="display: flex; gap: 8px;">
+              <input type="text" class="form-input flex-2 item-name" placeholder="Item / Service description" style="flex: 2;" />
+              <input type="number" class="form-input item-qty" placeholder="Qty" value="1" min="1" style="max-width: 80px;" />
+              <input type="number" class="form-input item-price" placeholder="Unit Price ($)" step="0.01" style="flex: 1;" />
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnAddInvoiceItemRow" style="margin-top: 8px;">+ Add Line Item</button>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Tax Rate (%):</label>
+            <input type="number" id="inputInvoiceTax" class="form-input" placeholder="0" value="0" min="0" max="100" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Discount Amount ($):</label>
+            <input type="number" id="inputInvoiceDiscount" class="form-input" placeholder="0" value="0" min="0" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Payment Terms & Notes:</label>
+          <textarea id="inputInvoiceNotes" class="form-textarea" rows="2" placeholder="Thank you for your business! Payment due within 14 days."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewInvoice">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveInvoiceSubmit">Create & Issue Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Expense -->
+  <div class="modal-backdrop" id="modalNewExpense">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Record Business Expense</h3>
+        <button class="modal-close" data-close="modalNewExpense">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Expense Title / Description:</label>
+          <input type="text" id="inputExpenseTitle" class="form-input" placeholder="e.g. Cloud Server Hosting or API Token Credits" />
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Amount ($):</label>
+            <input type="number" id="inputExpenseAmount" class="form-input" placeholder="49.99" step="0.01" min="0.01" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Category:</label>
+            <select id="inputExpenseCategory" class="form-select">
+              <option value="infrastructure">Infrastructure & Servers</option>
+              <option value="apis">AI & API Credits</option>
+              <option value="software">Software & SaaS</option>
+              <option value="marketing">Marketing & Ads</option>
+              <option value="office">Office & Equipment</option>
+              <option value="legal">Legal & Professional</option>
+              <option value="other" selected>Other Operating</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label>Vendor (optional):</label>
+            <input type="text" id="inputExpenseVendor" class="form-input" placeholder="e.g. Anthropic, AWS, Hetzner" />
+          </div>
+          <div class="form-group flex-1">
+            <label>Date:</label>
+            <input type="date" id="inputExpenseDate" class="form-input" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes / Receipt Reference:</label>
+          <textarea id="inputExpenseNotes" class="form-textarea" rows="2" placeholder="Optional reference notes..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewExpense">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveExpenseSubmit">Record Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Commercial Proposal -->
+  <div class="modal-backdrop" id="modalNewProposal">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="modalTitleProposal">New Commercial Proposal</h3>
+        <button class="modal-close" data-close="modalNewProposal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label id="labelProposalClient">Target Client:</label>
+            <select id="inputProposalClient" class="form-select"></select>
+          </div>
+          <div class="form-group flex-1">
+            <label id="labelProposalValidUntil">Valid Until:</label>
+            <input type="date" id="inputProposalValidUntil" class="form-input" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label id="labelProposalTitle">Proposal Title / Project:</label>
+          <input type="text" id="inputProposalTitle" class="form-input" placeholder="e.g. Enterprise Cloud Infrastructure Migration" />
+        </div>
+        <div class="form-group">
+          <label id="labelProposalAmount">Total Deal Value ($):</label>
+          <input type="number" id="inputProposalAmount" class="form-input" placeholder="12500" step="0.01" min="0" />
+        </div>
+        <div class="form-group">
+          <label id="labelProposalNotes">Scope of Work & Commercial Terms:</label>
+          <textarea id="inputProposalNotes" class="form-textarea" rows="4" placeholder="Detailed deliverables, milestones, and payment schedule..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalNewProposal">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveProposalSubmit">Create Proposal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Client Dossier Viewer -->
+  <div class="modal-backdrop" id="modalClientDossier">
+    <div class="modal-card" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3 id="dossierModalTitle">Client Executive Dossier</h3>
+        <button class="modal-close" data-close="modalClientDossier">×</button>
+      </div>
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <pre id="dossierContentPre" style="white-space: pre-wrap; font-family: var(--font-sans); background: var(--bg-surface); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); line-height: 1.6; color: var(--text-primary);"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalClientDossier">Close</button>
+        <button class="btn btn-primary" id="btnCopyDossier">
+          <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          <span>Copy Dossier Markdown</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

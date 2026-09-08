@@ -1,0 +1,334 @@
+/* ==========================================================================
+   Tidy Studio — CSS Module 01: Variables, Tokens & Theme Overrides
+   Powered by Qahera UI Kit — Canonical Specification: الزيتون (zeitoun)
+   School/Base: Suburban Aristocratic Villas & Classic Heritage
+   Mode: Day Mode (الوضع النهاري) · Density: default · Elevation: subtle
+   ========================================================================== */
+
+:root,
+[data-theme="zeitoun"][data-mode="light"],
+[data-mode="light"],
+body[data-mode="light"] {
+  /* Surfaces & Backgrounds */
+  --qhr-surface-base: #F8FAFC;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F8FAFC;
+  --qhr-surface-muted: #F1F5F9;
+
+  /* Content & Typography Tones */
+  --qhr-content-primary: #0F172A;
+  --qhr-content-secondary: #334155;
+  --qhr-text-primary: #0F172A;
+  --qhr-text-secondary: #334155;
+
+  /* Borders & Dividers */
+  --qhr-border-subtle: #CBD5E1;
+  --qhr-border-strong: #CBD5E1;
+  --qhr-color-border: #CBD5E1;
+  --qhr-border-width: 1px;
+
+  /* Brand Colors & Actions */
+  --qhr-color-primary: #1D4ED8;
+  --qhr-color-primary-bg: #1D4ED8;
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-button-primary-background: #1D4ED8;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-secondary: #F1F5F9;
+  --qhr-color-accent: #D97706;
+  --qhr-color-accent-fg: #FFFFFF;
+
+  /* Architectural Radii Matrix */
+  --qhr-radius-box: 8px;
+  --qhr-radius-field: 6px;
+  --qhr-radius-selector: 8px;
+  --qhr-radius-xl: 8px;
+  --qhr-radius-lg: 8px;
+  --qhr-radius-md: 6px;
+  --qhr-radius-sm: 8px;
+
+  /* Density & Elevation */
+  --qhr-density: default;
+  --qhr-elevation-level: subtle;
+
+  /* Signature Visual Effects */
+  --qhr-effect-glow: false;
+  --qhr-effect-glow-radius: 18px;
+  --qhr-effect-glow-opacity: 45%;
+  --qhr-effect-hard-shadow: false;
+  --qhr-effect-shadow-offset: 6px;
+  --qhr-effect-glass: false;
+  --qhr-effect-glass-blur: 18px;
+  --qhr-effect-glass-opacity: 45%;
+  --qhr-effect-scanlines: false;
+  --qhr-effect-scanlines-opacity: 75%;
+  --qhr-effect-grain: false;
+  --qhr-effect-grain-opacity: 25%;
+  --qhr-effect-ambient-mesh: false;
+  --qhr-effect-mesh-intensity: 22%;
+  --qhr-effect-accent-borders: false;
+  --qhr-effect-accent-border-width: 2px;
+
+  /* Token Bridges (1:1 with Zeitoun Canonical Spec) */
+  --bg-darkest: var(--qhr-surface-page);
+  --bg-base: var(--qhr-surface-base);
+  --bg-surface: var(--qhr-surface-elevated);
+  --bg-surface-elevated: var(--qhr-surface-elevated);
+  --bg-surface-glass: #FFFFFF;
+  --bg-card: var(--qhr-surface-card);
+  --bg-card-hover: var(--qhr-surface-muted);
+  --bg-hover: var(--qhr-surface-muted);
+
+  --border-subtle: var(--qhr-border-subtle);
+  --border-light: var(--qhr-border-subtle);
+  --border-strong: var(--qhr-border-strong);
+  --border-focus: var(--qhr-color-primary);
+
+  --text-primary: var(--qhr-content-primary);
+  --text-secondary: var(--qhr-content-secondary);
+  --text-muted: #64748B;
+  --text-dim: #94A3B8;
+
+  --accent-cyan: var(--qhr-color-primary);
+  --accent-blue: var(--qhr-color-primary);
+  --accent-yellow: var(--qhr-color-accent);
+  --accent-green: #10B981;
+  --accent-red: #EF4444;
+  --accent-purple: #8B5CF6;
+
+  --radius-xs: 4px;
+  --radius-sm: var(--qhr-radius-field);
+  --radius-md: var(--qhr-radius-box);
+  --radius-lg: var(--qhr-radius-box);
+  --radius-xl: var(--qhr-radius-xl);
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+
+  --font-heading: 'Alexandria', 'Cairo', system-ui, sans-serif;
+  --font-body: 'Cairo', 'Alexandria', system-ui, sans-serif;
+  --font-arabic: 'Cairo', 'Alexandria', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* ==========================================================================
+   Qahera UI Kit — الزيتون (zeitoun) [NIGHT MODE]
+   ========================================================================== */
+[data-theme="zeitoun"][data-mode="dark"],
+[data-mode="dark"],
+body[data-mode="dark"] {
+  --qhr-surface-base: #0B1120;
+  --qhr-surface-elevated: #131D33;
+  --qhr-surface-card: #131D33;
+  --qhr-surface-page: #0B1120;
+  --qhr-surface-muted: #1E293B;
+
+  --qhr-content-primary: #F8FAFC;
+  --qhr-content-secondary: #94A3B8;
+  --qhr-text-primary: #F8FAFC;
+  --qhr-text-secondary: #94A3B8;
+
+  --qhr-border-subtle: #1E293B;
+  --qhr-border-strong: #334155;
+  --qhr-color-border: #1E293B;
+  --qhr-border-width: 1px;
+
+  --qhr-color-primary: #3B82F6;
+  --qhr-color-primary-bg: #1D4ED8;
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-button-primary-background: #1D4ED8;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-secondary: #1E293B;
+  --qhr-color-accent: #F59E0B;
+  --qhr-color-accent-fg: #FFFFFF;
+
+  --qhr-radius-box: 8px;
+  --qhr-radius-field: 6px;
+  --qhr-radius-selector: 8px;
+  --qhr-radius-xl: 8px;
+  --qhr-radius-lg: 8px;
+  --qhr-radius-md: 6px;
+  --qhr-radius-sm: 8px;
+
+  --bg-darkest: #070B14;
+  --bg-base: #0B1120;
+  --bg-surface: #131D33;
+  --bg-surface-elevated: #18233D;
+  --bg-card: #131D33;
+  --bg-card-hover: #1E293B;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+
+  --border-subtle: #1E293B;
+  --border-light: #334155;
+  --border-strong: #334155;
+  --border-focus: #3B82F6;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-dim: #475569;
+
+  --accent-cyan: #3B82F6;
+  --accent-blue: #3B82F6;
+  --accent-yellow: #F59E0B;
+  --accent-green: #10B981;
+  --accent-red: #EF4444;
+  --accent-purple: #8B5CF6;
+
+  --radius-xs: 4px;
+  --radius-sm: var(--qhr-radius-field);
+  --radius-md: var(--qhr-radius-box);
+  --radius-lg: var(--qhr-radius-box);
+  --radius-xl: var(--qhr-radius-xl);
+  --radius-pill: 9999px;
+}
+
+/* Light Mode Specific Component Polish */
+[data-mode="light"] .app-layout {
+  background: var(--qhr-surface-page) !important;
+}
+
+[data-mode="light"] .sidebar {
+  background-color: #ffffff !important;
+  border-inline-end: 1px solid var(--qhr-border-subtle) !important;
+}
+
+[data-mode="light"] .top-bar {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid var(--qhr-border-subtle) !important;
+}
+
+[data-mode="light"] .global-search-wrap {
+  background: #ffffff !important;
+  border: 1px solid var(--qhr-border-subtle) !important;
+}
+
+[data-mode="light"] .panel,
+[data-mode="light"] .stat-card,
+[data-mode="light"] .memory-card,
+[data-mode="light"] .task-card,
+[data-mode="light"] .snippet-card,
+[data-mode="light"] .journal-card,
+[data-mode="light"] .subagent-card,
+[data-mode="light"] .table-container,
+[data-mode="light"] .modal-card,
+[data-mode="light"] .modal-dialog {
+  background: #ffffff !important;
+  border: 1px solid var(--qhr-border-subtle) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+[data-mode="light"] .stat-card::before {
+  display: none !important;
+}
+
+[data-mode="light"] .brand-text h2,
+[data-mode="light"] .section-header h1,
+[data-mode="light"] .stat-value,
+[data-mode="light"] .panel-header h3,
+[data-mode="light"] h1,
+[data-mode="light"] h2,
+[data-mode="light"] h3,
+[data-mode="light"] h4 {
+  color: var(--qhr-content-primary) !important;
+}
+
+[data-mode="light"] .section-kicker {
+  color: var(--qhr-color-primary) !important;
+  font-weight: 800 !important;
+}
+
+[data-mode="light"] .kicker-dot {
+  background: var(--qhr-color-primary) !important;
+  box-shadow: none !important;
+}
+
+[data-mode="light"] .section-header {
+  border-bottom: 1px solid var(--qhr-border-subtle) !important;
+}
+
+[data-mode="light"] .subtitle {
+  color: var(--qhr-content-secondary) !important;
+}
+
+[data-mode="light"] .stat-label {
+  color: var(--qhr-content-secondary) !important;
+}
+
+[data-mode="light"] .nav-item {
+  color: var(--qhr-content-secondary, #334155);
+}
+
+[data-mode="light"] .nav-item:hover {
+  background-color: var(--qhr-surface-muted, #F1F5F9) !important;
+  color: var(--qhr-content-primary, #0F172A) !important;
+}
+
+[data-mode="light"] .nav-item.active {
+  background: #EFF6FF !important;
+  color: var(--qhr-color-primary, #1D4ED8) !important;
+  font-weight: 700 !important;
+  border-inline-start-color: var(--qhr-color-primary, #1D4ED8) !important;
+}
+
+[data-mode="light"] .nav-item.active .nav-icon {
+  background: #DBEAFE !important;
+  color: var(--qhr-color-primary, #1D4ED8) !important;
+  border-color: rgba(29, 78, 216, 0.25) !important;
+}
+
+[data-mode="light"] .workspace-select {
+  background: var(--qhr-surface-card, #FFFFFF) !important;
+  border: 1px solid var(--qhr-border-subtle, #CBD5E1) !important;
+  color: var(--qhr-content-primary, #0F172A) !important;
+}
+
+[data-mode="light"] .data-table th {
+  background: var(--qhr-surface-muted, #F1F5F9) !important;
+  color: var(--qhr-content-secondary, #334155) !important;
+  border-bottom: 1px solid var(--qhr-border-subtle, #CBD5E1) !important;
+}
+
+[data-mode="light"] .data-table td {
+  color: var(--qhr-content-primary, #0F172A) !important;
+  border-bottom: 1px solid var(--qhr-border-subtle, #CBD5E1) !important;
+}
+
+/* Headings Typography */
+h1, h2, h3, h4, .brand-text h2, .section-header h1 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* RTL Specific Typography & Layout Overrides */
+html[dir="rtl"],
+[dir="rtl"] {
+  font-family: var(--font-body);
+  letter-spacing: normal !important;
+}
+
+/* Qahera SVG Icon System (Canonical Zero-Emoji Standard) */
+.qhr-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.qhr-icon--xs { width: 12px; height: 12px; }
+.qhr-icon--sm { width: 15px; height: 15px; }
+.qhr-icon--md { width: 18px; height: 18px; }
+.qhr-icon--lg { width: 22px; height: 22px; }
+.qhr-icon--xl { width: 28px; height: 28px; }
+
+.qhr-icon--danger { color: var(--accent-red); }
+.qhr-icon--warning { color: var(--accent-yellow); }
+.qhr-icon--info { color: var(--accent-cyan); }
+.qhr-icon--success { color: var(--accent-green); }

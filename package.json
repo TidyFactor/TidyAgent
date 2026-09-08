@@ -1,0 +1,68 @@
+{
+  "name": "tidy",
+  "version": "1.4.2",
+  "private": true,
+  "description": "Sovereign Personal Assistant Agent with persistent SQLite Memory, CLI engine, and local Stdio MCP Server",
+  "main": "index.js",
+  "bin": {
+    "tidy": "./bin/tidy.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "start": "node bin/tidy.js",
+    "cli": "node packages/cli/bin/tidy.js",
+    "desktop": "npm --prefix apps/desktop start",
+    "web": "node apps/web/server.js",
+    "test": "node tests/run.js",
+    "mcp": "node scripts/mcp_server.js",
+    "init-db": "node bin/tidy.js init",
+    "validate": "python tools/validate_skill.py",
+    "build": "node tools/build-skill.js",
+    "check:leaks": "node tools/check-leaks.js"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "keywords": [
+    "tidyfactor",
+    "agent",
+    "personal-assistant",
+    "sqlite",
+    "mcp",
+    "memory",
+    "fts5",
+    "sovereign"
+  ],
+  "author": "TidyFactor Team",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "index.js",
+    "bin",
+    "packages",
+    "scripts",
+    "tools",
+    "references",
+    "tests",
+    "SKILL.md",
+    "manifest.json",
+    "brand.yaml",
+    "brand.json",
+    "README.md",
+    "README.ar.md",
+    "README.es.md",
+    "README.de.md",
+    "README.fr.md",
+    "README.pt.md",
+    "README.zh.md",
+    "README.fa.md",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^1.8.0",
+    "picocolors": "^1.1.1"
+  }
+}

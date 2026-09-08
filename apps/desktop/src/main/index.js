@@ -1,0 +1,515 @@
+/**
+ * Tidy Studio — Electron Main Process
+ * Manages native window lifecycle and secure IPC bridge to @tidy/core.
+ */
+
+const { app, BrowserWindow, ipcMain, shell, globalShortcut } = require('electron');
+const path = require('path');
+
+// Resolve @tidy/core kernel
+let core;
+try {
+  core = require('@tidy/core');
+} catch {
+  try {
+    core = require('../../../packages/core/src/index');
+  } catch {
+    core = require('../../../../packages/core/src/index');
+  }
+}
+
+let office = null;
+try {
+  office = require('@tidy/office');
+} catch {
+  try {
+    office = require('../../../packages/office/src/index');
+  } catch {
+    try {
+      office = require('../../../../packages/office/src/index');
+    } catch {
+      office = null;
+    }
+  }
+}
+
+let mainWindow = null;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 840,
+    minWidth: 960,
+    minHeight: 640,
+    title: 'Tidy Studio — Sovereign Assistant & Memory OS',
+    icon: path.join(__dirname, '../../assets/icon.png'),
+    backgroundColor: '#090b10',
+    webPreferences: {
+      preload: path.join(__dirname, '../preload/index.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false
+    }
+  });
+
+  // Remove default menu for clean, modern look
+  mainWindow.setMenuBarVisibility(false);
+
+  // Load renderer
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+
+  // Open external links in user's default browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+}
+
+// ----------------- IPC Handlers -----------------
+function handle(channel, fn) {
+  ipcMain.handle(`tidy:${channel}`, fn);
+}
+
+function registerIpcHandlers() {
+  // System Health & Stats
+  handle('stats', async () => {
+    try {
+      return { ok: true, data: core.getStats() };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Memory Operations
+  handle('memory:recall', async (_, { query, category, tier, limit }) => {
+    try {
+      const results = core.recallMemory({ query, category, tier, limit });
+      return { ok: true, data: results };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:save', async (_, { content, category, importance, tier }) => {
+    try {
+      const saved = core.saveMemory({ content, category, importance, tier });
+      return { ok: true, data: saved };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:list', async (_, { limit, category, tier }) => {
+    try {
+      const list = core.listMemories({ limit, category, tier });
+      return { ok: true, data: list };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:forget', async (_, id) => {
+    try {
+      const ok = core.forgetMemory(id);
+      return { ok: true, data: { deleted: ok } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Context & Workspaces
+  handle('context:list', async () => {
+    try {
+      const db = core.getDb();
+      const contexts = db.prepare('SELECT * FROM contexts ORDER BY is_active DESC, name ASC').all();
+      return { ok: true, data: contexts };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('context:switch', async (_, contextId) => {
+    try {
+      const db = core.getDb();
+      const target = db.prepare('SELECT * FROM contexts WHERE id = ?').get(contextId);
+      if (!target) throw new Error(`Context "${contextId}" not found.`);
+      db.prepare('UPDATE contexts SET is_active = 0').run();
+      db.prepare('UPDATE contexts SET is_active = 1, last_accessed_at = CURRENT_TIMESTAMP WHERE id = ?').run(contextId);
+      return { ok: true, data: target };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Tasks App
+  handle('tasks:list', async (_, filters) => {
+    try {
+      const tasks = core.listTasks(filters || {});
+      return { ok: true, data: tasks };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('tasks:add', async (_, taskData) => {
+    try {
+      const created = core.addTask(taskData);
+      return { ok: true, data: created };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('tasks:complete', async (_, id) => {
+    try {
+      core.completeTask(id);
+      return { ok: true, data: { completed: true } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Snippets App
+  handle('snippets:list', async (_, filters) => {
+    try {
+      const snippets = core.listSnippets(filters || {});
+      return { ok: true, data: snippets };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('snippets:add', async (_, snippetData) => {
+    try {
+      const snip = core.addSnippet(snippetData);
+      return { ok: true, data: snip };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('snippets:delete', async (_, id) => {
+    try {
+      const deleted = core.deleteSnippet(id);
+      return { ok: true, data: { deleted } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Journal App
+  handle('journal:list', async (_, { limit }) => {
+    try {
+      const logs = core.listJournal({ limit });
+      return { ok: true, data: logs };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('journal:add', async (_, entryData) => {
+    try {
+      const entry = core.addJournalEntry(entryData);
+      return { ok: true, data: entry };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Vault App
+  handle('vault:list', async () => {
+    try {
+      const keys = core.listVaultKeys();
+      return { ok: true, data: keys };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('vault:get', async (_, key) => {
+    try {
+      const val = core.getSecret(key);
+      return { ok: true, data: { key, value: val } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('vault:set', async (_, { key, value }) => {
+    try {
+      core.setSecret({ key, value });
+      return { ok: true, data: { key, saved: true } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('vault:delete', async (_, key) => {
+    try {
+      const deleted = core.deleteSecret(key);
+      return { ok: true, data: { deleted } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Subagents
+  handle('subagents:list', async () => {
+    try {
+      const agents = core.listSubagents();
+      return { ok: true, data: agents };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('subagents:run', async (_, { name, task }) => {
+    try {
+      const result = core.runSubagent(name, task);
+      return { ok: true, data: result };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Community Skills & Briefs
+  handle('skills:list', async () => {
+    try {
+      const skills = core.listRegisteredSkills ? core.listRegisteredSkills() : [];
+      return { ok: true, data: skills };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('skills:scan', async (_, dir) => {
+    try {
+      const discovered = core.discoverSkills ? core.discoverSkills(dir ? [dir] : []) : [];
+      return { ok: true, data: discovered };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brief:generate', async (_, params) => {
+    try {
+      const brief = core.generateTaskBrief(params);
+      return { ok: true, data: brief };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Database Maintenance Operations
+  handle('db:backup', async (_, targetPath) => {
+    try {
+      const res = core.backupDatabase(targetPath);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('db:checkpoint', async () => {
+    try {
+      const res = core.checkpointWal();
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('db:integrity', async () => {
+    try {
+      const res = core.checkIntegrity();
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Office Suite Handlers (@tidy/office)
+  handle('office:stats', async () => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const cashflow = office.getCashflowSummary();
+      const clients = office.listClients({ limit: 100 });
+      const invoices = office.listInvoices({ limit: 100 });
+      return {
+        ok: true,
+        data: {
+          clientsCount: clients.length,
+          invoicesCount: invoices.length,
+          cashflow
+        }
+      };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:crm:list', async (_, params) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const clients = office.listClients(params || {});
+      return { ok: true, data: clients };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:crm:add', async (_, data) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const client = office.addClient(data);
+      return { ok: true, data: client };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:crm:update', async (_, { id, params }) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const client = office.updateClient(id, params);
+      return { ok: true, data: client };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:crm:delete', async (_, id) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const ok = office.deleteClient(id);
+      return { ok: true, data: ok };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:invoices:list', async (_, params) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const invoices = office.listInvoices(params || {});
+      return { ok: true, data: invoices };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:invoices:get', async (_, id) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const invoice = office.getInvoice(id);
+      return { ok: true, data: invoice };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:invoices:create', async (_, data) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const invoice = office.createInvoice(data);
+      return { ok: true, data: invoice };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:invoices:status', async (_, { id, status, amountPaid }) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const invoice = office.updateInvoiceStatus(id, status, amountPaid);
+      return { ok: true, data: invoice };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:expenses:list', async (_, params) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const expenses = office.listExpenses(params || {});
+      return { ok: true, data: expenses };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:expenses:add', async (_, data) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const expense = office.addExpense(data);
+      return { ok: true, data: expense };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:cashflow', async () => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const cashflow = office.getCashflowSummary();
+      return { ok: true, data: cashflow };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('office:dossier', async (_, clientId) => {
+    try {
+      if (!office) return { ok: false, error: 'Office pack not installed' };
+      const dossier = office.compileClientDossier(clientId);
+      return { ok: true, data: dossier };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+}
+
+// App Lifecycle
+app.whenReady().then(() => {
+  // Ensure DB is bootstrapped
+  core.initDatabase();
+
+  registerIpcHandlers();
+  createWindow();
+
+  // Register Global Summon Shortcut (Alt+Space)
+  try {
+    globalShortcut.register('Alt+Space', () => {
+      if (mainWindow) {
+        if (mainWindow.isVisible() && mainWindow.isFocused()) {
+          mainWindow.hide();
+        } else {
+          mainWindow.show();
+          mainWindow.focus();
+        }
+      }
+    });
+  } catch (e) {
+    // ignore if hotkey registration fails on some window managers
+  }
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on('will-quit', () => {
+  try {
+    globalShortcut.unregisterAll();
+  } catch (e) {}
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});

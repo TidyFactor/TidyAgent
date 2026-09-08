@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-validate:
+    name: Test Suite & Skill Integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js (v22 for native node:sqlite)
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Setup Python (v3.11 for Skill Architect Validator)
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Audit Environment Leaks & Hygiene
+        run: npm run check:leaks
+
+      - name: Run Tidy Automated Test Suite (20 Tests)
+        run: node tests/run.js
+
+      - name: Validate Root Skill Integrity (15 Structural Rules)
+        run: python tools/validate_skill.py
+
+      - name: Validate @tidy/skill Package Integrity
+        run: python packages/skill/tools/validate_skill.py
+

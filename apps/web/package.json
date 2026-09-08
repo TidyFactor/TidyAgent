@@ -1,0 +1,14 @@
+{
+  "name": "@tidy/web",
+  "version": "1.4.1",
+  "description": "Tidy Web Management Console — Local Web Server & Browser Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "Apache-2.0",
+  "author": "TidyFactor Team",
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

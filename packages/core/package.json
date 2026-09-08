@@ -1,0 +1,20 @@
+{
+  "name": "@tidy/core",
+  "version": "1.4.1",
+  "description": "Tidy Sovereign Engine Kernel — SQLite SSOT, FTS5 Memory Engine, Subagents & Micro-Apps",
+  "main": "src/index.js",
+  "license": "Apache-2.0",
+  "author": "TidyFactor Team",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "keywords": [
+    "tidy",
+    "tidyfactor",
+    "sqlite",
+    "fts5",
+    "memory",
+    "sovereign",
+    "agent"
+  ]
+}

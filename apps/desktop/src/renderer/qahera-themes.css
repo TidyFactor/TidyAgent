@@ -1,0 +1,1171 @@
+/**
+ * Qahera UI Kit — Cairo Design Atlas Dual-Mode Stylesheet (12 Canonical Design System Themes)
+ * Authoritative Synthesis: 12 Cultural Design Themes × 8 Dimensions
+ * Architecture: [data-theme="archetype"][data-mode="dark|light"]
+ */
+
+/* ==========================================================================
+   الزمالك (Zamalek) — Diplomatic Mansions & Champagne Pearl Obsidian [NIGHT MODE]
+   ========================================================================== */
+[data-theme="zamalek"],
+[data-theme="zamalek"][data-mode="dark"] {
+  --qhr-radius-box: 12px;
+  --qhr-radius-field: 6px;
+  --qhr-radius-selector: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 12px 35px -5px rgba(0, 0, 0, 0.65), 0 0 15px rgba(229, 195, 120, 0.08);
+  --qhr-surface-base: #09090B;
+  --qhr-surface-elevated: #121216;
+  --qhr-surface-card: #121216;
+  --qhr-surface-page: #09090B;
+  --qhr-surface-muted: #1C1C24;
+  --qhr-content-primary: #F6F4EE;
+  --qhr-content-secondary: #A39E93;
+  --qhr-content-muted: #6E685E;
+  --qhr-text-primary: #F6F4EE;
+  --qhr-text-secondary: #A39E93;
+  --qhr-text-muted: #6E685E;
+  --qhr-border-subtle: rgba(229, 195, 120, 0.10);
+  --qhr-border-strong: rgba(229, 195, 120, 0.35);
+  --qhr-color-border: rgba(229, 195, 120, 0.22);
+  --qhr-color-border-subtle: rgba(229, 195, 120, 0.10);
+  --qhr-color-border-strong: rgba(229, 195, 120, 0.35);
+  --qhr-color-bg: #09090B;
+  --qhr-color-surface: #121216;
+  --qhr-color-surface-elevated: #1C1C24;
+  --qhr-color-text-primary: #F6F4EE;
+  --qhr-color-text-secondary: #A39E93;
+  --qhr-color-text-muted: #6E685E;
+  --qhr-color-primary: #E5C378;
+  --qhr-color-primary-bg: #E5C378;
+  --qhr-button-primary-background: #E5C378;
+  --qhr-button-primary-foreground: #09090B;
+  --qhr-color-primary-hover: #D4AF37;
+  --qhr-color-primary-focus: rgba(229, 195, 120, 0.35);
+  --qhr-color-primary-fg: #09090B;
+  --qhr-color-secondary: #1C1C24;
+  --qhr-color-secondary-hover: #272732;
+  --qhr-color-secondary-fg: #F6F4EE;
+  --qhr-color-accent: #E2C37A;
+}
+
+/* ==========================================================================
+   الزمالك (Zamalek) — Diplomatic Mansions & Champagne Pearl Obsidian [DAY MODE]
+   ========================================================================== */
+[data-theme="zamalek"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 20px -2px rgba(24, 24, 27, 0.06);
+  --qhr-surface-base: #FBF9F5;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #FBF9F5;
+  --qhr-surface-muted: #F3EFE6;
+  --qhr-content-primary: #18181B;
+  --qhr-content-secondary: #57534E;
+  --qhr-content-muted: #78716C;
+  --qhr-text-primary: #18181B;
+  --qhr-text-secondary: #57534E;
+  --qhr-text-muted: #78716C;
+  --qhr-border-subtle: #F3EFE6;
+  --qhr-border-strong: #D5C7B3;
+  --qhr-color-border: #E7DFD3;
+  --qhr-color-border-subtle: #F3EFE6;
+  --qhr-color-border-strong: #D5C7B3;
+  --qhr-color-bg: #FBF9F5;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #F3EFE6;
+  --qhr-color-text-primary: #18181B;
+  --qhr-color-text-secondary: #57534E;
+  --qhr-color-text-muted: #78716C;
+  --qhr-color-primary: #18181B;
+  --qhr-color-primary-bg: #18181B;
+  --qhr-button-primary-background: #18181B;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #27272A;
+  --qhr-color-primary-focus: rgba(24, 24, 27, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #F3EFE6;
+  --qhr-color-secondary-hover: #E7DFD3;
+  --qhr-color-secondary-fg: #18181B;
+  --qhr-color-accent: #B88A3B;
+}
+
+/* ==========================================================================
+   وسط البلد (Downtown) — Khedivial Belle Époque & Parisian Heritage Patina [NIGHT MODE]
+   ========================================================================== */
+[data-theme="downtown"],
+[data-theme="downtown"][data-mode="dark"] {
+  --qhr-radius-box: 4px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 4px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: none;
+  --qhr-surface-base: #161311;
+  --qhr-surface-elevated: #211D19;
+  --qhr-surface-card: #211D19;
+  --qhr-surface-page: #161311;
+  --qhr-surface-muted: #2C2722;
+  --qhr-content-primary: #FAF6F0;
+  --qhr-content-secondary: #C5B9AC;
+  --qhr-content-muted: #8A7D70;
+  --qhr-text-primary: #FAF6F0;
+  --qhr-text-secondary: #C5B9AC;
+  --qhr-text-muted: #8A7D70;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #161311;
+  --qhr-color-surface: #211D19;
+  --qhr-color-surface-elevated: #2C2722;
+  --qhr-color-text-primary: #FAF6F0;
+  --qhr-color-text-secondary: #C5B9AC;
+  --qhr-color-text-muted: #8A7D70;
+  --qhr-color-primary: #C29B38;
+  --qhr-color-primary-bg: #C29B38;
+  --qhr-button-primary-background: #C29B38;
+  --qhr-button-primary-foreground: #161311;
+  --qhr-color-primary-hover: #AD872C;
+  --qhr-color-primary-focus: rgba(194, 155, 56, 0.35);
+  --qhr-color-primary-fg: #161311;
+  --qhr-color-secondary: #2C2722;
+  --qhr-color-secondary-hover: #38322C;
+  --qhr-color-secondary-fg: #FAF6F0;
+  --qhr-color-accent: #9B3133;
+}
+
+/* ==========================================================================
+   وسط البلد (Downtown) — Khedivial Belle Époque & Parisian Heritage Patina [DAY MODE]
+   ========================================================================== */
+[data-theme="downtown"][data-mode="light"] {
+  --qhr-shadow-box: none;
+  --qhr-surface-base: #F6F3EC;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F6F3EC;
+  --qhr-surface-muted: #ECE6DC;
+  --qhr-content-primary: #1C1917;
+  --qhr-content-secondary: #574E45;
+  --qhr-content-muted: #786C60;
+  --qhr-text-primary: #1C1917;
+  --qhr-text-secondary: #574E45;
+  --qhr-text-muted: #786C60;
+  --qhr-border-subtle: #ECE6DC;
+  --qhr-border-strong: #C9BEAA;
+  --qhr-color-border: #DED6C7;
+  --qhr-color-border-subtle: #ECE6DC;
+  --qhr-color-border-strong: #C9BEAA;
+  --qhr-color-bg: #F6F3EC;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #ECE6DC;
+  --qhr-color-text-primary: #1C1917;
+  --qhr-color-text-secondary: #574E45;
+  --qhr-color-text-muted: #786C60;
+  --qhr-color-primary: #9E7728;
+  --qhr-color-primary-bg: #9E7728;
+  --qhr-button-primary-background: #9E7728;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #876520;
+  --qhr-color-primary-focus: rgba(158, 119, 40, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #ECE6DC;
+  --qhr-color-secondary-hover: #DED6C7;
+  --qhr-color-secondary-fg: #1C1917;
+  --qhr-color-accent: #832729;
+}
+
+/* ==========================================================================
+   هليوبوليس (Heliopolis) — Moorish Sandstone & Neo-Pharaonic Art Deco [NIGHT MODE]
+   ========================================================================== */
+[data-theme="heliopolis"],
+[data-theme="heliopolis"][data-mode="dark"] {
+  --qhr-radius-box: 8px;
+  --qhr-radius-field: 6px;
+  --qhr-radius-selector: 6px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 8px 24px rgba(224, 169, 109, 0.15);
+  --qhr-surface-base: #181411;
+  --qhr-surface-elevated: #241D19;
+  --qhr-surface-card: #241D19;
+  --qhr-surface-page: #181411;
+  --qhr-surface-muted: #302621;
+  --qhr-content-primary: #FDF7F2;
+  --qhr-content-secondary: #C9B5A5;
+  --qhr-content-muted: #8F7B6B;
+  --qhr-text-primary: #FDF7F2;
+  --qhr-text-secondary: #C9B5A5;
+  --qhr-text-muted: #8F7B6B;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #181411;
+  --qhr-color-surface: #241D19;
+  --qhr-color-surface-elevated: #302621;
+  --qhr-color-text-primary: #FDF7F2;
+  --qhr-color-text-secondary: #C9B5A5;
+  --qhr-color-text-muted: #8F7B6B;
+  --qhr-color-primary: #E0A96D;
+  --qhr-color-primary-bg: #E0A96D;
+  --qhr-button-primary-background: #E0A96D;
+  --qhr-button-primary-foreground: #181411;
+  --qhr-color-primary-hover: #D19452;
+  --qhr-color-primary-focus: rgba(224, 169, 109, 0.35);
+  --qhr-color-primary-fg: #181411;
+  --qhr-color-secondary: #302621;
+  --qhr-color-secondary-hover: #3E312B;
+  --qhr-color-secondary-fg: #FDF7F2;
+  --qhr-color-accent: #C86D51;
+}
+
+/* ==========================================================================
+   هليوبوليس (Heliopolis) — Moorish Sandstone & Neo-Pharaonic Art Deco [DAY MODE]
+   ========================================================================== */
+[data-theme="heliopolis"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 18px rgba(180, 83, 9, 0.08);
+  --qhr-surface-base: #FAF6F0;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #FAF6F0;
+  --qhr-surface-muted: #F0E7DC;
+  --qhr-content-primary: #1F1813;
+  --qhr-content-secondary: #5C4A3C;
+  --qhr-content-muted: #7C6755;
+  --qhr-text-primary: #1F1813;
+  --qhr-text-secondary: #5C4A3C;
+  --qhr-text-muted: #7C6755;
+  --qhr-border-subtle: #F0E7DC;
+  --qhr-border-strong: #CCA78B;
+  --qhr-color-border: #E2D3C1;
+  --qhr-color-border-subtle: #F0E7DC;
+  --qhr-color-border-strong: #CCA78B;
+  --qhr-color-bg: #FAF6F0;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #F0E7DC;
+  --qhr-color-text-primary: #1F1813;
+  --qhr-color-text-secondary: #5C4A3C;
+  --qhr-color-text-muted: #7C6755;
+  --qhr-color-primary: #B45309;
+  --qhr-color-primary-bg: #B45309;
+  --qhr-button-primary-background: #B45309;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #92400E;
+  --qhr-color-primary-focus: rgba(180, 83, 9, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #F0E7DC;
+  --qhr-color-secondary-hover: #E2D3C1;
+  --qhr-color-secondary-fg: #1F1813;
+  --qhr-color-accent: #9A3412;
+}
+
+/* ==========================================================================
+   المعادي (Maadi) — Garden Suburb & Bio-Organic Serene Glass [NIGHT MODE]
+   ========================================================================== */
+[data-theme="maadi"],
+[data-theme="maadi"][data-mode="dark"] {
+  --qhr-radius-box: 16px;
+  --qhr-radius-field: 8px;
+  --qhr-radius-selector: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 6px 20px rgba(0,0,0,0.2);
+  --qhr-surface-base: #0E1512;
+  --qhr-surface-elevated: #17221E;
+  --qhr-surface-card: #17221E;
+  --qhr-surface-page: #0E1512;
+  --qhr-surface-muted: #202E29;
+  --qhr-content-primary: #F0F5F2;
+  --qhr-content-secondary: #9EB8AC;
+  --qhr-content-muted: #658173;
+  --qhr-text-primary: #F0F5F2;
+  --qhr-text-secondary: #9EB8AC;
+  --qhr-text-muted: #658173;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #0E1512;
+  --qhr-color-surface: #17221E;
+  --qhr-color-surface-elevated: #202E29;
+  --qhr-color-text-primary: #F0F5F2;
+  --qhr-color-text-secondary: #9EB8AC;
+  --qhr-color-text-muted: #658173;
+  --qhr-color-primary: #52796F;
+  --qhr-color-primary-bg: #52796F;
+  --qhr-button-primary-background: #52796F;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #42635B;
+  --qhr-color-primary-focus: rgba(82, 121, 111, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #202E29;
+  --qhr-color-secondary-hover: #293B35;
+  --qhr-color-secondary-fg: #F0F5F2;
+  --qhr-color-accent: #84A98C;
+}
+
+/* ==========================================================================
+   المعادي (Maadi) — Garden Suburb & Bio-Organic Serene Glass [DAY MODE]
+   ========================================================================== */
+[data-theme="maadi"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 16px rgba(13, 148, 136, 0.07);
+  --qhr-surface-base: #F4F8F6;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F4F8F6;
+  --qhr-surface-muted: #E4ECE8;
+  --qhr-content-primary: #111D18;
+  --qhr-content-secondary: #365347;
+  --qhr-content-muted: #5B7E6F;
+  --qhr-text-primary: #111D18;
+  --qhr-text-secondary: #365347;
+  --qhr-text-muted: #5B7E6F;
+  --qhr-border-subtle: #E4ECE8;
+  --qhr-border-strong: #A8C2B7;
+  --qhr-color-border: #C9D8D1;
+  --qhr-color-border-subtle: #E4ECE8;
+  --qhr-color-border-strong: #A8C2B7;
+  --qhr-color-bg: #F4F8F6;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #E4ECE8;
+  --qhr-color-text-primary: #111D18;
+  --qhr-color-text-secondary: #365347;
+  --qhr-color-text-muted: #5B7E6F;
+  --qhr-color-primary: #0D9488;
+  --qhr-color-primary-bg: #0D9488;
+  --qhr-button-primary-background: #0D9488;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #0F766E;
+  --qhr-color-primary-focus: rgba(13, 148, 136, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #E4ECE8;
+  --qhr-color-secondary-hover: #C9D8D1;
+  --qhr-color-secondary-fg: #111D18;
+  --qhr-color-accent: #059669;
+}
+
+/* ==========================================================================
+   روكسي (Roxy) — Egyptian Cinema Nostalgia & Mid-Century Neon Retro [NIGHT MODE]
+   ========================================================================== */
+[data-theme="roxy"],
+[data-theme="roxy"][data-mode="dark"] {
+  --qhr-radius-box: 8px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 9999px;
+  --qhr-border-width: 2px;
+  --qhr-shadow-box: 4px 4px 0px #000, 0 0 15px rgba(0, 240, 255, 0.4);
+  --qhr-surface-base: #090B14;
+  --qhr-surface-elevated: #121626;
+  --qhr-surface-card: #121626;
+  --qhr-surface-page: #090B14;
+  --qhr-surface-muted: #1A2035;
+  --qhr-content-primary: #FFFFFF;
+  --qhr-content-secondary: #A5B4FC;
+  --qhr-content-muted: #6366F1;
+  --qhr-text-primary: #FFFFFF;
+  --qhr-text-secondary: #A5B4FC;
+  --qhr-text-muted: #6366F1;
+  --qhr-border-subtle: rgba(0, 240, 255, 0.12);
+  --qhr-border-strong: rgba(0, 240, 255, 0.5);
+  --qhr-color-border: rgba(0, 240, 255, 0.25);
+  --qhr-color-border-subtle: rgba(0, 240, 255, 0.12);
+  --qhr-color-border-strong: rgba(0, 240, 255, 0.5);
+  --qhr-color-bg: #090B14;
+  --qhr-color-surface: #121626;
+  --qhr-color-surface-elevated: #1A2035;
+  --qhr-color-text-primary: #FFFFFF;
+  --qhr-color-text-secondary: #A5B4FC;
+  --qhr-color-text-muted: #6366F1;
+  --qhr-color-primary: #00F0FF;
+  --qhr-color-primary-bg: #00F0FF;
+  --qhr-button-primary-background: #00F0FF;
+  --qhr-button-primary-foreground: #090B14;
+  --qhr-color-primary-hover: #00D0E0;
+  --qhr-color-primary-focus: rgba(0, 240, 255, 0.35);
+  --qhr-color-primary-fg: #090B14;
+  --qhr-color-secondary: #1A2035;
+  --qhr-color-secondary-hover: #232B47;
+  --qhr-color-secondary-fg: #FFFFFF;
+  --qhr-color-accent: #FF2A85;
+}
+
+/* ==========================================================================
+   روكسي (Roxy) — Egyptian Cinema Nostalgia & Mid-Century Neon Retro [DAY MODE]
+   ========================================================================== */
+[data-theme="roxy"][data-mode="light"] {
+  --qhr-shadow-box: 4px 4px 0px rgba(15, 23, 42, 0.95);
+  --qhr-surface-base: #F8F9FD;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F8F9FD;
+  --qhr-surface-muted: #EEF2FF;
+  --qhr-content-primary: #0F172A;
+  --qhr-content-secondary: #3730A3;
+  --qhr-content-muted: #6366F1;
+  --qhr-text-primary: #0F172A;
+  --qhr-text-secondary: #3730A3;
+  --qhr-text-muted: #6366F1;
+  --qhr-border-subtle: #EEF2FF;
+  --qhr-border-strong: #818CF8;
+  --qhr-color-border: #C7D2FE;
+  --qhr-color-border-subtle: #EEF2FF;
+  --qhr-color-border-strong: #818CF8;
+  --qhr-color-bg: #F8F9FD;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #EEF2FF;
+  --qhr-color-text-primary: #0F172A;
+  --qhr-color-text-secondary: #3730A3;
+  --qhr-color-text-muted: #6366F1;
+  --qhr-color-primary: #2563EB;
+  --qhr-color-primary-bg: #2563EB;
+  --qhr-button-primary-background: #2563EB;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #1D4ED8;
+  --qhr-color-primary-focus: rgba(37, 99, 235, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #EEF2FF;
+  --qhr-color-secondary-hover: #E0E7FF;
+  --qhr-color-secondary-fg: #0F172A;
+  --qhr-color-accent: #EC4899;
+}
+
+/* ==========================================================================
+   السكاكيني (Sakakini) — Baroque Rococo & Dramatic Gothic Mystery [NIGHT MODE]
+   ========================================================================== */
+[data-theme="sakakini"],
+[data-theme="sakakini"][data-mode="dark"] {
+  --qhr-radius-box: 4px;
+  --qhr-radius-field: 2px;
+  --qhr-radius-selector: 4px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 8px 24px rgba(168, 85, 247, 0.2);
+  --qhr-surface-base: #100D14;
+  --qhr-surface-elevated: #1A1622;
+  --qhr-surface-card: #1A1622;
+  --qhr-surface-page: #100D14;
+  --qhr-surface-muted: #241F2E;
+  --qhr-content-primary: #F8F4FB;
+  --qhr-content-secondary: #C2B6D4;
+  --qhr-content-muted: #847399;
+  --qhr-text-primary: #F8F4FB;
+  --qhr-text-secondary: #C2B6D4;
+  --qhr-text-muted: #847399;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #100D14;
+  --qhr-color-surface: #1A1622;
+  --qhr-color-surface-elevated: #241F2E;
+  --qhr-color-text-primary: #F8F4FB;
+  --qhr-color-text-secondary: #C2B6D4;
+  --qhr-color-text-muted: #847399;
+  --qhr-color-primary: #9B51E0;
+  --qhr-color-primary-bg: #9B51E0;
+  --qhr-button-primary-background: #9B51E0;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #873FCA;
+  --qhr-color-primary-focus: rgba(155, 81, 224, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #241F2E;
+  --qhr-color-secondary-hover: #2E273B;
+  --qhr-color-secondary-fg: #F8F4FB;
+  --qhr-color-accent: #D97706;
+}
+
+/* ==========================================================================
+   السكاكيني (Sakakini) — Baroque Rococo & Dramatic Gothic Mystery [DAY MODE]
+   ========================================================================== */
+[data-theme="sakakini"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 18px rgba(126, 34, 206, 0.08);
+  --qhr-surface-base: #FAF7FC;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #FAF7FC;
+  --qhr-surface-muted: #F0EAF7;
+  --qhr-content-primary: #181124;
+  --qhr-content-secondary: #4F3E69;
+  --qhr-content-muted: #776295;
+  --qhr-text-primary: #181124;
+  --qhr-text-secondary: #4F3E69;
+  --qhr-text-muted: #776295;
+  --qhr-border-subtle: #F0EAF7;
+  --qhr-border-strong: #C2A9DC;
+  --qhr-color-border: #DFD3ED;
+  --qhr-color-border-subtle: #F0EAF7;
+  --qhr-color-border-strong: #C2A9DC;
+  --qhr-color-bg: #FAF7FC;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #F0EAF7;
+  --qhr-color-text-primary: #181124;
+  --qhr-color-text-secondary: #4F3E69;
+  --qhr-color-text-muted: #776295;
+  --qhr-color-primary: #7C3AED;
+  --qhr-color-primary-bg: #7C3AED;
+  --qhr-button-primary-background: #7C3AED;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #6D28D9;
+  --qhr-color-primary-focus: rgba(124, 58, 237, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #F0EAF7;
+  --qhr-color-secondary-hover: #DFD3ED;
+  --qhr-color-secondary-fg: #181124;
+  --qhr-color-accent: #B45309;
+}
+
+/* ==========================================================================
+   الحسين (El-Hussein) — Historic Islamic Cairo & Gilded Damascene Manuscripts [NIGHT MODE]
+   ========================================================================== */
+[data-theme="el-hussein"],
+[data-theme="el-hussein"][data-mode="dark"],
+[data-theme="hussein"],
+[data-theme="hussein"][data-mode="dark"] {
+  --qhr-radius-box: 4px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 4px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 4px 20px rgba(2, 132, 199, 0.25);
+  --qhr-surface-base: #14100C;
+  --qhr-surface-elevated: #1E1812;
+  --qhr-surface-card: #1E1812;
+  --qhr-surface-page: #14100C;
+  --qhr-surface-muted: #292019;
+  --qhr-content-primary: #FBF7F0;
+  --qhr-content-secondary: #C9BBAA;
+  --qhr-content-muted: #8A7B68;
+  --qhr-text-primary: #FBF7F0;
+  --qhr-text-secondary: #C9BBAA;
+  --qhr-text-muted: #8A7B68;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #14100C;
+  --qhr-color-surface: #1E1812;
+  --qhr-color-surface-elevated: #292019;
+  --qhr-color-text-primary: #FBF7F0;
+  --qhr-color-text-secondary: #C9BBAA;
+  --qhr-color-text-muted: #8A7B68;
+  --qhr-color-primary: #D4AF37;
+  --qhr-color-primary-bg: #D4AF37;
+  --qhr-button-primary-background: #D4AF37;
+  --qhr-button-primary-foreground: #14100C;
+  --qhr-color-primary-hover: #B5952B;
+  --qhr-color-primary-focus: rgba(212, 175, 55, 0.35);
+  --qhr-color-primary-fg: #14100C;
+  --qhr-color-secondary: #292019;
+  --qhr-color-secondary-hover: #352B22;
+  --qhr-color-secondary-fg: #FBF7F0;
+  --qhr-color-accent: #3B82F6;
+}
+
+/* ==========================================================================
+   الحسين (El-Hussein) — Historic Islamic Cairo & Gilded Damascene Manuscripts [DAY MODE]
+   ========================================================================== */
+[data-theme="el-hussein"][data-mode="light"],
+[data-theme="hussein"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 18px rgba(3, 105, 161, 0.08);
+  --qhr-surface-base: #F9F5EC;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F9F5EC;
+  --qhr-surface-muted: #EFE7D8;
+  --qhr-content-primary: #1C160F;
+  --qhr-content-secondary: #5A4C3A;
+  --qhr-content-muted: #7B6A54;
+  --qhr-text-primary: #1C160F;
+  --qhr-text-secondary: #5A4C3A;
+  --qhr-text-muted: #7B6A54;
+  --qhr-border-subtle: #EFE7D8;
+  --qhr-border-strong: #C4B196;
+  --qhr-color-border: #DFD2BE;
+  --qhr-color-border-subtle: #EFE7D8;
+  --qhr-color-border-strong: #C4B196;
+  --qhr-color-bg: #F9F5EC;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #EFE7D8;
+  --qhr-color-text-primary: #1C160F;
+  --qhr-color-text-secondary: #5A4C3A;
+  --qhr-color-text-muted: #7B6A54;
+  --qhr-color-primary: #A16207;
+  --qhr-color-primary-bg: #A16207;
+  --qhr-button-primary-background: #A16207;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #854D0E;
+  --qhr-color-primary-focus: rgba(161, 98, 7, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #EFE7D8;
+  --qhr-color-secondary-hover: #DFD2BE;
+  --qhr-color-secondary-fg: #1C160F;
+  --qhr-color-accent: #1D4ED8;
+}
+
+/* ==========================================================================
+   شبرا (Shubra) — Vibrant Neo-Brutalist & Raw Urban Pop [NIGHT MODE]
+   ========================================================================== */
+[data-theme="shubra"],
+[data-theme="shubra"][data-mode="dark"] {
+  --qhr-radius-box: 0px;
+  --qhr-radius-field: 0px;
+  --qhr-radius-selector: 0px;
+  --qhr-border-width: 2px;
+  --qhr-shadow-box: 3px 3px 0px rgba(0,0,0,0.95);
+  --qhr-surface-base: #0F0F12;
+  --qhr-surface-elevated: #18181E;
+  --qhr-surface-card: #18181E;
+  --qhr-surface-page: #0F0F12;
+  --qhr-surface-muted: #22222A;
+  --qhr-content-primary: #FFFFFF;
+  --qhr-content-secondary: #E2E8F0;
+  --qhr-content-muted: #94A3B8;
+  --qhr-text-primary: #FFFFFF;
+  --qhr-text-secondary: #E2E8F0;
+  --qhr-text-muted: #94A3B8;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.18);
+  --qhr-border-strong: #FFFFFF;
+  --qhr-color-border: #FFFFFF;
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.18);
+  --qhr-color-border-strong: #FFFFFF;
+  --qhr-color-bg: #0F0F12;
+  --qhr-color-surface: #18181E;
+  --qhr-color-surface-elevated: #22222A;
+  --qhr-color-text-primary: #FFFFFF;
+  --qhr-color-text-secondary: #E2E8F0;
+  --qhr-color-text-muted: #94A3B8;
+  --qhr-color-primary: #DC2626;
+  --qhr-color-primary-bg: #DC2626;
+  --qhr-button-primary-background: #DC2626;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #B91C1C;
+  --qhr-color-primary-focus: rgba(220, 38, 38, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #22222A;
+  --qhr-color-secondary-hover: #2D2D38;
+  --qhr-color-secondary-fg: #FFFFFF;
+  --qhr-color-accent: #D97706;
+}
+
+/* ==========================================================================
+   شبرا (Shubra) — Vibrant Neo-Brutalist & Raw Urban Pop [DAY MODE]
+   ========================================================================== */
+[data-theme="shubra"][data-mode="light"] {
+  --qhr-shadow-box: 3px 3px 0px rgba(31, 18, 18, 0.95);
+  --qhr-surface-base: #FAF9F6;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #FAF9F6;
+  --qhr-surface-muted: #F1F0EA;
+  --qhr-content-primary: #000000;
+  --qhr-content-secondary: #1E293B;
+  --qhr-content-muted: #475569;
+  --qhr-text-primary: #000000;
+  --qhr-text-secondary: #1E293B;
+  --qhr-text-muted: #475569;
+  --qhr-border-subtle: rgba(0, 0, 0, 0.15);
+  --qhr-border-strong: #000000;
+  --qhr-color-border: #000000;
+  --qhr-color-border-subtle: rgba(0, 0, 0, 0.15);
+  --qhr-color-border-strong: #000000;
+  --qhr-color-bg: #FAF9F6;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #F1F0EA;
+  --qhr-color-text-primary: #000000;
+  --qhr-color-text-secondary: #1E293B;
+  --qhr-color-text-muted: #475569;
+  --qhr-color-primary: #DC2626;
+  --qhr-color-primary-bg: #DC2626;
+  --qhr-button-primary-background: #DC2626;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #B91C1C;
+  --qhr-color-primary-focus: rgba(220, 38, 38, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #F1F0EA;
+  --qhr-color-secondary-hover: #E4E2D7;
+  --qhr-color-secondary-fg: #000000;
+  --qhr-color-accent: #D97706;
+}
+
+/* ==========================================================================
+   الزيتون (El-Zeitoun) — Suburban Aristocratic Villas & Classic Heritage [NIGHT MODE]
+   ========================================================================== */
+[data-theme="el-zaytoun"],
+[data-theme="el-zaytoun"][data-mode="dark"],
+[data-theme="zeitoun"],
+[data-theme="zeitoun"][data-mode="dark"] {
+  --qhr-radius-box: 8px;
+  --qhr-radius-field: 6px;
+  --qhr-radius-selector: 8px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 6px 18px rgba(59, 130, 246, 0.2);
+  --qhr-surface-base: #0B0F19;
+  --qhr-surface-elevated: #131B2E;
+  --qhr-surface-card: #131B2E;
+  --qhr-surface-page: #0B0F19;
+  --qhr-surface-muted: #1E293B;
+  --qhr-content-primary: #F1F5F9;
+  --qhr-content-secondary: #94A3B8;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #F1F5F9;
+  --qhr-text-secondary: #94A3B8;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-border: rgba(255, 255, 255, 0.12);
+  --qhr-color-border-subtle: rgba(255, 255, 255, 0.06);
+  --qhr-color-border-strong: rgba(255, 255, 255, 0.22);
+  --qhr-color-bg: #0B0F19;
+  --qhr-color-surface: #131B2E;
+  --qhr-color-surface-elevated: #1E293B;
+  --qhr-color-text-primary: #F1F5F9;
+  --qhr-color-text-secondary: #94A3B8;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #3B82F6;
+  --qhr-color-primary-bg: #3B82F6;
+  --qhr-button-primary-background: #3B82F6;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #2563EB;
+  --qhr-color-primary-focus: rgba(59, 130, 246, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #1E293B;
+  --qhr-color-secondary-hover: #2B3B54;
+  --qhr-color-secondary-fg: #F1F5F9;
+  --qhr-color-accent: #F59E0B;
+}
+
+/* ==========================================================================
+   الزيتون (El-Zeitoun) — Suburban Aristocratic Villas & Classic Heritage [DAY MODE]
+   ========================================================================== */
+[data-theme="el-zaytoun"][data-mode="light"],
+[data-theme="zeitoun"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 16px rgba(29, 78, 216, 0.08);
+  --qhr-surface-base: #F8FAFC;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F8FAFC;
+  --qhr-surface-muted: #F1F5F9;
+  --qhr-content-primary: #0F172A;
+  --qhr-content-secondary: #334155;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #0F172A;
+  --qhr-text-secondary: #334155;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: #F1F5F9;
+  --qhr-border-strong: #94A3B8;
+  --qhr-color-border: #CBD5E1;
+  --qhr-color-border-subtle: #F1F5F9;
+  --qhr-color-border-strong: #94A3B8;
+  --qhr-color-bg: #F8FAFC;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #F1F5F9;
+  --qhr-color-text-primary: #0F172A;
+  --qhr-color-text-secondary: #334155;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #1D4ED8;
+  --qhr-color-primary-bg: #1D4ED8;
+  --qhr-button-primary-background: #1D4ED8;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #1E40AF;
+  --qhr-color-primary-focus: rgba(29, 78, 216, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #F1F5F9;
+  --qhr-color-secondary-hover: #E2E8F0;
+  --qhr-color-secondary-fg: #0F172A;
+  --qhr-color-accent: #D97706;
+}
+
+/* ==========================================================================
+   المرج (El-Marg) — Khedivial Royal Meadows & Dynasty Estates [NIGHT MODE]
+   ========================================================================== */
+[data-theme="el-marg"],
+[data-theme="el-marg"][data-mode="dark"],
+[data-theme="marg"],
+[data-theme="marg"][data-mode="dark"] {
+  --qhr-radius-box: 14px;
+  --qhr-radius-field: 8px;
+  --qhr-radius-selector: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 8px 24px rgba(21, 128, 82, 0.25);
+  --qhr-surface-base: #06130B;
+  --qhr-surface-elevated: #0E2216;
+  --qhr-surface-card: #0E2216;
+  --qhr-surface-page: #06130B;
+  --qhr-surface-muted: #152F20;
+  --qhr-content-primary: #F2F8F4;
+  --qhr-content-secondary: #9BB8A7;
+  --qhr-content-muted: #5F806D;
+  --qhr-text-primary: #F2F8F4;
+  --qhr-text-secondary: #9BB8A7;
+  --qhr-text-muted: #5F806D;
+  --qhr-border-subtle: rgba(212, 175, 55, 0.12);
+  --qhr-border-strong: rgba(212, 175, 55, 0.45);
+  --qhr-color-border: rgba(212, 175, 55, 0.28);
+  --qhr-color-border-subtle: rgba(212, 175, 55, 0.12);
+  --qhr-color-border-strong: rgba(212, 175, 55, 0.45);
+  --qhr-color-bg: #06130B;
+  --qhr-color-surface: #0E2216;
+  --qhr-color-surface-elevated: #152F20;
+  --qhr-color-text-primary: #F2F8F4;
+  --qhr-color-text-secondary: #9BB8A7;
+  --qhr-color-text-muted: #5F806D;
+  --qhr-color-primary: #158052;
+  --qhr-color-primary-bg: #158052;
+  --qhr-button-primary-background: #158052;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #116842;
+  --qhr-color-primary-focus: rgba(21, 128, 82, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #152F20;
+  --qhr-color-secondary-hover: #1E402D;
+  --qhr-color-secondary-fg: #F2F8F4;
+  --qhr-color-accent: #E5B83B;
+}
+
+/* ==========================================================================
+   المرج (El-Marg) — Khedivial Royal Meadows & Dynasty Estates [DAY MODE]
+   ========================================================================== */
+[data-theme="el-marg"][data-mode="light"],
+[data-theme="marg"][data-mode="light"] {
+  --qhr-shadow-box: 0 4px 18px rgba(14, 94, 58, 0.09);
+  --qhr-surface-base: #F2F7F4;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F2F7F4;
+  --qhr-surface-muted: #E4ECE7;
+  --qhr-content-primary: #0A1E12;
+  --qhr-content-secondary: #244833;
+  --qhr-content-muted: #4A6B56;
+  --qhr-text-primary: #0A1E12;
+  --qhr-text-secondary: #244833;
+  --qhr-text-muted: #4A6B56;
+  --qhr-border-subtle: #E4ECE7;
+  --qhr-border-strong: #B0C8BA;
+  --qhr-color-border: #D2E0D8;
+  --qhr-color-border-subtle: #E4ECE7;
+  --qhr-color-border-strong: #B0C8BA;
+  --qhr-color-bg: #F2F7F4;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #E4ECE7;
+  --qhr-color-text-primary: #0A1E12;
+  --qhr-color-text-secondary: #244833;
+  --qhr-color-text-muted: #4A6B56;
+  --qhr-color-primary: #0E5E3A;
+  --qhr-color-primary-bg: #0E5E3A;
+  --qhr-button-primary-background: #0E5E3A;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #0A462B;
+  --qhr-color-primary-focus: rgba(14, 94, 58, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #E4ECE7;
+  --qhr-color-secondary-hover: #D4E2D9;
+  --qhr-color-secondary-fg: #0A1E12;
+  --qhr-color-accent: #D4AF37;
+}
+
+/* ==========================================================================
+   القاهرة الجديدة (New Cairo) — High-Tech Minimalist & Cyan Cyber Glass [NIGHT MODE]
+   ========================================================================== */
+[data-theme="new-cairo"],
+[data-theme="new-cairo"][data-mode="dark"] {
+  --qhr-radius-box: 16px;
+  --qhr-radius-field: 8px;
+  --qhr-radius-selector: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 8px 32px rgba(6, 182, 212, 0.2);
+  --qhr-surface-base: #07090E;
+  --qhr-surface-elevated: #0D121D;
+  --qhr-surface-card: #0D121D;
+  --qhr-surface-page: #07090E;
+  --qhr-surface-muted: #141B2B;
+  --qhr-content-primary: #F0F4FC;
+  --qhr-content-secondary: #94A3B8;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #F0F4FC;
+  --qhr-text-secondary: #94A3B8;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: rgba(56, 189, 248, 0.08);
+  --qhr-border-strong: rgba(56, 189, 248, 0.35);
+  --qhr-color-border: rgba(56, 189, 248, 0.2);
+  --qhr-color-border-subtle: rgba(56, 189, 248, 0.08);
+  --qhr-color-border-strong: rgba(56, 189, 248, 0.35);
+  --qhr-color-bg: #07090E;
+  --qhr-color-surface: #0D121D;
+  --qhr-color-surface-elevated: #141B2B;
+  --qhr-color-text-primary: #F0F4FC;
+  --qhr-color-text-secondary: #94A3B8;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #0284C7;
+  --qhr-color-primary-bg: #0284C7;
+  --qhr-button-primary-background: #0284C7;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #0369A1;
+  --qhr-color-primary-focus: rgba(2, 132, 199, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #141B2B;
+  --qhr-color-secondary-hover: #1D273D;
+  --qhr-color-secondary-fg: #F0F4FC;
+  --qhr-color-accent: #38BDF8;
+}
+
+/* ==========================================================================
+   القاهرة الجديدة (New Cairo) — High-Tech Minimalist & Cyan Cyber Glass [DAY MODE]
+   ========================================================================== */
+[data-theme="new-cairo"][data-mode="light"] {
+  --qhr-shadow-box: 0 6px 24px rgba(2, 132, 199, 0.1);
+  --qhr-surface-base: #F0F5FA;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F0F5FA;
+  --qhr-surface-muted: #E2ECF6;
+  --qhr-content-primary: #0B1320;
+  --qhr-content-secondary: #334155;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #0B1320;
+  --qhr-text-secondary: #334155;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: #E2ECF6;
+  --qhr-border-strong: #9BB8D3;
+  --qhr-color-border: #CBD9E7;
+  --qhr-color-border-subtle: #E2ECF6;
+  --qhr-color-border-strong: #9BB8D3;
+  --qhr-color-bg: #F0F5FA;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #E2ECF6;
+  --qhr-color-text-primary: #0B1320;
+  --qhr-color-text-secondary: #334155;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #0284C7;
+  --qhr-color-primary-bg: #0284C7;
+  --qhr-button-primary-background: #0284C7;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #0369A1;
+  --qhr-color-primary-focus: rgba(2, 132, 199, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #E2ECF6;
+  --qhr-color-secondary-hover: #D4E2F0;
+  --qhr-color-secondary-fg: #0B1320;
+  --qhr-color-accent: #0EA5E9;
+}
+
+
+/* ==========================================================================
+   جاردن سيتي (Garden City) — Nile Serenade & Botanical Art Nouveau [NIGHT MODE]
+   ========================================================================== */
+[data-theme="garden-city"],
+[data-theme="garden-city"][data-mode="dark"] {
+  --qhr-radius-box: 12px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 9999px;
+  --qhr-radius-xl: 12px;
+  --qhr-radius-lg: 12px;
+  --qhr-radius-md: 4px;
+  --qhr-radius-sm: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 16px 40px -8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(114, 161, 223, 0.15);
+  --qhr-surface-base: #081310;
+  --qhr-surface-elevated: #0F1F1A;
+  --qhr-surface-card: #0F1F1A;
+  --qhr-surface-page: #081310;
+  --qhr-surface-muted: #172C25;
+  --qhr-content-primary: #F0F9F5;
+  --qhr-content-secondary: #ffffff;
+  --qhr-content-muted: #9BB8AE;
+  --qhr-text-primary: #F0F9F5;
+  --qhr-text-secondary: #ffffff;
+  --qhr-text-muted: #9BB8AE;
+  --qhr-border-subtle: rgba(128, 105, 242, 0.25);
+  --qhr-border-strong: #8069f2;
+  --qhr-color-border: #8069f2;
+  --qhr-color-border-subtle: rgba(128, 105, 242, 0.25);
+  --qhr-color-border-strong: #8069f2;
+  --qhr-color-bg: #081310;
+  --qhr-color-surface: #0F1F1A;
+  --qhr-color-surface-elevated: #172C25;
+  --qhr-color-text-primary: #F0F9F5;
+  --qhr-color-text-secondary: #ffffff;
+  --qhr-color-text-muted: #9BB8AE;
+  --qhr-color-primary: #72a1df;
+  --qhr-color-primary-bg: #72a1df;
+  --qhr-button-primary-background: #72a1df;
+  --qhr-button-primary-foreground: #081310;
+  --qhr-color-primary-hover: #5b8ecf;
+  --qhr-color-primary-focus: rgba(114, 161, 223, 0.35);
+  --qhr-color-primary-fg: #081310;
+  --qhr-color-secondary: #172C25;
+  --qhr-color-secondary-hover: #213C33;
+  --qhr-color-secondary-fg: #F0F9F5;
+  --qhr-color-accent: #ebc50a;
+  --qhr-color-accent-fg: #0B130E;
+}
+
+/* ==========================================================================
+   جاردن سيتي (Garden City) — Nile Serenade & Botanical Art Nouveau [DAY MODE]
+   ========================================================================== */
+[data-theme="garden-city"][data-mode="light"] {
+  --qhr-radius-box: 12px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 9999px;
+  --qhr-radius-xl: 12px;
+  --qhr-radius-lg: 12px;
+  --qhr-radius-md: 4px;
+  --qhr-radius-sm: 9999px;
+  --qhr-border-width: 1px;
+  --qhr-shadow-box: 0 6px 24px rgba(37, 99, 235, 0.08);
+  --qhr-surface-base: #F4F7FB;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F4F7FB;
+  --qhr-surface-muted: #EBF1F9;
+  --qhr-content-primary: #09182B;
+  --qhr-content-secondary: #3B536E;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #09182B;
+  --qhr-text-secondary: #3B536E;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: #E2E8F0;
+  --qhr-border-strong: #C4D1EB;
+  --qhr-color-border: #C4D1EB;
+  --qhr-color-border-subtle: #E2E8F0;
+  --qhr-color-border-strong: #C4D1EB;
+  --qhr-color-bg: #F4F7FB;
+  --qhr-color-surface: #FFFFFF;
+  --qhr-color-surface-elevated: #EBF1F9;
+  --qhr-color-text-primary: #09182B;
+  --qhr-color-text-secondary: #3B536E;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #2563EB;
+  --qhr-color-primary-bg: #2563EB;
+  --qhr-button-primary-background: #2563EB;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #1D4ED8;
+  --qhr-color-primary-focus: rgba(37, 99, 235, 0.25);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #EBF1F9;
+  --qhr-color-secondary-hover: #DCE7F5;
+  --qhr-color-secondary-fg: #09182B;
+  --qhr-color-accent: #D97706;
+  --qhr-color-accent-fg: #FFFFFF;
+}
+
+/* ==========================================================================
+   تايدي — القاهرة (tidy-cairo) — High-Tech Minimalist & Cyan Cyber Glass [NIGHT MODE]
+   Provenance: Derived from Qahera القاهرة الجديدة (new-cairo) via Cairo Studio v1.1
+   Density: compact · Elevation: subtle
+   ========================================================================== */
+[data-theme="tidy-cairo"],
+[data-theme="tidy-cairo"][data-mode="dark"] {
+  --qhr-radius-box: 12px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 4px;
+  --qhr-radius-xl: 12px;
+  --qhr-radius-lg: 12px;
+  --qhr-radius-md: 4px;
+  --qhr-radius-sm: 4px;
+  --qhr-border-width: 1px;
+  --qhr-density: compact;
+  --qhr-elevation-level: subtle;
+  --qhr-shadow-box: 0 8px 32px rgba(6, 182, 212, 0.2);
+  --qhr-surface-base: #07090E;
+  --qhr-surface-elevated: #0D121D;
+  --qhr-surface-card: #0D121D;
+  --qhr-surface-page: #07090E;
+  --qhr-surface-muted: #141B2B;
+  --qhr-content-primary: #F0F4FC;
+  --qhr-content-secondary: #94A3B8;
+  --qhr-content-muted: #64748B;
+  --qhr-text-primary: #F0F4FC;
+  --qhr-text-secondary: #94A3B8;
+  --qhr-text-muted: #64748B;
+  --qhr-border-subtle: rgba(56, 189, 248, 0.08);
+  --qhr-border-strong: rgba(56, 189, 248, 0.35);
+  --qhr-color-border: rgba(56, 189, 248, 0.2);
+  --qhr-color-border-subtle: rgba(56, 189, 248, 0.08);
+  --qhr-color-border-strong: rgba(56, 189, 248, 0.35);
+  --qhr-color-bg: #07090E;
+  --qhr-color-surface: #0D121D;
+  --qhr-color-surface-elevated: #141B2B;
+  --qhr-color-text-primary: #F0F4FC;
+  --qhr-color-text-secondary: #94A3B8;
+  --qhr-color-text-muted: #64748B;
+  --qhr-color-primary: #0284C7;
+  --qhr-color-primary-bg: #0284C7;
+  --qhr-button-primary-background: #0284C7;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-primary-hover: #0369A1;
+  --qhr-color-primary-focus: rgba(2, 132, 199, 0.35);
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-color-secondary: #141B2B;
+  --qhr-color-secondary-hover: #1D273D;
+  --qhr-color-secondary-fg: #F0F4FC;
+  --qhr-color-accent: #38BDF8;
+}
+
+/* ==========================================================================
+   تايدي — القاهرة (tidy-cairo) — High-Tech Minimalist & Cyan Cyber Glass [DAY MODE]
+   Provenance: Derived from Qahera القاهرة الجديدة (new-cairo) via Cairo Studio v1.1
+   Density: compact · Elevation: subtle
+   ========================================================================== */
+[data-theme="tidy-cairo"][data-mode="light"] {
+  /* Surfaces & Backgrounds */
+  --qhr-surface-base: #F0F5FA;
+  --qhr-surface-elevated: #FFFFFF;
+  --qhr-surface-card: #FFFFFF;
+  --qhr-surface-page: #F0F5FA;
+  --qhr-surface-muted: #E2ECF6;
+
+  /* Content & Typography Tones */
+  --qhr-content-primary: #0B1320;
+  --qhr-content-secondary: #334155;
+  --qhr-text-primary: #0B1320;
+  --qhr-text-secondary: #334155;
+
+  /* Borders & Dividers */
+  --qhr-border-subtle: #CBD9E7;
+  --qhr-border-strong: #CBD9E7;
+  --qhr-color-border: #CBD9E7;
+  --qhr-border-width: 0px;
+
+  /* Brand Colors & Actions */
+  --qhr-color-primary: #0284C7;
+  --qhr-color-primary-bg: #0284C7;
+  --qhr-color-primary-fg: #FFFFFF;
+  --qhr-button-primary-background: #0284C7;
+  --qhr-button-primary-foreground: #FFFFFF;
+  --qhr-color-secondary: #E2ECF6;
+  --qhr-color-accent: #0EA5E9;
+  --qhr-color-accent-fg: #FFFFFF;
+
+  /* Architectural Radii Matrix */
+  --qhr-radius-box: 12px;
+  --qhr-radius-field: 4px;
+  --qhr-radius-selector: 4px;
+  --qhr-radius-xl: 12px;
+  --qhr-radius-lg: 12px;
+  --qhr-radius-md: 4px;
+  --qhr-radius-sm: 4px;
+
+  /* Density & Elevation */
+  --qhr-density: compact;
+  --qhr-elevation-level: subtle;
+
+  /* Signature Visual Effects */
+  --qhr-effect-glow: false;
+  --qhr-effect-glow-radius: 8px;
+  --qhr-effect-glow-opacity: 15%;
+  --qhr-effect-hard-shadow: false;
+  --qhr-effect-shadow-offset: 6px;
+  --qhr-effect-glass: true;
+  --qhr-effect-glass-blur: 6px;
+  --qhr-effect-glass-opacity: 85%;
+  --qhr-effect-scanlines: false;
+  --qhr-effect-scanlines-opacity: 75%;
+  --qhr-effect-grain: false;
+  --qhr-effect-grain-opacity: 20%;
+  --qhr-effect-ambient-mesh: false;
+  --qhr-effect-mesh-intensity: 35%;
+  --qhr-effect-accent-borders: false;
+  --qhr-effect-accent-border-width: 1px;
+}
+
+

@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Tidy Studio & Web Console — Master Modular Stylesheet
+   Powered by Qahera UI Kit (New Cairo & tidy-cairo Custom Preset)
+   Architecture: Clean 4-Tier Modular Separation
+   ========================================================================== */
+
+@import "css/01-variables.css";
+@import "css/02-layout.css";
+@import "css/03-components.css";
+@import "css/04-apps.css";

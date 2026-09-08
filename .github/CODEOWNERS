@@ -1,0 +1,22 @@
+# Tidy Ecosystem Code Ownership Contract
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default fallback owners for the entire repository
+* @TidyFactor/core-team
+
+# Core Engine Kernel & Protocol Server
+packages/core/ @TidyFactor/core-team @TidyFactor/engineers
+packages/mcp/  @TidyFactor/core-team @TidyFactor/engineers
+packages/cli/  @TidyFactor/core-team @TidyFactor/engineers
+
+# TidyFactor Certified Skill
+packages/skill/ @TidyFactor/core-team @TidyFactor/skill-architects
+SKILL.md        @TidyFactor/core-team @TidyFactor/skill-architects
+manifest.json   @TidyFactor/core-team @TidyFactor/skill-architects
+
+# Desktop & Web Applications
+apps/desktop/ @TidyFactor/core-team @TidyFactor/frontend-team
+apps/web/     @TidyFactor/core-team @TidyFactor/frontend-team
+
+# CI/CD, Supply Chain & Security Governance
+.github/ @TidyFactor/core-team @TidyFactor/devops
