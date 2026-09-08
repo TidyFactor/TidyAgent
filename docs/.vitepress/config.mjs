@@ -7,6 +7,13 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
 
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap' }]
+  ],
+
   locales: {
     root: {
       label: 'العربية',
@@ -73,6 +80,9 @@ export default defineConfig({
   },
 
   themeConfig: {
+    logo: '/logo.svg',
+    siteTitle: 'Tidy Ecosystem',
+
     socialLinks: [
       { icon: 'github', link: 'https://github.com/TidyFactor/Agent' }
     ],

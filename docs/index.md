@@ -4,25 +4,40 @@ layout: home
 hero:
   name: "Tidy Ecosystem"
   text: "منظومة المساعد الشخصي وإدارة الأعمال السيادية"
-  tagline: "نواة مصغرة فائقة السرعة بـ SQLite WAL وبحث FTS5 BM25 وحزم مجالات مستقلة"
+  tagline: "نواة مصغرة فائقة السرعة بـ SQLite WAL • بحث ذكي FTS5 BM25 • حزم مجالات تخصصية (@tidy/office & @tidy/builder)"
+  image:
+    src: /logo.svg
+    alt: Tidy Ecosystem Logo
   actions:
     - theme: brand
-      text: 📖 دليل الاستخدام الشامل
+      text: 🚀 ابدأ بدليل الاستخدام
       link: /user_manual.ar
     - theme: alt
-      text: 🏛️ المواصفات الهندسية
+      text: 🏛️ المواصفات والمعمارية
       link: /specs/architecture_spec.ar
     - theme: alt
-      text: 🚀 خارطة الطريق ومسار SemVer
+      text: 🗺️ خارطة الطريق ومسار SemVer
       link: /PROJECT_STATUS.ar
 
 features:
-  - title: 🔒 سيادة تامة ومحلية (Local-First SSOT)
-    details: قاعدة بيانات SQLite واحدة نشطة بنمط WAL عالي السرعة، مع صفر تبعيات سحابية وأمان مشفر للخزنة.
-  - title: ⚡ بحث ذكي ثنائي اللغة (FTS5 BM25)
-    details: فهرسة فورية تدعم العربية والإنجليزية عبر unicode61 وخوارزمية قياس الاضمحلال المعرفي (Decay Scoring).
-  - title: 🧩 معمارية النواة المصغرة والحزم
-    details: نواة مجردة خفيفة (@tidy/core) قابلة للتمديد بحزم النطاقات مثل حزمة الأعمال المكتبية (@tidy/office).
+  - icon: 🔒
+    title: سيادة تامة ومحلية (Local-First SSOT)
+    details: قاعدة بيانات SQLite واحدة نشطة بنمط WAL عالي السرعة، مع صفر ارتهان بالسحابة وخزنة محلية مشفرة بالكامل.
+  - icon: ⚡
+    title: بحث ذكي ثنائي اللغة (FTS5 BM25)
+    details: محرك بحث واسترجاع فوري يدعم العربية والإنجليزية بترميز unicode61 مع خوارزمية قياس الاضمحلال المعرفي (Decay Scoring).
+  - icon: 🧩
+    title: معمارية النواة المصغرة (Microkernel)
+    details: نواة مجردة خفيفة فائقة الاستجابة (@tidy/core) تلتزم بالقواعد الهيكلية وتتمدد بحزم النطاقات المخصصة.
+  - icon: 💼
+    title: حزمة إدارة الأعمال (@tidy/office)
+    details: إدارة العملاء والصفقات (CRM)، فواتير وعروض أسعار آلية، وتوليد ملفات استخبارات العملاء الشاملة (AI Dossier).
+  - icon: 🎨
+    title: نظام تصميم أصيل (@tidy/builder)
+    details: تكامل أصيل مع مكتبة Qahera UI Kit لتوليد واجهات ويب وتطبيقات SPA بدعم RTL كامل ودون أي تعقيدات.
+  - icon: 🤖
+    title: حوكمة سياق الحلقات الثلاث (3-Ring Context)
+    details: تجميع السياق الذري الفوري (Ring 0 للهوية، Ring 1 للمجالات، Ring 2 للمشروع) مع خطافات تفويض الوكلاء الفرعيين.
 ---
 
 # 📚 مركز التوثيق الشامل لمنظومة تايدي — Documentation Hub
