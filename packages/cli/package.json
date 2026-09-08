@@ -1,6 +1,6 @@
 {
   "name": "@tidy/cli",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Tidy Terminal Engine — Interactive @clack/prompts wizard & scriptable CLI",
   "bin": {
     "tidy": "bin/tidy.js"

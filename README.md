@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🤖 Tidy `v1.4.0`
+# 🤖 Tidy `v1.4.2`
 ### Sovereign Personal Assistant & Office Suite with Persistent SQLite Memory & Local Stdio MCP Server
 
 Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a dedicated sovereign assistant layer with zero-config persistent memory, subagent delegation, community skills discovery, full B2B CRM, automated itemized invoicing, expense & cashflow telemetry, and instant SQLite FTS5 search.
 
-[![npm version](https://img.shields.io/badge/version-1.4.0-blue.svg?style=for-the-badge)](package.json)
+[![npm version](https://img.shields.io/badge/version-1.4.2-blue.svg?style=for-the-badge)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 [![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](SKILL.md)

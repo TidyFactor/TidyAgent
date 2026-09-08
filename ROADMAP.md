@@ -12,10 +12,12 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 ┌────────────────────────────────────────────────────────────────────────┐
 │                    TIDY ECOSYSTEM PLATFORM ROADMAP                     │
 └────────────────────────────────────────────────────────────────────────┘
-  Phase 1: Foundation (Core, CLI, MCP & TidyFactor Skill)       ✅ Done (v1.1)
-  Phase 2: Management GUI (Electron Windows & Web Console)      🚀 In Progress
-  Phase 3: Sovereign Multi-Device Sync (Cloud MCP & LibSQL)      ⏳ Planned
-  Phase 4: Cross-Platform Expansion (macOS, Linux, Mobile App)   🔮 Vision
+  Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
+  Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
+  Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2 - Current)
+  Phase 3: Cognitive OS Services & Platform Hubs (v1.4.3-v1.5) 🚀 In Progress
+  Phase 4: Sovereign Office & Commerce Suite (v1.6.0)          ⏳ Planned
+  Phase 5: Multi-Device Sync & Cross-Platform (v2.0.0)         🔮 Vision
 ```
 
 ---
