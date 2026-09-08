@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ==========================================================================
-   Tidy Ecosystem — Premium Documentation Theme Tokens
-   Compliant with TidyFactor Design & Qahera UI Kit Aesthetics
+   Tidy Ecosystem — Sovereign Documentation Design System
+   Surgical RTL Polish & Token Engineering (TidyFactor Styler + Design Track)
    ========================================================================== */
 
 :root {
-  /* Brand Palettes — Azure Sapphire to Indigo */
+  /* Brand Palette — Azure Sapphire to Deep Indigo */
   --vp-c-brand-1: #2563eb;
   --vp-c-brand-2: #1d4ed8;
   --vp-c-brand-3: #1e40af;
   --vp-c-brand-soft: rgba(37, 99, 235, 0.12);
 
-  /* Typography */
+  /* Typography Pairing SSOT */
   --vp-font-family-base: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --vp-font-family-headings: 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -20,7 +20,7 @@
   /* Hero Gradient Accents */
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(135deg, #2563eb 0%, #6366f1 50%, #9333ea 100%);
-  --vp-home-hero-image-filter: drop-shadow(0 12px 36px rgba(37, 99, 235, 0.35));
+  --vp-home-hero-image-filter: drop-shadow(0 16px 40px rgba(37, 99, 235, 0.35));
 }
 
 /* Dark Mode Fine-Tuning */
@@ -31,134 +31,11 @@
   --vp-c-brand-soft: rgba(56, 189, 248, 0.14);
 
   --vp-home-hero-name-background: -webkit-linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-  --vp-home-hero-image-filter: drop-shadow(0 0 50px rgba(56, 189, 248, 0.45));
+  --vp-home-hero-image-filter: drop-shadow(0 0 55px rgba(56, 189, 248, 0.45));
 }
 
 /* ==========================================================================
-   Hero Section Enhancements
-   ========================================================================== */
-
-.VPHomeHero {
-  padding-top: calc(var(--vp-nav-height) + 24px) !important;
-  padding-bottom: 40px !important;
-}
-
-.VPHomeHero .name {
-  font-family: 'Alexandria', sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.02em;
-}
-
-.VPHomeHero .text {
-  font-family: 'Alexandria', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 2rem !important;
-  line-height: 1.35 !important;
-  max-width: 650px;
-}
-
-.VPHomeHero .tagline {
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 1.15rem !important;
-  line-height: 1.6 !important;
-  max-width: 620px;
-}
-
-.VPHomeHero .image-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.VPHomeHero .image-bg {
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.1) 70%, transparent 100%);
-  filter: blur(28px);
-}
-
-/* Hero Action Buttons */
-.VPButton.brand {
-  border-radius: 12px !important;
-  font-family: 'Alexandria', sans-serif !important;
-  font-weight: 600 !important;
-  background: linear-gradient(135deg, #2563eb, #6366f1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35) !important;
-  transition: all 0.25s ease !important;
-}
-
-.VPButton.brand:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45) !important;
-}
-
-.VPButton.alt {
-  border-radius: 12px !important;
-  font-family: 'Alexandria', sans-serif !important;
-  font-weight: 600 !important;
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--vp-c-divider) !important;
-  transition: all 0.25s ease !important;
-}
-
-.VPButton.alt:hover {
-  transform: translateY(-2px);
-  border-color: var(--vp-c-brand-1) !important;
-}
-
-/* ==========================================================================
-   Feature Cards — Luxury Micro-Interaction
-   ========================================================================== */
-
-.VPHomeFeatures {
-  padding-bottom: 60px !important;
-}
-
-.VPFeature {
-  border: 1px solid var(--vp-c-divider) !important;
-  border-radius: 16px !important;
-  background: var(--vp-c-bg-soft) !important;
-  backdrop-filter: blur(12px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.VPFeature:hover {
-  transform: translateY(-4px);
-  border-color: var(--vp-c-brand-1) !important;
-  box-shadow: 0 12px 32px -8px rgba(37, 99, 235, 0.22) !important;
-}
-
-.VPFeature .icon {
-  font-size: 1.85rem !important;
-  margin-bottom: 12px;
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.VPFeature:hover .icon {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.VPFeature .title {
-  font-family: 'Alexandria', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 1.15rem !important;
-  margin-bottom: 8px;
-}
-
-.VPFeature .details {
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
-  color: var(--vp-c-text-2) !important;
-}
-
-/* ==========================================================================
-   RTL Precision & Layout Adjustments
+   1. RTL Precision & Top Navbar Re-ordering
    ========================================================================== */
 
 html[dir="rtl"] {
@@ -166,20 +43,248 @@ html[dir="rtl"] {
   text-align: right;
 }
 
-/* Brand & Navbar */
+/* Reorder Navbar items in RTL: Title/Logo -> Menu -> (spacer) -> Search -> Theme -> Social */
+html[dir="rtl"] .VPNavBar .content-body {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  width: 100%;
+}
+
+html[dir="rtl"] .VPNavBarTitle {
+  order: 1 !important;
+  margin-inline-end: 28px !important;
+}
+
 html[dir="rtl"] .VPNavBarTitle .title {
   font-family: 'Alexandria', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 1.1rem;
+  font-weight: 800 !important;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+html[dir="rtl"] .VPNavBarTitle .logo {
+  margin-inline-end: 12px !important;
+  border-radius: 8px;
+}
+
+html[dir="rtl"] .VPNavBarMenu {
+  order: 2 !important;
+  margin-inline-end: auto !important; /* Pushes Search & Utilities to far left */
 }
 
 html[dir="rtl"] .VPNavBarMenuLink {
-  font-family: 'Alexandria', sans-serif;
-  font-weight: 500;
-  font-size: 0.95rem;
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem;
+  padding: 0 14px !important;
+  transition: color 0.2s ease;
 }
 
-/* Headings Typography */
+html[dir="rtl"] .VPNavBarSearch {
+  order: 3 !important;
+  margin-inline-start: 16px !important;
+  margin-inline-end: 12px !important;
+}
+
+html[dir="rtl"] .VPNavBarAppearance {
+  order: 4 !important;
+  margin-inline-end: 8px !important;
+}
+
+html[dir="rtl"] .VPNavBarSocialLinks {
+  order: 5 !important;
+}
+
+/* ==========================================================================
+   2. Hero Section Architecture & RTL Alignment
+   ========================================================================== */
+
+.VPHomeHero {
+  padding-top: calc(var(--vp-nav-height) + 32px) !important;
+  padding-bottom: 48px !important;
+}
+
+.VPHomeHero .container {
+  align-items: center;
+}
+
+html[dir="rtl"] .VPHomeHero .main {
+  text-align: right !important;
+}
+
+.VPHomeHero .name {
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 3rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.VPHomeHero .text {
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.85rem !important;
+  line-height: 1.4 !important;
+  color: var(--vp-c-text-1) !important;
+  margin-bottom: 16px;
+}
+
+.VPHomeHero .tagline {
+  font-family: 'Cairo', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 1.15rem !important;
+  line-height: 1.7 !important;
+  color: var(--vp-c-text-2) !important;
+  margin-bottom: 28px;
+}
+
+/* Align Hero Action Buttons to the Right (Start) in RTL */
+html[dir="rtl"] .VPHomeHero .actions {
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
+}
+
+html[dir="rtl"] .VPHomeHero .action {
+  margin: 0 !important;
+}
+
+.VPButton {
+  height: 46px !important;
+  line-height: 44px !important;
+  padding: 0 24px !important;
+  border-radius: 12px !important;
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.VPButton.brand {
+  background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.VPButton.brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45) !important;
+}
+
+.VPButton.alt {
+  background: var(--vp-c-bg-soft) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPButton.alt:hover {
+  transform: translateY(-2px);
+  border-color: var(--vp-c-brand-1) !important;
+  background: var(--vp-c-brand-soft) !important;
+}
+
+/* Hero Logo Container */
+.VPHomeHero .image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.VPHomeHero .image-src {
+  max-width: 250px !important;
+  max-height: 250px !important;
+  transition: transform 0.4s ease;
+}
+
+.VPHomeHero .image-src:hover {
+  transform: scale(1.04) rotate(1deg);
+}
+
+/* ==========================================================================
+   3. Feature Cards — Luxury RTL Grid
+   ========================================================================== */
+
+.VPHomeFeatures {
+  padding-bottom: 70px !important;
+}
+
+.VPFeature {
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 18px !important;
+  background: var(--vp-c-bg-soft) !important;
+  backdrop-filter: blur(16px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+  overflow: hidden;
+  padding: 24px !important;
+}
+
+html[dir="rtl"] .VPFeature {
+  text-align: right !important;
+}
+
+html[dir="rtl"] .VPFeature .box {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: right !important;
+}
+
+.VPFeature:hover {
+  transform: translateY(-5px);
+  border-color: var(--vp-c-brand-1) !important;
+  box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.22) !important;
+}
+
+.VPFeature .icon {
+  font-size: 1.75rem !important;
+  margin-bottom: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 14px !important;
+  background: var(--vp-c-brand-soft) !important;
+  border: 1px solid rgba(37, 99, 235, 0.15) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.VPFeature:hover .icon {
+  transform: scale(1.12) rotate(4deg);
+}
+
+.VPFeature .title {
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 10px !important;
+  color: var(--vp-c-text-1) !important;
+  width: 100% !important;
+  text-align: right !important;
+}
+
+.VPFeature .details {
+  font-family: 'Cairo', sans-serif !important;
+  font-size: 0.96rem !important;
+  line-height: 1.68 !important;
+  color: var(--vp-c-text-2) !important;
+  width: 100% !important;
+  text-align: right !important;
+}
+
+/* ==========================================================================
+   4. Document Typography & Content Rhythm
+   ========================================================================== */
+
 html[dir="rtl"] h1,
 html[dir="rtl"] h2,
 html[dir="rtl"] h3,
@@ -187,31 +292,38 @@ html[dir="rtl"] h4,
 html[dir="rtl"] h5,
 html[dir="rtl"] h6 {
   font-family: 'Alexandria', sans-serif !important;
-  font-weight: 700;
 }
 
 html[dir="rtl"] .VPDoc h1 {
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   font-weight: 800;
   border-bottom: 1px solid var(--vp-c-divider);
-  padding-bottom: 12px;
-  margin-bottom: 24px;
+  padding-bottom: 14px;
+  margin-bottom: 26px;
+  letter-spacing: -0.01em;
 }
 
 html[dir="rtl"] .VPDoc h2 {
-  font-size: 1.55rem;
+  font-size: 1.6rem;
   font-weight: 700;
   border-bottom: 1px solid var(--vp-c-divider-light);
-  padding-bottom: 8px;
-  margin-top: 36px;
-  margin-bottom: 16px;
+  padding-bottom: 10px;
+  margin-top: 40px;
+  margin-bottom: 18px;
 }
 
 html[dir="rtl"] .VPDoc h3 {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  margin-top: 24px;
-  margin-bottom: 12px;
+  margin-top: 26px;
+  margin-bottom: 14px;
+}
+
+html[dir="rtl"] .VPDoc p,
+html[dir="rtl"] .VPDoc li {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
 }
 
 /* Sidebar in RTL */
@@ -219,49 +331,53 @@ html[dir="rtl"] .VPSidebarItem .text {
   text-align: right;
   font-family: 'Cairo', sans-serif;
   font-weight: 600;
+  font-size: 0.95rem;
 }
 
 html[dir="rtl"] .VPSidebarItem.is-active > .item .indicator {
   right: -16px !important;
   left: auto !important;
   border-radius: 4px 0 0 4px;
+  width: 3px;
+  background: var(--vp-c-brand-1);
 }
 
 /* On-This-Page Outline in RTL */
 html[dir="rtl"] .VPDocOutlineItem a {
   text-align: right;
   font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
 }
 
 html[dir="rtl"] .VPDocOutlineItem.is-active > a {
   border-inline-start: 2px solid var(--vp-c-brand-1);
 }
 
-/* Callout / Custom Blocks (Tip, Warning, Danger) */
+/* Callouts / Custom Blocks (Tip, Warning, Danger) */
 html[dir="rtl"] .custom-block {
   border-inline-start: 4px solid !important;
   border-inline-end: 1px solid var(--vp-c-divider) !important;
   border-top: 1px solid var(--vp-c-divider) !important;
   border-bottom: 1px solid var(--vp-c-divider) !important;
-  border-radius: 12px !important;
-  padding: 16px 20px !important;
-  margin: 20px 0 !important;
+  border-radius: 14px !important;
+  padding: 18px 22px !important;
+  margin: 22px 0 !important;
 }
 
 html[dir="rtl"] .custom-block .custom-block-title {
   font-family: 'Alexandria', sans-serif !important;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
-/* Markdown Tables Styling */
+/* Markdown Tables */
 html[dir="rtl"] .VPDoc table {
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--vp-c-divider);
-  margin: 24px 0;
+  margin: 26px 0;
   width: 100%;
 }
 
@@ -269,15 +385,15 @@ html[dir="rtl"] .VPDoc th {
   background: var(--vp-c-bg-soft);
   font-family: 'Alexandria', sans-serif;
   font-weight: 700;
-  font-size: 0.92rem;
-  padding: 12px 16px;
+  font-size: 0.95rem;
+  padding: 14px 18px;
   border-bottom: 2px solid var(--vp-c-divider);
 }
 
 html[dir="rtl"] .VPDoc td {
-  padding: 12px 16px;
+  padding: 13px 18px;
   border-bottom: 1px solid var(--vp-c-divider-light);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
 }
 
 html[dir="rtl"] .VPDoc tr:last-child td {
@@ -288,34 +404,39 @@ html[dir="rtl"] .VPDoc tr:nth-child(even) td {
   background: rgba(125, 125, 125, 0.02);
 }
 
-/* Code Blocks & Terminal Windows */
+/* Bi-Directional Isolation for Code Blocks & Keys */
 html[dir="rtl"] div[class*='language-'],
 html[dir="rtl"] code,
-html[dir="rtl"] pre {
+html[dir="rtl"] pre,
+html[dir="rtl"] kbd,
+html[dir="rtl"] .DocSearch-Button-Keys {
   direction: ltr !important;
   text-align: left !important;
   font-family: var(--vp-font-family-mono) !important;
+  unicode-bidi: isolate;
 }
 
 div[class*='language-'] {
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   border: 1px solid var(--vp-c-divider) !important;
-  margin: 18px 0 !important;
+  margin: 20px 0 !important;
 }
 
-/* Footer / Pager In RTL */
+/* Footer / Pager in RTL */
 html[dir="rtl"] .VPDocFooter .pager-link.prev .title {
   text-align: right;
+  font-family: 'Alexandria', sans-serif;
 }
 
 html[dir="rtl"] .VPDocFooter .pager-link.next .title {
   text-align: left;
+  font-family: 'Alexandria', sans-serif;
 }
 
-/* Smooth Custom Scrollbar */
+/* Smooth Minimal Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
