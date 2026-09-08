@@ -41,21 +41,48 @@ export default defineConfig({
 
         sidebar: [
           {
-            text: '📖 التوثيق العام',
+            text: '🚀 البدء السريع',
             collapsed: false,
             items: [
-              { text: 'فهرس مركز التوثيق', link: '/' },
-              { text: 'دليل الاستخدام الشامل', link: '/user_manual.ar' },
-              { text: 'حالة المشروع ومسارات SemVer', link: '/PROJECT_STATUS.ar' }
+              { text: 'نظرة عامة على المنظومة', link: '/' },
+              { text: 'دليل التثبيت والتهيئة', link: '/guide/getting-started.ar' },
+              { text: 'دليل المستخدم الشامل', link: '/user_manual.ar' }
             ]
           },
           {
-            text: '🏛️ المواصفات الهندسية والمعمارية',
+            text: '🛠️ أدوات المنظومة',
             collapsed: false,
             items: [
+              { text: 'واجهة سطر الأوامر (CLI)', link: '/tools/cli.ar' },
+              { text: 'خادم بروتوكول MCP', link: '/tools/mcp-server.ar' }
+            ]
+          },
+          {
+            text: '💼 التطبيقات وحزم العمل',
+            collapsed: false,
+            items: [
+              { text: 'تطبيقات الإنتاجية الدقيقة', link: '/apps/productivity.ar' },
+              { text: 'حزمة الأعمال (@tidy/office)', link: '/apps/office-suite.ar' },
+              { text: 'تطبيق سطح المكتب (HUD)', link: '/apps/desktop-hud.ar' }
+            ]
+          },
+          {
+            text: '🏛️ المعمارية العميقة',
+            collapsed: false,
+            items: [
+              { text: 'بنية الذاكرة ومحرك البحث', link: '/architecture/memory-and-search.ar' },
+              { text: 'معمارية الحلقات وجدار الحماية', link: '/architecture/3-ring-context.ar' },
+              { text: 'الوكلاء الفرعيون ومحمل المهارات', link: '/architecture/subagents-and-skills.ar' },
               { text: 'مواصفات المعمارية والنواة', link: '/specs/architecture_spec.ar' },
               { text: 'ميثاق تطور حزمة @tidy/office', link: '/specs/tidyoffice_evolution_roadmap.ar' },
               { text: 'ترقية PocketOffice ونظام التصميم', link: '/specs/pocketoffice_migration_and_design_system.ar' }
+            ]
+          },
+          {
+            text: '🗺️ المشروع والتقارير',
+            collapsed: false,
+            items: [
+              { text: 'حالة المشروع ومراحل الإطلاق', link: '/PROJECT_STATUS.ar' }
             ]
           },
           {
