@@ -8,10 +8,10 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 [![npm version](https://img.shields.io/badge/version-1.4.2-blue.svg?style=for-the-badge)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
-[![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](SKILL.md)
+[![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](packages/skill/SKILL.md)
 [![RTL Native Arabic](https://img.shields.io/badge/RTL-Native%20Arabic-emerald.svg?style=for-the-badge)](docs/i18n/README.ar.md)
 [![Architect Score](https://img.shields.io/badge/Architect%20Score-15%2F15%20Pass%20(100%25)-green.svg?style=for-the-badge)](#-architecture--governance)
-[![AI Agents Compatible](https://img.shields.io/badge/AI%20Agents-Universal%20Compatibility-4285F4.svg?style=for-the-badge)](SKILL.md)
+[![AI Agents Compatible](https://img.shields.io/badge/AI%20Agents-Universal%20Compatibility-4285F4.svg?style=for-the-badge)](packages/skill/SKILL.md)
 
 [ English ](README.md) • [ العربية ](docs/i18n/README.ar.md) • [ 📚 Documentation Hub ](docs/README.md) • [ 📖 User Manual ](docs/user_manual.ar.md) • [ 🗺️ Roadmap ](ROADMAP.md)
 

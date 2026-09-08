@@ -16,8 +16,8 @@
     "test": "node tests/run.js",
     "mcp": "node scripts/mcp_server.js",
     "init-db": "node bin/tidy.js init",
-    "validate": "python tools/validate_skill.py",
-    "build": "node tools/build-skill.js",
+    "validate": "python packages/skill/tools/validate_skill.py",
+    "build": "node packages/skill/tools/build-skill.js",
     "check:leaks": "node tools/check-leaks.js"
   },
   "workspaces": [
@@ -25,6 +25,7 @@
     "apps/*"
   ],
   "keywords": [
+    "tidy",
     "tidyfactor",
     "agent",
     "personal-assistant",
@@ -53,14 +54,8 @@
     "packages",
     "scripts",
     "tools",
-    "references",
-    "tests",
-    "SKILL.md",
-    "manifest.json",
-    "brand.yaml",
-    "brand.json",
-    "README.md",
     "docs",
+    "README.md",
     "CHANGELOG.md"
   ],
   "dependencies": {

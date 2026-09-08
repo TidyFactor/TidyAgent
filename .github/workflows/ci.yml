@@ -40,12 +40,10 @@ jobs:
       - name: Audit Environment Leaks & Hygiene
         run: npm run check:leaks
 
-      - name: Run Tidy Automated Test Suite (20 Tests)
+      - name: Run Tidy Automated Test Suite (33 Tests)
         run: node tests/run.js
 
-      - name: Validate Root Skill Integrity (15 Structural Rules)
-        run: python tools/validate_skill.py
-
-      - name: Validate @tidy/skill Package Integrity
+      - name: Validate @tidy/skill Package Integrity (15 Structural Rules)
         run: python packages/skill/tools/validate_skill.py
+
 
