@@ -80,38 +80,95 @@ export default defineConfig({
     en: {
       label: 'English',
       lang: 'en',
-      link: '/i18n/README.ar'
+      link: '/en/',
+      themeConfig: {
+        nav: [
+          { text: 'Home', link: '/en/' },
+          { text: 'Arabic Hub', link: '/' },
+          { text: 'User Manual', link: '/user_manual.ar' },
+          { text: 'Architecture Spec', link: '/specs/architecture_spec.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     es: {
       label: 'Español',
       lang: 'es',
-      link: '/i18n/README.es'
+      link: '/es/',
+      themeConfig: {
+        nav: [
+          { text: 'Inicio', link: '/es/' },
+          { text: 'Hub Principal (العربية)', link: '/' },
+          { text: 'Manual de Usuario', link: '/user_manual.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     de: {
       label: 'Deutsch',
       lang: 'de',
-      link: '/i18n/README.de'
+      link: '/de/',
+      themeConfig: {
+        nav: [
+          { text: 'Startseite', link: '/de/' },
+          { text: 'Haupt-Hub (العربية)', link: '/' },
+          { text: 'Benutzerhandbuch', link: '/user_manual.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     fr: {
       label: 'Français',
       lang: 'fr',
-      link: '/i18n/README.fr'
+      link: '/fr/',
+      themeConfig: {
+        nav: [
+          { text: 'Accueil', link: '/fr/' },
+          { text: 'Hub Principal (العربية)', link: '/' },
+          { text: 'Manuel d\'utilisation', link: '/user_manual.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     pt: {
       label: 'Português',
       lang: 'pt',
-      link: '/i18n/README.pt'
+      link: '/pt/',
+      themeConfig: {
+        nav: [
+          { text: 'Início', link: '/pt/' },
+          { text: 'Hub Principal (العربية)', link: '/' },
+          { text: 'Manual do Usuário', link: '/user_manual.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     zh: {
       label: '简体中文',
       lang: 'zh',
-      link: '/i18n/README.zh'
+      link: '/zh/',
+      themeConfig: {
+        nav: [
+          { text: '首页', link: '/zh/' },
+          { text: '主文档中心 (العربية)', link: '/' },
+          { text: '使用手册', link: '/user_manual.ar' },
+          { text: 'GitHub', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     },
     fa: {
       label: 'فارسی',
       lang: 'fa',
       dir: 'rtl',
-      link: '/i18n/README.fa'
+      link: '/fa/',
+      themeConfig: {
+        nav: [
+          { text: 'خانه', link: '/fa/' },
+          { text: 'مرکز اسناد (العربية)', link: '/' },
+          { text: 'راهنمای کاربر', link: '/user_manual.ar' },
+          { text: 'گیت‌هاب', link: 'https://github.com/TidyFactor/Agent' }
+        ]
+      }
     }
   },
 
