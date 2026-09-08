@@ -15,8 +15,8 @@ Security patches and bug fixes are actively provided for the following releases:
 
 | Version | Supported |
 | :--- | :--- |
-| `1.3.x` | ✅ Yes (Current Active Release) |
-| `< 1.3.0` | ❌ No (Please upgrade to v1.3.0+) |
+| `1.4.x` | ✅ Yes (Current Active Release) |
+| `< 1.4.0` | ❌ No (Please upgrade to v1.4.0+) |
 
 ---
 
