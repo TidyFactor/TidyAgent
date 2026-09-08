@@ -36,6 +36,14 @@
   ],
   "author": "TidyFactor Team",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TidyFactor/Agent.git"
+  },
+  "homepage": "https://github.com/TidyFactor/Agent#readme",
+  "bugs": {
+    "url": "https://github.com/TidyFactor/Agent/issues"
+  },
   "engines": {
     "node": ">=22.0.0"
   },
