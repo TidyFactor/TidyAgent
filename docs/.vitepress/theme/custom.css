@@ -87,14 +87,80 @@ html[dir="rtl"] .VPNavBarSearch {
   margin-inline-end: 12px !important;
 }
 
-html[dir="rtl"] .VPNavBarAppearance {
+html[dir="rtl"] .VPNavBarTranslations {
   order: 4 !important;
   margin-inline-end: 8px !important;
 }
 
-html[dir="rtl"] .VPNavBarSocialLinks {
+html[dir="rtl"] .VPNavBarAppearance {
   order: 5 !important;
+  margin-inline-end: 8px !important;
 }
+
+html[dir="rtl"] .VPNavBarSocialLinks {
+  order: 6 !important;
+}
+
+/* ==========================================================================
+   Translations Switcher (i18n) — Luxury Design System Styling
+   ========================================================================== */
+
+.VPNavBarTranslations .VPFlyout button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 10px !important;
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.VPNavBarTranslations .VPFlyout button:hover {
+  background: var(--vp-c-brand-soft) !important;
+  border-color: rgba(37, 99, 235, 0.25) !important;
+  color: var(--vp-c-brand-1) !important;
+}
+
+.VPNavBarTranslations .VPMenu {
+  border-radius: 16px !important;
+  padding: 8px !important;
+  background: var(--vp-c-bg-elv) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.28), 0 0 1px rgba(0, 0, 0, 0.15) !important;
+  min-width: 175px !important;
+}
+
+.VPNavBarTranslations .VPMenu .item {
+  border-radius: 10px !important;
+  margin: 3px 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.VPNavBarTranslations .VPMenu .link {
+  padding: 8px 14px !important;
+  font-family: 'Alexandria', 'Cairo', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transition: all 0.2s ease !important;
+}
+
+.VPNavBarTranslations .VPMenu .item:hover .link {
+  background: var(--vp-c-brand-soft) !important;
+  color: var(--vp-c-brand-1) !important;
+  transform: translateX(-3px);
+}
+
+.VPNavBarTranslations .VPMenu .item.active .link {
+  color: var(--vp-c-brand-1) !important;
+  font-weight: 700 !important;
+  background: var(--vp-c-brand-soft) !important;
+}
+
 
 /* ==========================================================================
    2. Hero Section Architecture & RTL Alignment

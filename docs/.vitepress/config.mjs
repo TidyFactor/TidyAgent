@@ -76,6 +76,42 @@ export default defineConfig({
         sidebarMenuLabel: 'القائمة',
         returnToTopLabel: 'العودة للأعلى'
       }
+    },
+    en: {
+      label: 'English',
+      lang: 'en',
+      link: '/i18n/README.ar'
+    },
+    es: {
+      label: 'Español',
+      lang: 'es',
+      link: '/i18n/README.es'
+    },
+    de: {
+      label: 'Deutsch',
+      lang: 'de',
+      link: '/i18n/README.de'
+    },
+    fr: {
+      label: 'Français',
+      lang: 'fr',
+      link: '/i18n/README.fr'
+    },
+    pt: {
+      label: 'Português',
+      lang: 'pt',
+      link: '/i18n/README.pt'
+    },
+    zh: {
+      label: '简体中文',
+      lang: 'zh',
+      link: '/i18n/README.zh'
+    },
+    fa: {
+      label: 'فارسی',
+      lang: 'fa',
+      dir: 'rtl',
+      link: '/i18n/README.fa'
     }
   },
 
