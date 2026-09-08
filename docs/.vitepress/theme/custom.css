@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;700;800&family=Cairo:wght@400;500;600;700&display=swap');
+
+:root {
+  --vp-c-brand-1: #2563eb;
+  --vp-c-brand-2: #1d4ed8;
+  --vp-c-brand-3: #1e40af;
+  --vp-font-family-base: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --vp-font-family-headings: 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .VPNavBarTitle .title {
+  font-family: 'Alexandria', sans-serif;
+  font-weight: 700;
+}
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6 {
+  font-family: 'Alexandria', sans-serif;
+}
+
+html[dir="rtl"] .VPDoc :is(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: normal;
+}
+
+/* Ensure code blocks stay LTR for readability */
+html[dir="rtl"] div[class*='language-'],
+html[dir="rtl"] code,
+html[dir="rtl"] pre {
+  direction: ltr !important;
+  text-align: left !important;
+  font-family: var(--vp-font-family-mono);
+}
+
+/* Fix sidebar items alignment in RTL */
+html[dir="rtl"] .VPSidebarItem .text {
+  text-align: right;
+}

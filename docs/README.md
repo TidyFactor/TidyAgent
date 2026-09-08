@@ -60,3 +60,21 @@ docs/
 | **Português** | [docs/i18n/README.pt.md](i18n/README.pt.md) | LTR |
 | **中文** | [docs/i18n/README.zh.md](i18n/README.zh.md) | LTR |
 | **فارسی** | [docs/i18n/README.fa.md](i18n/README.fa.md) | RTL |
+
+---
+
+## ⚡ بوابة التوثيق التفاعلية (VitePress Documentation Portal)
+
+تم تجهيز المجلد ليعمل كبوابة ويب تفاعلية فائقة السرعة مدعومة بـ **VitePress** مع بحث محلي فوري ودعم كامل للـ RTL:
+
+```bash
+# تشغيل خادم التوثيق المحلي المباشر
+npm run docs:dev
+
+# بناء نسخة الإنتاج المجمعة (SSG)
+npm run docs:build
+
+# معاينة نسخة الإنتاج محلياً
+npm run docs:preview
+```
+

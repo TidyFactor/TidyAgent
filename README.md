@@ -213,10 +213,17 @@ The Tidy repository is organized around a single root `README.md` and a modular 
 | **System Architecture** | Technical specification of SQLite WAL, FTS5 & Context Rings | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | **Product Roadmap** | Strategic multi-phase product roadmap and release plan | [ROADMAP.md](ROADMAP.md) |
 | **AI Agent Guidelines** | Autonomous coding agent operating contract & invariants | [AGENTS.md](AGENTS.md) |
-| **Skill Manifest** | TidyFactor Skills-LAB certified skill router | [SKILL.md](SKILL.md) |
+| **Skill Manifest** | TidyFactor Skills-LAB certified skill router | [packages/skill/SKILL.md](packages/skill/SKILL.md) |
 | **Release Changelog** | Complete historical SemVer changelog | [CHANGELOG.md](CHANGELOG.md) |
 | **Security Policy** | Zero-telemetry guarantee & private vulnerability reporting | [SECURITY.md](SECURITY.md) |
 | **Contributing Guide** | Development workflows, test suites, and contribution rules | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+### ⚡ Interactive Documentation Portal (VitePress)
+Run the local interactive documentation portal with instant search and full RTL/LTR support:
+```bash
+npm run docs:dev    # Start live development server
+npm run docs:build  # Compile static production bundle (SSG)
+```
 
 ### 🌐 International Translations (`docs/i18n/`)
 - [العربية (Arabic)](docs/i18n/README.ar.md) • [Español](docs/i18n/README.es.md) • [Deutsch](docs/i18n/README.de.md) • [Français](docs/i18n/README.fr.md) • [Português](docs/i18n/README.pt.md) • [中文](docs/i18n/README.zh.md) • [فارسی](docs/i18n/README.fa.md)
