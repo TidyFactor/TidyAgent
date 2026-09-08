@@ -1,8 +1,14 @@
 /**
- * Tidy Task Brief Generator
- * Synthesizes self-contained, context-rich task briefs for AI agents,
- * blending 3-Ring Cognitive Context with Skill-specific operational boundaries.
+ * Tidy Ecosystem — Task Brief Generator
+ * Synthesizes self-contained, context-rich task briefs for AI agents, blending 3-Ring Cognitive Context with Skill boundaries.
+ *
+ * @module @tidy/core/brief-generator
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const fs = require('fs');
 const path = require('path');

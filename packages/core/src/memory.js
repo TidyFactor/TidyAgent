@@ -1,7 +1,14 @@
 /**
- * Tidy Memory & Recall Engine
+ * Tidy Ecosystem — Memory & Recall Engine
  * Full-Text Search (FTS5 BM25), Tiered Storage, Mathematical Decay Scoring & Cognitive Recall.
+ *
+ * @module @tidy/core/memory
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const crypto = require('crypto');
 const { getDb } = require('./db');

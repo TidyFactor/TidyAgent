@@ -1,7 +1,14 @@
 /**
- * Tidy Sovereignty & Portability Engine
+ * Tidy Ecosystem — Sovereignty & Portability Engine
  * Zero-Vendor-Lockin: Obsidian PARA Markdown Export/Import & Full JSON SSOT Migration.
+ *
+ * @module @tidy/core/portability
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const fs = require('fs');
 const path = require('path');

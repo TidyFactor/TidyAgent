@@ -1,7 +1,14 @@
 /**
- * @file packages/office/src/index.js
- * Main entry point for @tidy/office domain pack
+ * Tidy Ecosystem — Business Office Suite Pack Entry
+ * Sovereign CRM, itemized invoicing, proposals, expenses, calendar, and AI dossier compiler.
+ *
+ * @module @tidy/office
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const { getDb } = require('./core-bridge');
 const { OFFICE_SCHEMA_SQL, initOfficeSchema } = require('./schema');

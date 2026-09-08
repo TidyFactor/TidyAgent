@@ -1,7 +1,14 @@
 /**
- * Tidy Sub-Agents Registry & Orchestrator
- * Manages specialized roles, scoped prompts, and tool delegation.
+ * Tidy Ecosystem — Sub-Agents Registry & Orchestrator
+ * Manages specialized assistant roles, scoped system prompts, and tool delegation.
+ *
+ * @module @tidy/core/subagents
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const { getDb } = require('./db');
 const { recallMemory } = require('./memory');

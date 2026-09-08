@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 /**
- * Tidy CLI Engine
- * Unified Command-Line Interface for the Tidy Sovereign Assistant & Memory OS.
- * Clean, standard English interface for maximum cross-platform compatibility.
+ * Tidy Ecosystem — Unified Terminal CLI Engine
+ * Interactive navigation wizard, one-liner commands, and subagent dispatcher.
+ *
+ * @module bin/tidy
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 // Suppress Node.js experimental warnings for node:sqlite
 const originalEmitWarning = process.emitWarning;

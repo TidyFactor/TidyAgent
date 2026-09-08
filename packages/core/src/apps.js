@@ -1,8 +1,14 @@
 /**
- * Tidy Micro-App Library
- * Integrated local productivity tools: Tasks, Snippets, Journal, and Vault.
- * With autonomous Task-to-Memory feedback loops and decision archival.
+ * Tidy Ecosystem — Micro-App Productivity Library
+ * Integrated local productivity tools: Tasks, Snippets, Journal, and Vault with autonomous feedback loops.
+ *
+ * @module @tidy/core/apps
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const crypto = require('crypto');
 const { getDb } = require('./db');

@@ -1,7 +1,14 @@
 /**
- * Tidy Database Engine (Active SQLite SSOT)
- * Auto-bootstrapping, WAL-enabled, FTS5-indexed persistent storage.
+ * Tidy Ecosystem — Sovereign Database Engine (Active SQLite SSOT)
+ * Auto-bootstrapping, WAL concurrency tuning, FTS5 BM25 search & schema extension kernel.
+ *
+ * @module @tidy/core/db
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const fs = require('fs');
 const path = require('path');

@@ -1,7 +1,14 @@
 /**
- * @tidy/core — Sovereign Personal Assistant Kernel
- * Main entry point exporting Database, Memory, Apps, Subagents, and Portability APIs.
+ * Tidy Ecosystem — Sovereign Personal Assistant Kernel Entry
+ * Main module exporting Database, Memory, Apps, Subagents, and Portability APIs.
+ *
+ * @module @tidy/core
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const db = require('./db');
 const memory = require('./memory');

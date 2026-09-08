@@ -1,8 +1,14 @@
 /**
- * Tidy Skill-as-Agent Loader & Discovery Engine
- * Scans, parses, and bridges community skills (TidyFactor Skills-LAB)
- * into first-class, context-injected managed subagents.
+ * Tidy Ecosystem — Skill-as-Agent Loader & Discovery Engine
+ * Scans, parses, and bridges community skills (TidyFactor Skills-LAB) into context-injected managed subagents.
+ *
+ * @module @tidy/core/skills-loader
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const fs = require('fs');
 const path = require('path');

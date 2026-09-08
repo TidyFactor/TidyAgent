@@ -1,3 +1,14 @@
+/**
+ * Tidy Ecosystem — VitePress Configuration
+ * Comprehensive configuration for i18n locales, offline search, navigation, and theme metadata.
+ *
+ * @module docs/.vitepress/config.mjs
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
+ */
+
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({

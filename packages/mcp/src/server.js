@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 /**
- * @tidy/mcp — Stdio MCP Server (Model Context Protocol JSON-RPC 2.0)
- * Exposes active SQLite memory, contexts, subagents, and micro-apps to AI agents.
+ * Tidy Ecosystem — Stdio Model Context Protocol (MCP) Server
+ * High-performance JSON-RPC 2.0 server exposing SQLite memory, context rings, subagents, and micro-apps.
+ *
+ * @module @tidy/mcp/server
+ * @version 1.4.2
+ * @license Apache-2.0
+ * @copyright 2026 TidyFactor Team
+ * @see https://github.com/TidyFactor/Agent
  */
+
 
 const readline = require('readline');
 
