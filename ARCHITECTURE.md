@@ -157,16 +157,40 @@ The visual management console is built with **Electron + Vanilla CSS/JS** for ma
 
 ---
 
-## 📦 5. Monorepo Package Topology
+## 📦 5. Monorepo Package Topology & Clean Root Doctrine
 
-```
-tidy (root)
+The repository is strictly partitioned into distinct packages, applications, and documentation layers with zero root pollution:
+
+```text
+tidy-agent (root)
 ├── packages/
-│   ├── core/      --> Pure Node.js SQLite & Memory Engine
-│   ├── cli/       --> @clack/prompts interactive terminal experience
-│   ├── mcp/       --> Stdio JSON-RPC 2.0 MCP Server
-│   └── skill/     --> TidyFactor Skills-LAB Community Skill
-└── apps/
-    ├── desktop/   --> Electron GUI for Windows, macOS, Linux
-    └── web/       --> Web Management Console
+│   ├── core/      --> (@tidy/core) Sovereign SQLite SSOT, FTS5 & Cognitive Memory Engine
+│   ├── cli/       --> (@tidy/cli) Interactive @clack/prompts wizard & scriptable CLI
+│   ├── mcp/       --> (@tidy/mcp) Stdio JSON-RPC 2.0 MCP Server (16 tools, 4 resources)
+│   ├── skill/     --> (@tidy/skill) Certified TidyFactor Community Skill (references/, manifest.json, tools/)
+│   └── office/    --> (@tidy/office) Standalone Business Suite (CRM, Invoicing, Proposals, Cashflow)
+├── apps/
+│   ├── desktop/   --> (@tidy/desktop) Native Electron Studio GUI (Windows, macOS, Linux)
+│   └── web/       --> (@tidy/web) Web Management Console (HTTP 127.0.0.1:3840)
+├── docs/          --> Unified Documentation Hub (Master index, user manual, specs/, i18n/)
+├── bin/           --> Global CLI launcher (tidy binary)
+├── scripts/       --> Backward-compatibility proxies to @tidy/core
+├── tests/         --> Zero-dependency test runner (33 automated tests, 100% pass)
+└── tools/         --> Environment & security hygiene auditor (check-leaks.js)
 ```
+
+### 🏛️ 6. Clean Root & Boundary Doctrine
+- **Single Root Entry**: A single authoritative `README.md` resides at the root, linking to all guides and translations.
+- **Skill Encapsulation**: All skill manifests (`SKILL.md`, `manifest.json`, `references/`, `tools/`) are encapsulated strictly within `packages/skill/` to eliminate root duplication.
+- **Documentation Isolation**: Translated READMEs are centralized in `docs/i18n/`, while architectural and functional specifications reside in `docs/specs/`.
+
+---
+
+## 🚀 7. Core OS Services Architecture (Phase 3 Roadmap: v1.4.3 – v1.5.0)
+
+To support dynamic micro-apps, plugins, and third-party extensions without code duplication, `@tidy/core` provides four foundational platform services:
+1. **Settings & Governance Provider (`system_config`)**: Central key-value store for application variables, active theme (`zeitoun`, `newcairo`, etc.), language (`ar`/`en`), currency, and user profile metadata.
+2. **Multi-Database Pool Engine**: Runtime abstraction allowing dynamic creation, backup, and switching between multiple SQLite databases (`Switch Active SSOT`).
+3. **AI Services Router (BYOK & Local AI)**: Multi-provider abstraction managing API credentials (OpenAI, Anthropic, Gemini, DeepSeek, Groq) alongside zero-leakage local execution (Ollama, LM Studio).
+4. **Plugin & Extension Lifecycle**: Event hooks and schema registration interfaces (`registerSchema`) enabling modular business packs to mount without altering core kernel code.
+

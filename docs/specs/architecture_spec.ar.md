@@ -1,8 +1,8 @@
 # وثيقة المواصفات المعمارية لنظام Tidy (Sovereign Personal Assistant Agent)
 
-**الإصدار**: 1.0.0-Draft  
-**المرجعية المعمارية**: `tidyfactor-skill-architect` (الحوكمة الهيكلية) + `tidyfactor-brain` (الحوكمة الإدراكية)  
-**النمط**: Local-First, Zero-Config, Sovereign Memory, Single SQLite SSOT  
+**الإصدار**: v1.4.2 (Production Monorepo)  
+**المرجعية المعمارية**: `TidyFactor Skills-LAB` (الحوكمة الهيكلية) + `Qahera UI Kit` (نظام التصميم)  
+**النمط**: Local-First, Zero-Config, Sovereign Memory, Single SQLite SSOT, Modular Monorepo  
 
 ---
 
@@ -223,3 +223,38 @@ tidy db [vacuum|backup|stats]   # صيانة وفحص إحصائيات قاعد�
 2. **بروتوكول المزامنة غير المتزامن (Outbound Background Sync)**:
    - دعم التزامن اللامركزي لاحقاً باستخدام تقنيات مثل **CRDTs** (Conflict-free Replicated Data Types) أو **Turso / LibSQL Embedded Replicas** أو **Litestream** للنسخ الاحتياطي في سحابة المستخدم الخاصة.
    - تظل قاعدة بيانات SQLite المحلية هي مصدر الحقيقة الأول (Primary Local SSOT) وتتم المزامنة في الخلفية بدون انتظار الشبكة (Zero Network Latency Penalty).
+
+---
+
+## 7. هيكلية الـ Monorepo وعزل الحزم (Monorepo Topology)
+
+يعتمد المستودع مبدأ "الجذر النظيف" (Clean Root)، بحيث يحتوي الجذر فقط على ملف `README.md` واحد يربط كافة الأدلة، مع عزل المهارة وأدواتها بالكامل داخل حزمتها المعيارية:
+
+```text
+tidy-agent/
+├── packages/
+│   ├── core/      --> (@tidy/core) نواة SQLite ومحرك الذاكرة FTS5 BM25
+│   ├── cli/       --> (@tidy/cli) سطر الأوامر التفاعلي عبر @clack/prompts
+│   ├── mcp/       --> (@tidy/mcp) خادم بروتوكول Stdio JSON-RPC 2.0
+│   ├── skill/     --> (@tidy/skill) المهارة المعتمدة (references/, manifest.json, tools/)
+│   └── office/    --> (@tidy/office) حزمة إدارة الأعمال المستقلة (CRM, Invoicing, Proposals)
+├── apps/
+│   ├── desktop/   --> تطبيق سطح المكتب Electron بنظام ويندوز
+│   └── web/       --> كونسول الويب المحلي (127.0.0.1:3840)
+├── docs/          --> المجلد الموحد للتوثيق (Master index, specs/, i18n/, user_manual)
+├── bin/           --> مشغل الطرفية العالمي (tidy)
+├── scripts/       --> وسائط التوافق العكسي مع النواة
+├── tests/         --> حزمة الاختبارات الشاملة (33 اختباراً)
+└── tools/         --> أداة فحص الأمان والتسريبات (check-leaks.js)
+```
+
+---
+
+## 8. خدمات النواة المشتركة للمرحلة الثالثة (Core OS Platform Services: v1.4.3 – v1.5.0)
+
+لضمان عمل كافة التطبيقات المصغرة والإضافات الخارجية بمرونة وتكامل دون تكرار الكود:
+1. **محرك الحوكمة والإعدادات (`system_config`)**: واجهة مركزية لحفظ واسترجاع متغيرات التشغيل، تفضيلات المستخدم، الثيمات، واللغات.
+2. **محرك تعدد قواعد بيانات SQLite (Multi-DB Pool)**: القدرة على إنشاء والتبديل الحي بين قواعد بيانات متعددة (`Switch Active SSOT`).
+3. **موجه خدمات الذكاء الاصطناعي (AI Provider Center)**: دعم مفاتيح النماذج الخارجية (BYOK) والنماذج المحلية (Local AI عبر Ollama / LM Studio).
+4. **مدير دورة حياة الإضافات (Plugin Manager)**: آلية تسجيل المخططات (`registerSchema`) والمشابك الحدثية (Event Hooks).
+

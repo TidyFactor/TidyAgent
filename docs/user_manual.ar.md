@@ -1,5 +1,5 @@
 # 📖 دليل الاستخدام الشامل لمنظومة تايدي (Tidy Ecosystem User Manual)
-### الإصدار: `v1.4.0` — المعمارية السيادية متعددة الحزم (Microkernel & Domain Packs)
+### الإصدار: `v1.4.2` — المعمارية السيادية متعددة الحزم (Microkernel & Domain Packs)
 
 ---
 
