@@ -1,6 +1,6 @@
 {
   "name": "@tidy/desktop",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Tidy Studio — Windows & Cross-Platform Sovereign Personal Assistant Management Desktop Application",
   "main": "src/main/index.js",
   "scripts": {

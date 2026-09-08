@@ -84,6 +84,66 @@ function registerIpcHandlers() {
     }
   });
 
+  // Profile & Granular Persona
+  handle('profile:get', async () => {
+    try {
+      return { ok: true, data: core.getUserProfile() };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('profile:update', async (_, updates) => {
+    try {
+      return { ok: true, data: core.updateUserProfile(updates) };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Config Provider
+  handle('config:list', async () => {
+    try {
+      return { ok: true, data: core.listConfig() };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('config:get', async (_, key) => {
+    try {
+      return { ok: true, data: core.getConfig(key) };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('config:set', async (_, { key, value }) => {
+    try {
+      core.setConfig(key, value);
+      return { ok: true, data: { key, value } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Governance & Rules
+  handle('govern:list', async () => {
+    try {
+      return { ok: true, data: core.getGovernanceRules() };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('govern:set', async (_, { key, value }) => {
+    try {
+      return { ok: true, data: core.setGovernanceRule(key, value) };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
   // Memory Operations
   handle('memory:recall', async (_, { query, category, tier, limit }) => {
     try {

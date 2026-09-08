@@ -287,6 +287,12 @@ function initDatabase(customPath) {
   try { db.exec("ALTER TABLE app_tasks ADD COLUMN result_brief TEXT"); } catch {}
   try { db.exec("ALTER TABLE app_journal ADD COLUMN domain TEXT DEFAULT 'general'"); } catch {}
 
+  // Idempotent column migrations for user_profile granular settings
+  try { db.exec("ALTER TABLE user_profile ADD COLUMN theme TEXT DEFAULT 'dark'"); } catch {}
+  try { db.exec("ALTER TABLE user_profile ADD COLUMN currency TEXT DEFAULT 'USD'"); } catch {}
+  try { db.exec("ALTER TABLE user_profile ADD COLUMN time_format TEXT DEFAULT '24h'"); } catch {}
+  try { db.exec("ALTER TABLE user_profile ADD COLUMN role TEXT DEFAULT 'Owner & Lead Engineer'"); } catch {}
+
   // Seed default data if system_config is empty
   seedDefaults(db);
 

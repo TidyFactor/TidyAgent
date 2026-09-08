@@ -17,6 +17,7 @@ const subagents = require('./subagents');
 const skillsLoader = require('./skills-loader');
 const briefGenerator = require('./brief-generator');
 const portability = require('./portability');
+const governance = require('./governance');
 
 module.exports = {
   // Database & Storage SSOT
@@ -80,5 +81,16 @@ module.exports = {
   exportToMarkdown: portability.exportToMarkdown,
   exportToJson: portability.exportToJson,
   importFromJson: portability.importFromJson,
-  importFromMarkdown: portability.importFromMarkdown
+  importFromMarkdown: portability.importFromMarkdown,
+
+  // Core Governance, Settings & Granular Profile
+  getConfig: governance.getConfig,
+  setConfig: governance.setConfig,
+  listConfig: governance.listConfig,
+  deleteConfig: governance.deleteConfig,
+  getUserProfile: governance.getUserProfile,
+  updateUserProfile: governance.updateUserProfile,
+  getGovernanceRules: governance.getGovernanceRules,
+  setGovernanceRule: governance.setGovernanceRule,
+  DEFAULT_GOVERNANCE_RULES: governance.DEFAULT_GOVERNANCE_RULES
 };

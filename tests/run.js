@@ -38,6 +38,7 @@ const { saveMemory, recallMemory, forgetMemory, listMemories, calculateCognitive
 const { addTask, listTasks, completeTask, addSnippet, listSnippets, deleteSnippet, addJournalEntry, listJournal, setSecret, getSecret, deleteSecret } = require('../scripts/apps');
 const { listSubagents, runSubagent } = require('../scripts/subagents');
 const { exportToMarkdown, exportToJson, importFromJson, importFromMarkdown } = require('../scripts/portability');
+const { getConfig, setConfig, listConfig, deleteConfig, getUserProfile, updateUserProfile, getGovernanceRules, setGovernanceRule } = require('../scripts/governance');
 
 console.log('\n[1] Database Bootstrap & Schema Tests');
 test('Database initializes with tables and WAL mode', () => {
@@ -422,6 +423,69 @@ test('CLI One-Liners: who, m, q, task, tasks execute successfully', () => {
 
   const tasksOut = execSync('node bin/tidy.js tasks --pending', { env }).toString();
   assert.ok(tasksOut.includes('End to end test task'));
+});
+
+console.log('\n[12] Core Governance, Granular Profile & Central Settings Engine Tests');
+test('getConfig and setConfig: stores and retrieves system configurations', () => {
+  setConfig('app_cluster', 'production-west');
+  assert.strictEqual(getConfig('app_cluster'), 'production-west');
+  assert.strictEqual(getConfig('missing_key', 'fallback'), 'fallback');
+
+  const configs = listConfig();
+  assert.ok(configs.some(c => c.key === 'app_cluster'));
+
+  const deleted = deleteConfig('app_cluster');
+  assert.strictEqual(deleted, true);
+  assert.strictEqual(getConfig('app_cluster'), null);
+});
+
+test('getUserProfile & updateUserProfile: granular preferences & persona updates', () => {
+  const initial = getUserProfile();
+  assert.strictEqual(initial.assistant_name, 'Tidy');
+
+  const updated = updateUserProfile({
+    userName: 'Lead Architect',
+    role: 'Staff Principal Engineer',
+    theme: 'system',
+    currency: 'SAR',
+    timeFormat: '12h',
+    preferences: { customKey: 123 }
+  });
+
+  assert.strictEqual(updated.user_name, 'Lead Architect');
+  assert.strictEqual(updated.role, 'Staff Principal Engineer');
+  assert.strictEqual(updated.theme, 'system');
+  assert.strictEqual(updated.currency, 'SAR');
+  assert.strictEqual(updated.time_format, '12h');
+  assert.strictEqual(updated.preferences.customKey, 123);
+
+  // Verify persistence across calls
+  const persisted = getUserProfile();
+  assert.strictEqual(persisted.user_name, 'Lead Architect');
+});
+
+test('getGovernanceRules & setGovernanceRule: firewall & retention policy governance', () => {
+  const rules = getGovernanceRules();
+  assert.strictEqual(rules.firewall_policy, 'strict');
+  assert.strictEqual(rules.memory_decay, 'enabled');
+
+  const updatedRules = setGovernanceRule('firewall_policy', 'permissive');
+  assert.strictEqual(updatedRules.firewall_policy, 'permissive');
+  assert.strictEqual(getGovernanceRules().firewall_policy, 'permissive');
+
+  // Revert rule
+  setGovernanceRule('firewall_policy', 'strict');
+});
+
+test('CLI One-Liners: tidy govern and tidy cfg execute successfully', () => {
+  const { execSync } = require('child_process');
+  const env = { ...process.env, TIDY_DB: TEST_DB };
+
+  const govOut = execSync('node bin/tidy.js govern', { env }).toString();
+  assert.ok(govOut.includes('Governance & Context Firewall Policies'));
+
+  const cfgOut = execSync('node bin/tidy.js cfg list', { env }).toString();
+  assert.ok(cfgOut.includes('System Configuration'));
 });
 
 // Cleanup test DB

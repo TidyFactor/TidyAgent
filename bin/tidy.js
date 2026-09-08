@@ -31,6 +31,7 @@ const { addTask, listTasks, getTask, completeTask, addSnippet, listSnippets, add
 const { discoverSkills, listRegisteredSkills, registerSkillFromPath, getRegisteredSkill } = require('../scripts/skills-loader');
 const { generateTaskBrief } = require('../scripts/brief-generator');
 const { exportToMarkdown, exportToJson, importFromJson, importFromMarkdown } = require('../scripts/portability');
+const { getConfig, setConfig, listConfig, deleteConfig, getUserProfile, updateUserProfile, getGovernanceRules, setGovernanceRule } = require('../scripts/governance');
 const { startServer } = require('../scripts/mcp_server');
 const { runWizard } = require('../scripts/wizard');
 
@@ -95,7 +96,9 @@ Fast Developer One-Liners:
   tidy task <title>        Fast task creation (--priority, --agent, --domain)
   tidy tasks               Fast task list (--pending, --all, --domain)
   tidy done <id>           Complete task with auto-memory archival (--result)
-  tidy who                 Fast identity & firewall status
+  tidy who                 Fast identity & granular profile (--update, --user, --assistant)
+  tidy govern              Fast governance rules & firewall policy inspector (or: tidy govern set <k> <v>)
+  tidy cfg                 Fast configuration provider manager (or: tidy cfg get/set <k> <v>)
   tidy export              Export vault (Obsidian PARA Markdown or JSON SSOT)
   tidy import <path>       Import external Markdown or JSON vault into SQLite
   tidy prune               Smart cognitive purge of decayed ephemeral records
@@ -218,14 +221,117 @@ async function main() {
         break;
       }
 
-      case 'who': {
+      case 'who':
+      case 'whoami':
+      case 'profile': {
+        const { flags, positional } = parseFlags(args.slice(1));
+        const hasUpdates = Boolean(flags.update || flags.user || flags.assistant || flags.name || flags.locale || flags.theme || flags.currency || flags.role);
+        
+        if (hasUpdates) {
+          const updated = updateUserProfile({
+            userName: flags.user || flags.name,
+            assistantName: flags.assistant,
+            role: flags.role,
+            locale: flags.locale,
+            tone: flags.tone,
+            theme: flags.theme,
+            currency: flags.currency,
+            timeFormat: flags.format || flags.time_format
+          });
+          console.log(`\n  ✅ Profile Updated Successfully:`);
+          console.log(`     User       : ${updated.user_name} (${updated.role})`);
+          console.log(`     Assistant  : ${updated.assistant_name}`);
+          console.log(`     Locale/Tone: ${updated.locale} (${updated.tone})`);
+          console.log(`     Theme/Cur  : ${updated.theme} | ${updated.currency} (${updated.time_format})`);
+          break;
+        }
+
         printBanner();
+        const profile = getUserProfile();
         const stats = getStats();
-        console.log(`\n  👤 User            : ${stats.profile?.user_name}`);
-        console.log(`  🤖 Assistant       : ${stats.profile?.assistant_name}`);
-        console.log(`  🌐 Locale & Tone   : ${stats.profile?.locale} (${stats.profile?.tone})`);
+        console.log(`\n  👤 User            : ${profile.user_name} (${profile.role})`);
+        console.log(`  🤖 Assistant       : ${profile.assistant_name}`);
+        console.log(`  🌐 Locale & Tone   : ${profile.locale} (${profile.tone})`);
+        console.log(`  🎨 Theme & Currency: ${profile.theme} | ${profile.currency} (${profile.time_format})`);
         console.log(`  🎯 Active Context  : [${stats.activeContext?.id}] ${stats.activeContext?.name}`);
         console.log(`  🛡️ Firewall Mode   : [${stats.activeContext?.domain.toUpperCase()} MODE]`);
+        break;
+      }
+
+      case 'govern':
+      case 'gov': {
+        const { positional } = parseFlags(args.slice(1));
+        const sub = positional[0] || 'list';
+
+        if (sub === 'set') {
+          const key = positional[1];
+          const val = positional[2];
+          if (!key || val === undefined) {
+            console.error('Error: specify key and value (e.g. tidy govern set firewall_policy permissive)');
+            process.exit(1);
+          }
+          const rules = setGovernanceRule(key, val);
+          console.log(`\n  🛡️ Governance Rule Updated: ${key} = ${val}`);
+          console.log(`     Active Policy   : ${rules[key] || val}`);
+        } else {
+          const rules = getGovernanceRules();
+          console.log(`\n  🛡️ Tidy Ecosystem — Governance & Context Firewall Policies:`);
+          console.log(`  ------------------------------------------------------------`);
+          for (const [k, v] of Object.entries(rules)) {
+            const label = k.replace(/_/g, ' ').padEnd(26);
+            console.log(`  • ${label}: ${v}`);
+          }
+          console.log(`  ------------------------------------------------------------`);
+          console.log(`  To update a policy: tidy govern set <rule_name> <value>`);
+        }
+        break;
+      }
+
+      case 'cfg':
+      case 'config': {
+        const { positional } = parseFlags(args.slice(1));
+        const sub = positional[0] || 'list';
+
+        if (sub === 'get') {
+          const key = positional[1];
+          if (!key) {
+            console.error('Error: specify config key (e.g. tidy cfg get version)');
+            process.exit(1);
+          }
+          const val = getConfig(key);
+          console.log(val !== null ? `  ${key} = ${val}` : `  (not set)`);
+        } else if (sub === 'set') {
+          const key = positional[1];
+          const val = positional[2];
+          if (!key || val === undefined) {
+            console.error('Error: specify key and value (e.g. tidy cfg set default_domain dev)');
+            process.exit(1);
+          }
+          setConfig(key, val);
+          console.log(`  [OK] Set ${key} = ${val}`);
+        } else if (sub === 'del' || sub === 'delete') {
+          const key = positional[1];
+          if (!key) {
+            console.error('Error: specify config key (e.g. tidy cfg del my_key)');
+            process.exit(1);
+          }
+          const ok = deleteConfig(key);
+          console.log(ok ? `  [OK] Deleted ${key}` : `  Key ${key} not found.`);
+        } else {
+          const entries = listConfig();
+          console.log(`\n  ⚙️ System Configuration (${entries.length} variables):`);
+          console.log(`  ------------------------------------------------------------`);
+          if (entries.length === 0) {
+            console.log('  (no variables configured)');
+          } else {
+            entries.forEach(e => {
+              const keyPad = e.key.padEnd(24);
+              console.log(`  • ${keyPad} = ${e.value}`);
+            });
+          }
+          console.log(`  ------------------------------------------------------------`);
+          console.log(`  Usage: tidy cfg get <key> | tidy cfg set <key> <value> | tidy cfg del <key>`);
+        }
         break;
       }
 

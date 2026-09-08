@@ -120,6 +120,42 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ok: true, data: core.getStats() });
     }
 
+    // ---------------- Profile & Settings ----------------
+    if (pathname === '/api/profile' && req.method === 'GET') {
+      return sendJson(res, 200, { ok: true, data: core.getUserProfile() });
+    }
+
+    if (pathname === '/api/profile' && (req.method === 'PUT' || req.method === 'POST')) {
+      const body = await parseBody(req);
+      const updated = core.updateUserProfile(body);
+      return sendJson(res, 200, { ok: true, data: updated });
+    }
+
+    // ---------------- Config Provider ----------------
+    if (pathname === '/api/config' && req.method === 'GET') {
+      if (query.key) {
+        return sendJson(res, 200, { ok: true, data: { key: query.key, value: core.getConfig(query.key) } });
+      }
+      return sendJson(res, 200, { ok: true, data: core.listConfig() });
+    }
+
+    if (pathname === '/api/config' && req.method === 'POST') {
+      const body = await parseBody(req);
+      core.setConfig(body.key, body.value);
+      return sendJson(res, 200, { ok: true, data: { key: body.key, value: body.value } });
+    }
+
+    // ---------------- Governance & Policies ----------------
+    if (pathname === '/api/govern' && req.method === 'GET') {
+      return sendJson(res, 200, { ok: true, data: core.getGovernanceRules() });
+    }
+
+    if (pathname === '/api/govern' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const rules = core.setGovernanceRule(body.key, body.value);
+      return sendJson(res, 200, { ok: true, data: rules });
+    }
+
     // ---------------- Contexts & Workspaces ----------------
     if (pathname === '/api/contexts' && req.method === 'GET') {
       const db = core.getDb();

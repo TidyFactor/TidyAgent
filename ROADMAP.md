@@ -70,12 +70,13 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 
 ### Phase 3: Cognitive OS Services, Governance, AI Hub & Platform Engine 🚀 (Active Milestone — SemVer Progression)
 
-#### 📦 `v1.4.3` — Core Governance & Settings Engine (The Central Nervous System) 🎯 [Next Immediate Release]
-- [ ] Centralized application variables and governance rules management via `@tidy/core` Config Provider.
-- [ ] Granular Profile Management: display name, user role, system preferences, language (AR/EN), theme (Dark/Light/System), currency, date/time formatting.
-- [ ] Real-time reactive updates propagating immediately to CLI, MCP, and UI surfaces.
+#### 📦 `v1.4.3` — Core Governance & Settings Engine (The Central Nervous System) ✅ (Completed — v1.4.3)
+- [x] Centralized application variables and governance rules management via `@tidy/core` Config Provider.
+- [x] Granular Profile Management: display name, user role, system preferences, language (AR/EN), theme (Dark/Light/System), currency, date/time formatting.
+- [x] Fast CLI one-liners: `tidy govern` / `tidy gov`, `tidy cfg`, `tidy who --update`.
+- [x] Full MCP Server, REST API, and Desktop IPC parity for governance and configuration.
 
-#### 📦 `v1.4.4` — Professional Task Board v2 (Kanban & Subagent Delegation)
+#### 📦 `v1.4.4` — Professional Task Board v2 (Kanban & Subagent Delegation) 🎯 [Next Immediate Release]
 - [ ] Comprehensive Kanban and list views with fluid drag-and-drop state transitions.
 - [ ] Deep integration with Subagent delegation (`@planner`, `@coder`, `@researcher`, `@scribe`).
 - [ ] Autonomous task-to-memory auto-synthesis loop on task completion.

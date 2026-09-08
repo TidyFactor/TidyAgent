@@ -4,6 +4,27 @@ All notable changes to the `tidy` skill and CLI engine are documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.3] - 2026-09-08
+
+### Added
+- **Core Governance & Central Settings Engine (`@tidy/core/governance`)**:
+  - Central configuration provider: `getConfig`, `setConfig`, `listConfig`, `deleteConfig` backed by SQLite `system_config`.
+  - Granular Profile Management: `getUserProfile`, `updateUserProfile` supporting user display name, title/role, assistant persona, locale (ar/en), tone, theme (`dark`, `light`, `system`), currency (`USD`, `SAR`, `EGP`), time format (`12h`, `24h`), and custom JSON preferences.
+  - Contextual Governance & Firewall Rules: `getGovernanceRules`, `setGovernanceRule` for runtime firewall policies, auto-extract switch, memory decay, and retention thresholds.
+  - Idempotent SQLite migrations in `db.js` adding `theme`, `currency`, `time_format`, and `role` to `user_profile`.
+- **Fast Developer One-Liners (`bin/tidy.js`)**:
+  - `tidy govern` / `tidy gov`: Fast inspection of governance and context firewall rules, and policy updating via `tidy govern set <key> <value>`.
+  - `tidy cfg`: Fast configuration provider management (`tidy cfg`, `tidy cfg get <key>`, `tidy cfg set <key> <value>`, `tidy cfg del <key>`).
+  - `tidy who` / `tidy profile`: Granular identity inspector and updater (`--user`, `--assistant`, `--role`, `--theme`, `--currency`, `--locale`).
+- **Stdio MCP Server v1.4.3 Protocol Integration (`packages/mcp`)**:
+  - New MCP tools: `tidy_config_get`, `tidy_config_set`, `tidy_profile_update`, `tidy_govern_rules`.
+  - New live MCP dynamic resources: `tidy://config` and `tidy://govern`.
+- **Web Console REST & Desktop IPC Parity**:
+  - REST endpoints: `/api/config`, `/api/profile`, `/api/govern` in `apps/web/server.js`.
+  - Typed IPC channels: `tidy:config:*`, `tidy:profile:*`, `tidy:govern:*` with contextBridge bindings in `apps/desktop`.
+- **Automated Verification Suite (Suite 12)**:
+  - Added Suite [12] in `tests/run.js` expanding automated tests to 37 passed tests with 100% success rate.
+
 ## [1.4.2] - 2026-09-08
 
 ### Added

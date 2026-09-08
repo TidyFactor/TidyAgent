@@ -10,6 +10,19 @@ const api = {
   // System Health
   getStats: () => ipcRenderer.invoke('tidy:stats'),
 
+  // Profile & Granular Persona
+  getUserProfile: () => ipcRenderer.invoke('tidy:profile:get'),
+  updateUserProfile: (updates) => ipcRenderer.invoke('tidy:profile:update', updates),
+
+  // Config Provider
+  listConfig: () => ipcRenderer.invoke('tidy:config:list'),
+  getConfig: (key) => ipcRenderer.invoke('tidy:config:get', key),
+  setConfig: (key, value) => ipcRenderer.invoke('tidy:config:set', { key, value }),
+
+  // Governance & Rules
+  getGovernanceRules: () => ipcRenderer.invoke('tidy:govern:list'),
+  setGovernanceRule: (key, value) => ipcRenderer.invoke('tidy:govern:set', { key, value }),
+
   // Memory Operations
   recallMemory: (params) => ipcRenderer.invoke('tidy:memory:recall', params),
   saveMemory: (params) => ipcRenderer.invoke('tidy:memory:save', params),

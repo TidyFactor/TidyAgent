@@ -1,6 +1,6 @@
 {
   "name": "@tidy/web",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Tidy Web Management Console — Local Web Server & Browser Dashboard",
   "main": "server.js",
   "scripts": {

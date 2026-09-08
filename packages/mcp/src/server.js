@@ -43,7 +43,14 @@ const {
   generateTaskBrief,
   exportToMarkdown,
   exportToJson,
-  pruneDecayedMemories
+  pruneDecayedMemories,
+  getConfig,
+  setConfig,
+  listConfig,
+  getUserProfile,
+  updateUserProfile,
+  getGovernanceRules,
+  setGovernanceRule
 } = core;
 
 // Dynamically resolve @tidy/office domain pack if present
@@ -60,7 +67,7 @@ try {
 
 const SERVER_INFO = {
   name: 'tidy-mcp',
-  version: '1.4.1'
+  version: '1.4.3'
 };
 
 const TOOLS = [
@@ -270,7 +277,58 @@ const TOOLS = [
         required: ['client_id']
       }
     }
-  ] : [])
+  ] : []),
+  {
+    name: 'tidy_config_get',
+    description: 'Get a configuration setting or system variable from Tidy SQLite SSOT.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        key: { type: 'string', description: 'Configuration key name' }
+      },
+      required: ['key']
+    }
+  },
+  {
+    name: 'tidy_config_set',
+    description: 'Set or update a configuration setting or system variable in Tidy SQLite SSOT.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        key: { type: 'string', description: 'Configuration key name' },
+        value: { type: 'string', description: 'Value to assign' }
+      },
+      required: ['key', 'value']
+    }
+  },
+  {
+    name: 'tidy_profile_update',
+    description: 'Update user profile, assistant persona, display role, theme, currency, and preferences.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        userName: { type: 'string', description: 'User display name' },
+        assistantName: { type: 'string', description: 'Assistant persona name' },
+        role: { type: 'string', description: 'User title or role' },
+        locale: { type: 'string', enum: ['ar', 'en'], description: 'Primary language' },
+        theme: { type: 'string', enum: ['dark', 'light', 'system'], description: 'UI Theme' },
+        currency: { type: 'string', description: 'Default currency code (e.g. USD, EGP, SAR)' },
+        timeFormat: { type: 'string', enum: ['12h', '24h'], description: 'Time display format' }
+      }
+    }
+  },
+  {
+    name: 'tidy_govern_rules',
+    description: 'Inspect or update system governance rules, context firewall policies, and memory retention thresholds.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        action: { type: 'string', enum: ['get', 'set'], default: 'get', description: 'Action to perform' },
+        key: { type: 'string', description: 'Governance rule key if setting' },
+        value: { type: 'string', description: 'Governance rule value if setting' }
+      }
+    }
+  }
 ];
 
 const RESOURCES = [
@@ -279,6 +337,18 @@ const RESOURCES = [
     name: 'Tidy Sovereign User Profile',
     mimeType: 'application/json',
     description: 'Current user profile, language, and operating tone'
+  },
+  {
+    uri: 'tidy://config',
+    name: 'Tidy System Configuration',
+    mimeType: 'application/json',
+    description: 'Central system variables, engine metadata, and application configuration'
+  },
+  {
+    uri: 'tidy://govern',
+    name: 'Tidy Governance Rules & Firewall Policies',
+    mimeType: 'application/json',
+    description: 'Active governance policies, memory retention limits, and domain firewall rules'
   },
   {
     uri: 'tidy://context/current',
@@ -502,6 +572,30 @@ function handleToolCall(rawName, args) {
       };
     }
 
+    case 'tidy_config_get': {
+      const val = getConfig(args.key);
+      return { content: [{ type: 'text', text: JSON.stringify({ key: args.key, value: val }, null, 2) }] };
+    }
+
+    case 'tidy_config_set': {
+      setConfig(args.key, args.value);
+      return { content: [{ type: 'text', text: JSON.stringify({ success: true, key: args.key, value: args.value }, null, 2) }] };
+    }
+
+    case 'tidy_profile_update': {
+      const updated = updateUserProfile(args);
+      return { content: [{ type: 'text', text: JSON.stringify({ success: true, profile: updated }, null, 2) }] };
+    }
+
+    case 'tidy_govern_rules': {
+      if (args?.action === 'set' && args.key) {
+        const rules = setGovernanceRule(args.key, args.value);
+        return { content: [{ type: 'text', text: JSON.stringify({ success: true, rules }, null, 2) }] };
+      }
+      const rules = getGovernanceRules();
+      return { content: [{ type: 'text', text: JSON.stringify(rules, null, 2) }] };
+    }
+
     default:
       throw new Error(`Unknown tool: ${rawName}`);
   }
@@ -518,6 +612,28 @@ function handleResourceRead(rawUri) {
         uri: rawUri,
         mimeType: 'application/json',
         text: JSON.stringify(profile, null, 2)
+      }]
+    };
+  }
+
+  if (uri === 'tidy://config') {
+    const configs = listConfig();
+    return {
+      contents: [{
+        uri: rawUri,
+        mimeType: 'application/json',
+        text: JSON.stringify(configs, null, 2)
+      }]
+    };
+  }
+
+  if (uri === 'tidy://govern') {
+    const rules = getGovernanceRules();
+    return {
+      contents: [{
+        uri: rawUri,
+        mimeType: 'application/json',
+        text: JSON.stringify(rules, null, 2)
       }]
     };
   }
