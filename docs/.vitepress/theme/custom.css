@@ -206,41 +206,44 @@ html[dir="rtl"] .VPHomeHero .main {
   margin-bottom: 28px;
 }
 
-/* Align Hero Action Buttons to the Right (Start) in RTL */
+/* Align Hero Action Buttons in RTL */
 html[dir="rtl"] .VPHomeHero .actions {
   justify-content: flex-start !important;
-  gap: 14px !important;
+  gap: 12px !important;
   flex-wrap: wrap !important;
 }
 
 html[dir="rtl"] .VPHomeHero .action {
   margin: 0 !important;
+  flex-shrink: 0 !important;
 }
 
 .VPButton {
-  height: 46px !important;
-  line-height: 44px !important;
-  padding: 0 24px !important;
+  min-height: 44px !important;
+  height: auto !important;
+  padding: 10px 20px !important;
   border-radius: 12px !important;
   font-family: 'Alexandria', sans-serif !important;
   font-weight: 600 !important;
-  font-size: 0.95rem !important;
+  font-size: 0.92rem !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 8px !important;
+  white-space: nowrap !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .VPButton.brand {
   background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35) !important;
   color: #ffffff !important;
 }
 
 .VPButton.brand:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45) !important;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45) !important;
 }
 
 .VPButton.alt {
@@ -330,21 +333,31 @@ html[dir="rtl"] .VPFeature .box {
 .VPFeature .title {
   font-family: 'Alexandria', sans-serif !important;
   font-weight: 700 !important;
-  font-size: 1.2rem !important;
-  line-height: 1.4 !important;
+  font-size: 1.15rem !important;
+  line-height: 1.45 !important;
   margin-bottom: 10px !important;
   color: var(--vp-c-text-1) !important;
   width: 100% !important;
+}
+
+html[dir="rtl"] .VPFeature .title {
   text-align: right !important;
+  direction: rtl !important;
+  unicode-bidi: plaintext !important;
 }
 
 .VPFeature .details {
   font-family: 'Cairo', sans-serif !important;
-  font-size: 0.96rem !important;
-  line-height: 1.68 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
   color: var(--vp-c-text-2) !important;
   width: 100% !important;
+}
+
+html[dir="rtl"] .VPFeature .details {
   text-align: right !important;
+  direction: rtl !important;
+  unicode-bidi: plaintext !important;
 }
 
 /* ==========================================================================

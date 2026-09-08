@@ -1,4 +1,44 @@
-<div dir="rtl">
+---
+layout: home
+
+hero:
+  name: "Tidy Ecosystem"
+  text: "زیست‌بوم دستیار شخصی مستقل و مدیریت کسب‌وکار یکپارچه"
+  tagline: "میکروکرنل فوق‌سریع بر بستر SQLite WAL • موتور جستجوی آنی FTS5 BM25 • بسته‌های مستقل کسب‌وکار"
+  image:
+    src: /logo.svg
+    alt: Tidy Ecosystem Logo
+  actions:
+    - theme: brand
+      text: 🚀 راهنمای کاربر
+      link: /user_manual.ar
+    - theme: alt
+      text: 🏛️ مشخصات معماری
+      link: /specs/architecture_spec.ar
+    - theme: alt
+      text: 🗺️ نقشه راه (SemVer)
+      link: /PROJECT_STATUS.ar
+
+features:
+  - icon: 🔒
+    title: حاکمیت کامل داده‌ها (Local-First)
+    details: پایگاه‌داده محلی یکتا SQLite با حالت پرسرعت WAL، بدون وابستگی به ابر و دارای گاوصندوق رمزگذاری‌شده.
+  - icon: ⚡
+    title: جستجوی هوشمند دوزبانه (FTS5 BM25)
+    details: بازیابی آنی خاطرات با توکنایزر unicode61 و فرمول ریاضی زوال حافظه ابینگهاوس.
+  - icon: 🧩
+    title: معماری میکروکرنل (Microkernel)
+    details: موتور سبک و وفادار به ۱۵ اصل ساختاری با قابلیت توسعه پویا توسط بسته‌های دامنه و مهارت‌ها.
+  - icon: 💼
+    title: بسته ابزار تجاری یکپارچه (TidyOffice)
+    details: مدیریت ارتباط با مشتریان (CRM)، صدور پیشرفته فاکتورها، رهگیری هزینه‌ها و جریان نقدینگی لحظه‌ای.
+  - icon: 🎨
+    title: سازنده هوشمند برنامه‌ها (TidyBuilder)
+    details: یکپارچگی بومی با Qahera UI Kit برای تولید واسط‌های کاربری وب و برنامه‌های SPA با پشتیبانی کامل از RTL.
+  - icon: 🤖
+    title: حاکمیت زمینه سه‌حلقه‌ای (Context Rings)
+    details: مونتاژ آنی زمینه (حلقه ۰ هویت، حلقه ۱ فایروال دامنه، حلقه ۲ حافظه کاری) با تفویض وظایف به دستیاران فرعی.
+---
 
 # 🤖 تايدى Tidy `v1.4.2`
 ### عامل دستیار شخصی مستقل با حافظه پایدار SQLite و سرور محلی Stdio MCP
@@ -7,27 +47,13 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent/blob/main/LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 
-[ English ](/en/) • [ العربية ](/) • [ Español ](/es/) • [ Deutsch ](/de/) • [ Français ](/fr/) • [ Português ](/pt/) • [ 中文 ](/zh/) • [ فارسی ](/fa/)
-
 ---
 
 ## 🌟 نمای کلی و ارزش بنیادین
 
 **Tidy** لایه عامل دستیار هوشمند مستقل است که بر بستر یک پایگاه‌داده محلی SQLite به عنوان منبع یگانه حقیقت (SSOT) دائمی فعالیت می‌کند.
 
-### قابلیت‌های کلیدی
-1. **راه‌اندازی بدون پیکربندی (Zero-Config)**: استفاده از موتور پیش‌فرض `node:sqlite` (Node.js >= 22). ایجاد خودکار `~/.tidy/tidy.db` با حالت WAL، کلیدهای خارجی و ایندکس FTS5.
-2. **معماری سه‌حلقه‌ای زمینه (3-Ring Context)**:
-   - **حلقه ۰ (پروفایل مستقل)**: هویت کاربر و لحن دستیار (~۱۵۰ توکن).
-   - **حلقه ۱ (فایروال حوزه)**: تفکیک دقیق بین حالت‌های توسعه، بازاریابی و شخصی.
-   - **حلقه ۲ (حافظه کاری پویا)**: بازیابی سریع تصمیم‌ها و الگوها با FTS5 BM25.
-3. **بسته ابزار تجاری یکپارچه**: مدیریت مشتریان (CRM)، صدور فاکتور و تحلیل جریان نقدینگی.
-4. **۴ میکرو-برنامه یکپارچه**: `tasks` (مدیریت وظایف)، `snippets` (تکه‌کدها)، `journal` (یادداشت‌ها)، `vault` (کلیدهای رمزگذاری‌شده).
-5. **سرور محلی Stdio MCP**: استاندارد JSON-RPC 2.0 با ۱۶ ابزار هوشمند و ۴ منبع زنده.
-
----
-
-## 🚀 شروع سریع
+### 🚀 شروع سریع
 
 ```bash
 # دستیار تعاملی در ترمینال
@@ -37,9 +63,3 @@ tidy
 tidy m "تصمیم معماری"
 tidy q "SQLite"
 ```
-
-## 📄 مجوز
-
-Apache-2.0 © 2026 TidyFactor Team.
-
-</div>

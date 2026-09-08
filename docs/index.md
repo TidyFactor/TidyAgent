@@ -10,13 +10,13 @@ hero:
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand
-      text: 🚀 ابدأ بدليل الاستخدام
+      text: 🚀 دليل الاستخدام
       link: /user_manual.ar
     - theme: alt
-      text: 🏛️ المواصفات الهندسية
+      text: 🏛️ المواصفات المعمارية
       link: /specs/architecture_spec.ar
     - theme: alt
-      text: 🗺️ خارطة الطريق (SemVer)
+      text: 🗺️ خارطة الطريق
       link: /PROJECT_STATUS.ar
 
 features:

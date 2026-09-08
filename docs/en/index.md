@@ -1,4 +1,46 @@
-# 🤖 Tidy `v1.4.2`
+---
+layout: home
+
+hero:
+  name: "Tidy Ecosystem"
+  text: "Sovereign Personal Assistant & Business Operating Platform"
+  tagline: "Ultra-fast Microkernel on SQLite WAL • Instant FTS5 BM25 Search • Autonomous Business Packs & AI Builder"
+  image:
+    src: /logo.svg
+    alt: Tidy Ecosystem Logo
+  actions:
+    - theme: brand
+      text: 🚀 User Manual
+      link: /user_manual.ar
+    - theme: alt
+      text: 🏛️ Architecture Spec
+      link: /specs/architecture_spec.ar
+    - theme: alt
+      text: 🗺️ Roadmap (SemVer)
+      link: /PROJECT_STATUS.ar
+
+features:
+  - icon: 🔒
+    title: Complete Data Sovereignty (Local-First)
+    details: Single active SQLite database running high-performance WAL mode with zero cloud lock-in and fully encrypted local vault.
+  - icon: ⚡
+    title: Smart Bilingual Search (FTS5 BM25)
+    details: Instant memory recall supporting Arabic and English via unicode61 tokenizer with mathematical decay scoring.
+  - icon: 🧩
+    title: Microkernel Architecture
+    details: Lightweight engine adhering to 15 structural invariants, dynamically extensible with domain packs and community skills.
+  - icon: 💼
+    title: Sovereign Business Suite (TidyOffice)
+    details: B2B CRM pipelines, tax-calculated itemized invoicing, expense telemetry, real-time cashflow, and AI client dossiers.
+  - icon: 🎨
+    title: Intelligent App Builder (TidyBuilder)
+    details: Native integration with Qahera UI Kit for generating accessible, high-performance web interfaces and SPAs with full RTL parity.
+  - icon: 🤖
+    title: 3-Ring Context Governance
+    details: Atomic 3-ring context assembly (Ring 0 identity, Ring 1 domain firewall, Ring 2 memory) with specialized subagent delegation.
+---
+
+# 🤖 Tidy Platform Ecosystem `v1.4.2`
 ### Sovereign Personal Assistant & Office Suite with Persistent SQLite Memory & Local Stdio MCP Server
 
 Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a dedicated sovereign assistant layer with zero-config persistent memory, subagent delegation, community skills discovery, full B2B CRM, automated itemized invoicing, expense & cashflow telemetry, and instant SQLite FTS5 search.
@@ -7,10 +49,7 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent/blob/main/LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 [![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent)
-[![RTL Native Arabic](https://img.shields.io/badge/RTL-Native%20Arabic-emerald.svg?style=for-the-badge)](/)
-[![Architect Score](https://img.shields.io/badge/Architect%20Score-15%2F15%20Pass%20(100%25)-green.svg?style=for-the-badge)](#-architecture--governance)
-
-[ English ](/en/) • [ العربية (Arabic)](/) • [ 📚 Documentation Hub ](/) • [ 📖 User Manual ](/user_manual.ar) • [ 🗺️ Roadmap ](/PROJECT_STATUS.ar)
+[![Architect Score](https://img.shields.io/badge/Architect%20Score-15%2F15%20Pass%20(100%25)-green.svg?style=for-the-badge)](/specs/architecture_spec.ar)
 
 ---
 
@@ -27,197 +66,17 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 - **`@tidy/desktop` (`apps/desktop`)**: Native Windows x64 Desktop Application (Electron + secure typed IPC + global floating HUD summoned via `Alt+Space`) featuring dedicated visual tabs for CRM, Invoicing, and Cashflow.
 - **`@tidy/web` (`apps/web`)**: Web Management Console running on local HTTP port `3840`.
 
-### Core Capabilities
-1. **Pluggable Microkernel Architecture**: Pure separation of concerns between core cognitive memory (`@tidy/core`) and business domains (`@tidy/office`). Allows custom enterprise deployments (DevOps, Agencies, Developers) without engine bloat.
-2. **The 3-Ring Context Architecture**:
-   - **Ring 0 (Sovereign Profile)**: Permanent user preferences and assistant persona (~150 tokens).
-   - **Ring 1 (Domain Firewall)**: Context switching between `dev`, `marketing`, and `personal` modes without context bleed.
-   - **Ring 2 (Dynamic Working Memory)**: BM25-ranked FTS5 recall of relevant decisions, rules, and patterns.
-3. **Sovereign Business Suite**: Manage client pipelines, generate tax-calculated itemized invoices, record operational expenses, monitor real-time cashflow telemetry, and generate AI-powered client dossiers.
-4. **Pluggable Sub-Agents & Skills Hub**: Built-in core roles (`planner`, `coder`, `researcher`, `scribe`) plus dynamic integration of TidyFactor Skills-LAB community skills (`@marketing`, `@design`, `@doc`, `@next`, `@php`, etc.) as sovereign subagents.
-5. **Self-Contained Task Brief Generator**: Synthesizes autonomous task briefs combining Goal/Mission, 3-Ring Context, Skill Operational Rules, and Verification Gates.
-6. **Multi-Surface Access**: CLI, Stdio MCP Server, Electron Windows Desktop App (`Alt+Space` HUD), and Web Dashboard.
-
 ---
 
-## 🛠️ Quick Start & Usage
-
-> 💡 **For the comprehensive command reference and end-to-end workflows, see the [📖 User Manual](/user_manual.ar).**
-
-### 1. Interactive Terminal Wizard (Recommended)
-Launch the modern, interactive `@clack/prompts` navigation interface:
+## 🛠️ Quick Start
 
 ```bash
+# Launch interactive terminal wizard
 tidy
-# or explicitly:
-tidy ui
+
+# Instant memory search with mathematical decay
+tidy q "sqlite wal"
+
+# Add a high-priority task linked to memory
+tidy task "Review MCP contracts" --priority high
 ```
-
-### 2. Fast Developer One-Liners & Cognitive Memory
-High-speed terminal commands for daily coding and agent collaboration:
-
-```bash
-# Instant memory search with mathematical decay & stars ranking
-tidy q "WAL mode"
-tidy q "auth" --bypass   # Bypass domain firewall for global search
-
-# Instant memory capture in 1 second
-tidy m "Use WAL mode for high concurrency" --cat decision --imp 5
-
-# Quick task management with autonomous memory feedback loop
-tidy task "Implement OAuth2" --priority urgent --domain dev --agent coder
-tidy tasks --pending
-tidy done tsk_xxx --result "Implemented with JWT verification"  # Auto-archives decision to memory!
-
-# Quick status & firewall inspection
-tidy who
-
-# Obsidian PARA Markdown Vault Export & JSON SSOT
-tidy export --out ./my_vault
-tidy export --format json --out ./snapshot.json
-
-# External Markdown notes ingestion
-tidy import ./notes
-```
-
-### 3. Status Inspection
-```bash
-tidy init
-tidy whoami
-```
-
-### 3. CRM & Client Pipeline
-```bash
-# List active clients
-node bin/tidy.js crm list
-
-# Add a new client
-node bin/tidy.js crm add --name "Acme Corp" --budget 15000 --status prospect
-```
-
-### 4. Invoicing & Billing Engine
-```bash
-# List all invoices
-node bin/tidy.js invoice list
-
-# Create itemized invoice with 15% tax
-node bin/tidy.js invoice create --client cli_xxxx --tax 15 --items '[{"name":"Backend API Migration","qty":1,"unitPrice":4500}]'
-
-# Mark invoice as paid
-node bin/tidy.js invoice pay inv_xxxx
-```
-
-### 5. Expenses & Live Cashflow Telemetry
-```bash
-# Record operational expense
-node bin/tidy.js expense add --title "Cloud Server Hosting" --amount 240 --category hosting
-
-# Audit live cashflow statement (Revenue, Expenses, Net Profit, Margin, Receivables)
-node bin/tidy.js cashflow
-```
-
-### 6. AI Client Dossier Synthesizer
-```bash
-# Compile instant executive dossier combining CRM, Invoices, Proposals, and FTS5 Memory
-node bin/tidy.js dossier cli_xxxx
-```
-
-### 7. PocketOffice 1-Click Migration
-```bash
-# Import existing PocketOffice data into Tidy SQLite SSOT
-node bin/tidy.js import-pocketoffice --source ./path/to/PocketOffice-Data
-```
-
-### 8. Save & Recall Memories
-```bash
-# Save an architectural decision
-node bin/tidy.js memory save "Project uses Next.js 16 and Supabase with strict tenant isolation"
-
-# Instant BM25 search
-node bin/tidy.js memory recall "Next.js"
-```
-
-### 9. Switch Contexts & Domains
-```bash
-node bin/tidy.js context list
-node bin/tidy.js context switch ctx_dev
-```
-
-### 10. Delegate to Subagents & Synthesize Briefs
-```bash
-node bin/tidy.js agent run coder "Review database schema performance"
-node bin/tidy.js brief "Build cashflow analytics dashboard"
-```
-
----
-
-## 🔌 Stdio MCP Server Configuration
-
-Add to your IDE MCP configuration (`mcp_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "tidy": {
-      "command": "node",
-      "args": ["packages/mcp/src/server.js"]
-    }
-  }
-}
-```
-
-### Registered Tools (16 Tools)
-- **Cognitive & Memory**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`.
-- **Tasks & Agents**: `tidy_task_add`, `tidy_task_list`, `tidy_exec_subagent`, `tidy_list_skills`, `tidy_synthesize_brief`.
-- **Database Telemetry**: `tidy_db_stats`.
-- **Office Suite (`@tidy/office`)**:
-  - `tidy_crm_list`: List CRM clients, deal pipelines, and budgets.
-  - `tidy_crm_add`: Register a new B2B client.
-  - `tidy_invoice_list`: Query invoices by status, client, or due date.
-  - `tidy_invoice_create`: Generate itemized invoices with automated tax and discounts.
-  - `tidy_cashflow_summary`: Live P&L financial statement.
-  - `tidy_client_dossier`: Comprehensive AI client dossier fusing financial ledger and institutional memory.
-
-### Dynamic Live Resources (4 Resources)
-- `tidy://profile`: Sovereign user profile and operating tone.
-- `tidy://context/current`: Active project context and domain firewall constraints.
-- `tidy://tasks/pending`: Pending tasks queue.
-- `tidy://office/cashflow`: Real-time financial cashflow statement.
-
----
-
-## 🏛️ Architecture & Governance
-
-Tidy adheres strictly to the **15 Structural Rules** of TidyFactor Skills:
-- **Dispatcher Discipline**: `SKILL.md` is a clean router (~350 tokens) with explicit anti-triggers.
-- **Contextual Decision Layer (CDL v2.0)**: Automatic Context Delta Resolution before prompting.
-- **Operational Memory Isolation**: Clean separation between pure technical schemas and human documentation.
-- **Pluggable Microkernel**: Core engine remains clean, fast, and unpolluted by domain-specific business rules.
-
----
-
-## 📚 Documentation & Ecosystem Guides
-
-The Tidy repository is organized around a single root `README.md` and a modular [Documentation Hub](/):
-
-| Guide / Specification | Scope & Description | Link |
-|---|---|:---:|
-| **Documentation Hub** | Master index of all project guides, specs, and translations | [/](/) |
-| **User Manual (العربية)** | Comprehensive operating manual for CLI, MCP, HUD & Apps | [/user_manual.ar](/user_manual.ar) |
-| **Project Status & SemVer** | Active component status & SemVer roadmap (`v1.4.3` – `v2.0.0`) | [/PROJECT_STATUS.ar](/PROJECT_STATUS.ar) |
-| **System Architecture** | Technical specification of SQLite WAL, FTS5 & Context Rings | [/specs/architecture_spec.ar](/specs/architecture_spec.ar) |
-| **Product Roadmap** | Strategic multi-phase product roadmap and release plan | [/PROJECT_STATUS.ar](/PROJECT_STATUS.ar) |
-
-### ⚡ Interactive Documentation Portal (VitePress)
-Run the local interactive documentation portal with instant search and full RTL/LTR support:
-```bash
-npm run docs:dev    # Start live development server
-npm run docs:build  # Compile static production bundle (SSG)
-```
-
----
-
-## ⚖️ License
-
-Apache-2.0 © 2026 TidyFactor Team.
-See [LICENSE](https://github.com/TidyFactor/Agent/blob/main/LICENSE) for terms.
