@@ -66,42 +66,53 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 
 ---
 
-### Phase 3: Cognitive OS Services, Governance, AI Hub & Platform Engine 🚀 (Active Milestone — v1.5.0)
-- [ ] **1. Core Governance & Settings Engine (The Central Nervous System)**:
-  - Centralized application variables and governance rules management via `@tidy/core` Config Provider.
-  - Granular Profile Management: display name, user role, system preferences, language (AR/EN), theme (Dark/Light/System), currency, date/time formatting.
-  - Real-time reactive updates propagating immediately to CLI, MCP, and UI surfaces.
-- [ ] **2. Advanced Memory, Search & Rich Text Editor**:
-  - Full-featured Markdown/Text editor with syntax highlighting, live preview, auto-save, and tag extraction.
-  - Enhanced FTS5 BM25 search with hybrid filtering, query operators, and visual memory inspector.
-- [ ] **3. Professional Task Board v2 (Kanban & List Orchestration)**:
-  - Comprehensive Kanban and list views with fluid drag-and-drop state transitions.
-  - Deep integration with Subagent delegation (`@planner`, `@coder`, `@researcher`, `@scribe`) and automatic task-to-memory synthesis.
-- [ ] **4. Agents & Skills Management Hub (Full CRUD)**:
-  - Full lifecycle management (Create, Read, Update, Delete) for Subagents and Skills.
-  - Capability definition, system prompt editing, tool bindings, and contextual firewall assignment.
-- [ ] **5. Core Productivity Micro-Apps Hardening**:
-  - **Snippets Vault**: Syntax-highlighted code vault with tags, language filter, 1-click copy, and IDE export.
-  - **Journal & Daily Reflections**: Structured timeline reflections linked to memory nodes and daily activity logs.
-  - **Vault & Secret Credentials**: Secure masked credential storage with AES-GCM encryption, reveal controls, and zero cloud leaks.
-- [ ] **6. Multi-Workspace & Multi-Database Engine**:
-  - Dynamic workspace creation, editing, switching, and domain isolation.
-  - Multi-database pool: Create new SQLite databases, switch active SSOT at runtime, and isolate contexts per client/project.
-- [ ] **7. Sovereign Backup, Export & Portability Center**:
-  - 1-click SQLite snapshot backup with checksum verification and auto-recovery.
-  - Bi-directional JSON SSOT package import/export and Obsidian PARA Markdown vault sync.
-- [ ] **8. System Audit Logs & Diagnostics Center**:
-  - Real-time stream of engine operations, subagent invocations, database mutations, and security events.
-- [ ] **9. Plugin & Module Lifecycle Manager**:
-  - Standardized plugin architecture allowing core services to register, load, sandbox, and hot-reload third-party or custom modules.
-- [ ] **10. AI Services & Provider Center (BYOK & Local AI)**:
-  - **BYOK (Bring Your Own Key)**: Native management and latency benchmarking for OpenAI, Anthropic, Gemini, DeepSeek, and Groq.
-  - **Local AI Provider**: Zero-leakage local LLM execution via Ollama, LM Studio, and Llama.cpp.
-  - Model routing, token cost estimation, and fallback failover tiers.
+### Phase 3: Cognitive OS Services, Governance, AI Hub & Platform Engine 🚀 (Active Milestone — SemVer Progression)
+
+#### 📦 `v1.4.3` — Core Governance & Settings Engine (The Central Nervous System) 🎯 [Next Immediate Release]
+- [ ] Centralized application variables and governance rules management via `@tidy/core` Config Provider.
+- [ ] Granular Profile Management: display name, user role, system preferences, language (AR/EN), theme (Dark/Light/System), currency, date/time formatting.
+- [ ] Real-time reactive updates propagating immediately to CLI, MCP, and UI surfaces.
+
+#### 📦 `v1.4.4` — Professional Task Board v2 (Kanban & Subagent Delegation)
+- [ ] Comprehensive Kanban and list views with fluid drag-and-drop state transitions.
+- [ ] Deep integration with Subagent delegation (`@planner`, `@coder`, `@researcher`, `@scribe`).
+- [ ] Autonomous task-to-memory auto-synthesis loop on task completion.
+
+#### 📦 `v1.4.5` — Cognitive Memory, Advanced Search & Rich Text Editor
+- [ ] Full-featured Markdown/Text editor with syntax highlighting, live preview, auto-save, and tag extraction.
+- [ ] Enhanced FTS5 BM25 search with hybrid filtering, query operators, and visual memory inspector.
+
+#### 📦 `v1.4.6` — Agents & Skills Management Hub (Full CRUD)
+- [ ] Full lifecycle management (Create, Read, Update, Delete) for Subagents and Skills.
+- [ ] Capability definition, system prompt editing, tool bindings, and contextual firewall assignment.
+
+#### 📦 `v1.4.7` — Core Productivity Micro-Apps Hardening
+- [ ] **Snippets Vault**: Syntax-highlighted code vault with tags, language filter, 1-click copy, and IDE export.
+- [ ] **Journal & Daily Reflections**: Structured timeline reflections linked to memory nodes and daily activity logs.
+- [ ] **Vault & Secret Credentials**: Secure masked credential storage with AES-GCM encryption, reveal controls, and zero cloud leaks.
+
+#### 📦 `v1.4.8` — Multi-Workspace, Multi-Database Engine & Sovereign Backup Center
+- [ ] Dynamic workspace creation, editing, switching, and domain isolation.
+- [ ] Multi-database pool: Create new SQLite databases, switch active SSOT at runtime, and isolate contexts per client/project.
+- [ ] 1-click SQLite snapshot backup with checksum verification and auto-recovery.
+- [ ] Bi-directional JSON SSOT package import/export and Obsidian PARA Markdown vault sync.
+
+#### 📦 `v1.4.9` — System Audit Logs & Plugin / Module Lifecycle Manager
+- [ ] Real-time stream of engine operations, subagent invocations, database mutations, and security events.
+- [ ] Standardized plugin architecture allowing core services to register, load, sandbox, and hot-reload third-party or custom modules.
+
+#### 📦 `v1.4.10` — AI Services & Provider Center (BYOK & Local AI)
+- [ ] **BYOK (Bring Your Own Key)**: Native management and latency benchmarking for OpenAI, Anthropic, Gemini, DeepSeek, and Groq.
+- [ ] **Local AI Provider**: Zero-leakage local LLM execution via Ollama, LM Studio, and Llama.cpp.
+- [ ] Model routing, token cost estimation, and fallback failover tiers.
+
+#### 🏁 `v1.5.0` — Tidy Cognitive OS Unified Platform Release
+- [ ] Final integration, stress testing, end-to-end regression validation across CLI, MCP, Desktop, and Web.
+- [ ] Zero-drift documentation sync across all localized versions.
 
 ---
 
-### Phase 4: Sovereign Office & Commerce Suite (`@tidy/office`) ⏳ (Planned — v1.6.0)
+### Phase 4: Sovereign Office & Commerce Suite (`@tidy/office`) ⏳ (Planned — `v1.6.0`)
 - [ ] Full B2B CRM Pipeline (Clients, Leads, Stages, Contacts, Activity log).
 - [ ] Company Profile & Branding (Issuer credentials, VAT/tax numbers, payment accounts).
 - [ ] Product & Service Catalog (Standardized SKUs, multi-currency pricing, unit types).
@@ -111,7 +122,7 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 
 ---
 
-### Phase 5: Sovereign Multi-Device Sync & Cross-Platform 🔮 (v2.0)
+### Phase 5: Sovereign Multi-Device Sync & Cross-Platform 🔮 (`v2.0.0`)
 - [ ] Local-First LibSQL / Litestream replication and CRDT changesets for zero-cloud lock-in sync.
 - [ ] Cloud Companion MCP Server with encrypted token authentication for remote AI agents.
 - [ ] Native macOS (Universal `.dmg`) and Linux (`.AppImage` / `.deb`) desktop builds.
