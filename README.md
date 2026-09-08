@@ -9,11 +9,11 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 [![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](SKILL.md)
-[![RTL Native Arabic](https://img.shields.io/badge/RTL-Native%20Arabic-emerald.svg?style=for-the-badge)](README.ar.md)
+[![RTL Native Arabic](https://img.shields.io/badge/RTL-Native%20Arabic-emerald.svg?style=for-the-badge)](docs/i18n/README.ar.md)
 [![Architect Score](https://img.shields.io/badge/Architect%20Score-15%2F15%20Pass%20(100%25)-green.svg?style=for-the-badge)](#-architecture--governance)
 [![AI Agents Compatible](https://img.shields.io/badge/AI%20Agents-Universal%20Compatibility-4285F4.svg?style=for-the-badge)](SKILL.md)
 
-[ English ](README.md) • [ العربية ](README.ar.md) • [ User Manual ](docs/user_manual.ar.md) • [ Architecture Spec ](docs/specs/architecture_spec.ar.md)
+[ English ](README.md) • [ العربية ](docs/i18n/README.ar.md) • [ 📚 Documentation Hub ](docs/README.md) • [ 📖 User Manual ](docs/user_manual.ar.md) • [ 🗺️ Roadmap ](ROADMAP.md)
 
 </div>
 
@@ -201,11 +201,29 @@ Tidy adheres strictly to the **15 Structural Rules** of TidyFactor Skills:
 
 ---
 
-## 📄 Documentation & License
+## 📚 Documentation & Ecosystem Guides
 
-- [📖 User Manual (العربية)](docs/user_manual.ar.md)
-- [🏛️ Architecture Specification](docs/specs/architecture_spec.ar.md)
-- [🗺️ TidyOffice Evolution Roadmap](docs/specs/tidyoffice_evolution_roadmap.ar.md)
-- [📝 Release Changelog](CHANGELOG.md)
+The Tidy repository is organized around a single root `README.md` and a modular [Documentation Hub](docs/README.md):
+
+| Guide / Specification | Scope & Description | Link |
+|---|---|:---:|
+| **Documentation Hub** | Master index of all project guides, specs, and translations | [docs/README.md](docs/README.md) |
+| **User Manual (العربية)** | Comprehensive operating manual for CLI, MCP, HUD & Apps | [docs/user_manual.ar.md](docs/user_manual.ar.md) |
+| **Project Status & SemVer** | Active component status & SemVer roadmap (`v1.4.3` – `v2.0.0`) | [docs/PROJECT_STATUS.ar.md](docs/PROJECT_STATUS.ar.md) |
+| **System Architecture** | Technical specification of SQLite WAL, FTS5 & Context Rings | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| **Product Roadmap** | Strategic multi-phase product roadmap and release plan | [ROADMAP.md](ROADMAP.md) |
+| **AI Agent Guidelines** | Autonomous coding agent operating contract & invariants | [AGENTS.md](AGENTS.md) |
+| **Skill Manifest** | TidyFactor Skills-LAB certified skill router | [SKILL.md](SKILL.md) |
+| **Release Changelog** | Complete historical SemVer changelog | [CHANGELOG.md](CHANGELOG.md) |
+| **Security Policy** | Zero-telemetry guarantee & private vulnerability reporting | [SECURITY.md](SECURITY.md) |
+| **Contributing Guide** | Development workflows, test suites, and contribution rules | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+### 🌐 International Translations (`docs/i18n/`)
+- [العربية (Arabic)](docs/i18n/README.ar.md) • [Español](docs/i18n/README.es.md) • [Deutsch](docs/i18n/README.de.md) • [Français](docs/i18n/README.fr.md) • [Português](docs/i18n/README.pt.md) • [中文](docs/i18n/README.zh.md) • [فارسی](docs/i18n/README.fa.md)
+
+---
+
+## ⚖️ License
 
 Apache-2.0 © 2026 TidyFactor Team.
+See [LICENSE](LICENSE) for terms.

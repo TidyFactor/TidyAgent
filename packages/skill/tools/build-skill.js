@@ -32,13 +32,7 @@ const ROOT_COPIES = [
   ".tidyfactor",
   "package.json",
   "README.md",
-  "README.ar.md",
-  "README.es.md",
-  "README.de.md",
-  "README.fr.md",
-  "README.pt.md",
-  "README.zh.md",
-  "README.fa.md",
+  "docs",
   "LICENSE",
   "CHANGELOG.md"
 ];
