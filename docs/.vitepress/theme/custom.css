@@ -271,36 +271,64 @@ html[dir="rtl"] .VPHomeHero .actions {
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Hero Logo Container & Stabilized Aesthetics */
-.VPHomeHero .image {
+/* Hero Layout & RTL Natural Direction (Text on Right, Logo on Left) */
+.VPHomeHero .container {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
-  order: 2 !important;
+  justify-content: space-between !important;
 }
 
-html[dir="rtl"] .VPHomeHero .image {
-  order: 1 !important;
+html[dir="rtl"] .VPHomeHero .container {
+  flex-direction: row !important;
 }
 
 html[dir="rtl"] .VPHomeHero .main {
+  order: 1 !important;
+  text-align: right !important;
+  flex: 1 1 60% !important;
+  max-width: 650px !important;
+}
+
+html[dir="rtl"] .VPHomeHero .heading {
+  align-items: flex-start !important;
+  text-align: right !important;
+}
+
+html[dir="rtl"] .VPHomeHero .name,
+html[dir="rtl"] .VPHomeHero .text,
+html[dir="rtl"] .VPHomeHero .tagline {
+  text-align: right !important;
+  margin-inline-start: 0 !important;
+  margin-inline-end: auto !important;
+}
+
+html[dir="rtl"] .VPHomeHero .actions {
+  justify-content: flex-start !important;
+}
+
+html[dir="rtl"] .VPHomeHero .image {
   order: 2 !important;
+  flex: 1 1 40% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .VPHomeHero .image-container {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 380px !important;
-  height: 380px !important;
+  width: 360px !important;
+  height: 360px !important;
   transform: none !important;
   position: relative !important;
+  margin: 0 auto !important;
 }
 
 .VPHomeHero .image-bg {
-  width: 320px !important;
-  height: 320px !important;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, rgba(79, 70, 229, 0.08) 50%, transparent 75%) !important;
+  width: 300px !important;
+  height: 300px !important;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(79, 70, 229, 0.1) 50%, transparent 75%) !important;
   filter: blur(28px) !important;
   transform: translate(-50%, -50%) !important;
   position: absolute !important;
@@ -314,8 +342,8 @@ html[dir="rtl"] .VPHomeHero .main {
   left: auto !important;
   transform: none !important;
   width: auto !important;
-  max-width: 340px !important;
-  max-height: 220px !important;
+  max-width: 320px !important;
+  max-height: 200px !important;
   object-fit: contain !important;
   filter: drop-shadow(0 16px 36px rgba(37, 99, 235, 0.35)) !important;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
