@@ -271,21 +271,60 @@ html[dir="rtl"] .VPHomeHero .actions {
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Hero Logo Container */
+/* Hero Logo Container & Stabilized Aesthetics */
+.VPHomeHero .image {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  order: 2 !important;
+}
+
+html[dir="rtl"] .VPHomeHero .image {
+  order: 1 !important;
+}
+
+html[dir="rtl"] .VPHomeHero .main {
+  order: 2 !important;
+}
+
 .VPHomeHero .image-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 380px !important;
+  height: 380px !important;
+  transform: none !important;
+  position: relative !important;
+}
+
+.VPHomeHero .image-bg {
+  width: 320px !important;
+  height: 320px !important;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, rgba(79, 70, 229, 0.08) 50%, transparent 75%) !important;
+  filter: blur(28px) !important;
+  transform: translate(-50%, -50%) !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
 }
 
 .VPHomeHero .image-src {
-  max-width: 250px !important;
-  max-height: 250px !important;
-  transition: transform 0.4s ease;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: 340px !important;
+  max-height: 220px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 16px 36px rgba(37, 99, 235, 0.35)) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  pointer-events: auto !important;
 }
 
 .VPHomeHero .image-src:hover {
-  transform: scale(1.04) rotate(1deg);
+  filter: drop-shadow(0 20px 48px rgba(37, 99, 235, 0.55)) !important;
+  transform: scale(1.02) !important;
 }
 
 /* ==========================================================================

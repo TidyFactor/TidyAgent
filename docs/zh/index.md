@@ -6,7 +6,7 @@ hero:
   text: "独立个人助理与主权商业运营生态系统"
   tagline: "基于 SQLite WAL 的超高速微内核 • FTS5 BM25 实时检索 • 自治商业套件与智能构建器"
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand

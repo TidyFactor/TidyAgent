@@ -6,7 +6,7 @@ hero:
   text: "Ecossistema de Assistente Pessoal Soberano e Gestão Empresarial"
   tagline: "Microkernel ultrarrápido em SQLite WAL • Busca instantânea FTS5 BM25 • Pacotes de negócios autônomos"
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand

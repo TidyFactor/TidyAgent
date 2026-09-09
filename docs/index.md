@@ -6,7 +6,7 @@ hero:
   text: "منظومة المساعد الشخصي وإدارة الأعمال السيادية"
   tagline: "نواة مصغرة فائقة السرعة بـ SQLite WAL • محرك بحث فوري FTS5 BM25 • حزم مجالات مستقلة للأعمال وبناء التطبيقات"
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand

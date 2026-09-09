@@ -211,7 +211,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/logo.png',
     siteTitle: 'Tidy Ecosystem',
 
     socialLinks: [

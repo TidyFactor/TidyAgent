@@ -6,7 +6,7 @@ hero:
   text: "زیست‌بوم دستیار شخصی مستقل و مدیریت کسب‌وکار یکپارچه"
   tagline: "میکروکرنل فوق‌سریع بر بستر SQLite WAL • موتور جستجوی آنی FTS5 BM25 • بسته‌های مستقل کسب‌وکار"
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand

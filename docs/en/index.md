@@ -6,7 +6,7 @@ hero:
   text: "Sovereign Personal Assistant & Business Operating Platform"
   tagline: "Ultra-fast Microkernel on SQLite WAL • Instant FTS5 BM25 Search • Autonomous Business Packs & AI Builder"
   image:
-    src: /logo.svg
+    src: /logo.png
     alt: Tidy Ecosystem Logo
   actions:
     - theme: brand
