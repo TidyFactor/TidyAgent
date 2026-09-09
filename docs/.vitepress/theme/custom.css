@@ -206,57 +206,69 @@ html[dir="rtl"] .VPHomeHero .main {
   margin-bottom: 28px;
 }
 
-/* Align Hero Action Buttons in RTL */
-html[dir="rtl"] .VPHomeHero .actions {
-  justify-content: flex-start !important;
-  gap: 12px !important;
-  flex-wrap: wrap !important;
+/* Align Hero Action Buttons in RTL - strictly single-row without scattered wrapping */
+.VPHomeHero .actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  flex-wrap: nowrap !important;
+  margin-top: 12px !important;
 }
 
-html[dir="rtl"] .VPHomeHero .action {
+html[dir="rtl"] .VPHomeHero .actions {
+  justify-content: flex-start !important;
+}
+
+.VPHomeHero .action {
   margin: 0 !important;
-  flex-shrink: 0 !important;
+  flex: 0 0 auto !important;
 }
 
 .VPButton {
-  min-height: 44px !important;
-  height: auto !important;
-  padding: 10px 20px !important;
-  border-radius: 12px !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  padding: 0 24px !important;
+  border-radius: 14px !important;
   font-family: 'Alexandria', sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: -0.01em;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
   white-space: nowrap !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  word-break: keep-all !important;
+  box-sizing: border-box !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .VPButton.brand {
   background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 20px -2px rgba(37, 99, 235, 0.45) !important;
   color: #ffffff !important;
 }
 
 .VPButton.brand:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45) !important;
+  transform: translateY(-2.5px);
+  box-shadow: 0 10px 28px -2px rgba(37, 99, 235, 0.6) !important;
 }
 
 .VPButton.alt {
   background: var(--vp-c-bg-soft) !important;
-  backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(16px) !important;
   border: 1px solid var(--vp-c-divider) !important;
   color: var(--vp-c-text-1) !important;
 }
 
 .VPButton.alt:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2.5px);
   border-color: var(--vp-c-brand-1) !important;
   background: var(--vp-c-brand-soft) !important;
+  color: var(--vp-c-brand-1) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* Hero Logo Container */
@@ -277,52 +289,95 @@ html[dir="rtl"] .VPHomeHero .action {
 }
 
 /* ==========================================================================
-   3. Feature Cards — Luxury RTL Grid
+   3. Feature Cards — Luxury 3-Column Grid (TidyFactor Design Track)
    ========================================================================== */
 
 .VPHomeFeatures {
-  padding-bottom: 70px !important;
+  padding-bottom: 80px !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+}
+
+.VPHomeFeatures .items {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+}
+
+@media (max-width: 960px) {
+  .VPHomeFeatures .items {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .VPHomeFeatures .items {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .VPFeature {
   border: 1px solid var(--vp-c-divider) !important;
-  border-radius: 18px !important;
+  border-radius: 20px !important;
   background: var(--vp-c-bg-soft) !important;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px) !important;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  position: relative;
-  overflow: hidden;
-  padding: 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  padding: 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05) !important;
 }
 
-html[dir="rtl"] .VPFeature {
-  text-align: right !important;
+/* Subtle luxury accent gradient glow */
+.VPFeature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--vp-c-brand-1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.VPFeature:hover {
+  transform: translateY(-6px) !important;
+  border-color: var(--vp-c-brand-1) !important;
+  box-shadow: 0 20px 40px -8px rgba(37, 99, 235, 0.22) !important;
+}
+
+.VPFeature:hover::before {
+  opacity: 1;
+}
+
+.VPFeature .box {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  width: 100% !important;
 }
 
 html[dir="rtl"] .VPFeature .box {
-  display: flex !important;
-  flex-direction: column !important;
   align-items: flex-start !important;
   text-align: right !important;
 }
 
-.VPFeature:hover {
-  transform: translateY(-5px);
-  border-color: var(--vp-c-brand-1) !important;
-  box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.22) !important;
-}
-
 .VPFeature .icon {
-  font-size: 1.75rem !important;
-  margin-bottom: 14px !important;
+  font-size: 1.85rem !important;
+  margin-bottom: 18px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: 14px !important;
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
   background: var(--vp-c-brand-soft) !important;
-  border: 1px solid rgba(37, 99, 235, 0.15) !important;
+  border: 1px solid rgba(37, 99, 235, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12) !important;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -333,11 +388,12 @@ html[dir="rtl"] .VPFeature .box {
 .VPFeature .title {
   font-family: 'Alexandria', sans-serif !important;
   font-weight: 700 !important;
-  font-size: 1.15rem !important;
-  line-height: 1.45 !important;
-  margin-bottom: 10px !important;
+  font-size: 1.18rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 12px !important;
   color: var(--vp-c-text-1) !important;
   width: 100% !important;
+  letter-spacing: -0.01em !important;
 }
 
 html[dir="rtl"] .VPFeature .title {
@@ -348,10 +404,11 @@ html[dir="rtl"] .VPFeature .title {
 
 .VPFeature .details {
   font-family: 'Cairo', sans-serif !important;
-  font-size: 0.95rem !important;
-  line-height: 1.65 !important;
+  font-size: 0.98rem !important;
+  line-height: 1.72 !important;
   color: var(--vp-c-text-2) !important;
   width: 100% !important;
+  margin: 0 !important;
 }
 
 html[dir="rtl"] .VPFeature .details {
@@ -495,10 +552,72 @@ html[dir="rtl"] .DocSearch-Button-Keys {
   unicode-bidi: isolate;
 }
 
-div[class*='language-'] {
-  border-radius: 14px !important;
+/* Luxury Quick Navigation Grid in Documentation Hub */
+.quick-nav-grid table {
+  display: table !important;
+  width: 100% !important;
+  margin: 16px 0 28px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
   border: 1px solid var(--vp-c-divider) !important;
-  margin: 20px 0 !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.06) !important;
+}
+
+.quick-nav-grid th {
+  background: var(--vp-c-brand-soft) !important;
+  color: var(--vp-c-brand-1) !important;
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.02rem !important;
+  padding: 16px 20px !important;
+  border-bottom: 2px solid rgba(37, 99, 235, 0.2) !important;
+}
+
+.quick-nav-grid td {
+  padding: 18px 20px !important;
+  vertical-align: top !important;
+  line-height: 1.9 !important;
+  font-size: 0.96rem !important;
+  background: var(--vp-c-bg-soft) !important;
+}
+
+.quick-nav-grid td a {
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--vp-c-text-1) !important;
+  transition: all 0.2s ease !important;
+  display: inline-block !important;
+  margin-bottom: 4px !important;
+}
+
+.quick-nav-grid td a:hover {
+  color: var(--vp-c-brand-1) !important;
+  transform: translateX(-3px) !important;
+}
+
+/* Luxury Footer Design System (TidyFactor Design Track) */
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider) !important;
+  background: var(--vp-c-bg-soft) !important;
+  padding: 32px 24px !important;
+  text-align: center !important;
+}
+
+.VPFooter .message {
+  font-family: 'Alexandria', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  color: var(--vp-c-text-1) !important;
+  line-height: 1.6 !important;
+}
+
+.VPFooter .copyright {
+  font-family: 'Cairo', sans-serif !important;
+  font-size: 0.88rem !important;
+  color: var(--vp-c-text-2) !important;
+  margin-top: 8px !important;
 }
 
 /* Footer / Pager in RTL */

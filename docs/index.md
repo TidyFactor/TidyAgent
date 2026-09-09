@@ -21,85 +21,78 @@ hero:
 
 features:
   - icon: 🔒
-    title: سيادة محلية تامة (Local-First)
+    title: سيادة محلية كاملة
     details: قاعدة بيانات SQLite واحدة نشطة بنمط WAL عالي السرعة، مع صفر ارتهان بالسحابة وخزنة محلية مشفرة بالكامل.
   - icon: ⚡
-    title: بحث ذكي ثنائي اللغة (FTS5 BM25)
-    details: محرك بحث واسترجاع فوري يدعم العربية والإنجليزية بترميز unicode61 مع خوارزمية قياس الاضمحلال المعرفي.
+    title: محرك بحث فوري FTS5
+    details: استرجاع ذكي ثنائي اللغة يدعم العربية والإنجليزية بترميز unicode61 مع خوارزمية قياس الاضمحلال المعرفي BM25.
   - icon: 🧩
-    title: معمارية النواة المصغرة (Microkernel)
+    title: معمارية النواة المصغرة
     details: نواة مجردة خفيفة فائقة الاستجابة تلتزم بالقواعد الهيكلية وتتمدد بحزم النطاقات المخصصة كإضافات معيارية.
   - icon: 💼
-    title: حزمة إدارة الأعمال (TidyOffice)
-    details: إدارة العملاء والصفقات (CRM)، فواتير وعروض أسعار آلية، وتوليد ملفات استخبارات العملاء الشاملة.
+    title: حزمة إدارة الأعمال TidyOffice
+    details: إدارة العملاء والصفقات CRM، فواتير وعروض أسعار آلية، وتوليد ملفات استخبارات العملاء الشاملة.
   - icon: 🎨
-    title: باني التطبيقات الذكي (TidyBuilder)
+    title: باني التطبيقات TidyBuilder
     details: تكامل أصيل مع مكتبة Qahera UI Kit لتوليد واجهات ويب وتطبيقات SPA بدعم كامل للـ RTL دون أي تعقيدات.
   - icon: 🤖
-    title: حوكمة سياق الحلقات الثلاث (Context Rings)
+    title: حوكمة سياق الحلقات الثلاث
     details: تجميع السياق الذري الفوري (Ring 0 للهوية، Ring 1 للمجالات، Ring 2 للمشروع) مع تفويض الوكلاء الفرعيين.
 ---
 
-# 📚 مركز التوثيق الشامل لمنظومة تايدي — Documentation Hub
-<!-- Status: Living Documentation Index -->
-<!-- SemVer SSOT: v1.4.2 -->
+# 📚 مركز التوثيق الشامل لمنظومة تايدي (Tidy Ecosystem Hub)
 
-مرحباً بك في مركز التوثيق الرسمي لمنظومة **Tidy Platform Ecosystem**. تم تنظيم هذا المجلد ليكون المرجع المركزي الشامل لكافة الجوانب المعمارية، التشغيلية، ومسارات التطوير القادمة.
+مرحباً بك في مركز التوثيق الموحد لمنظومة **Tidy Platform Ecosystem**. صُمم هذا المركز ليكون المرجع التقني والتشغيلي الموثوق لكافة أدوات المنظومة، معماريتها النواتية، وخوارزميات الذاكرة وحوكمة الوكلاء.
 
 ---
 
-## 🗺️ خريطة وثائق النظام (Documentation Map)
+## 🧭 جدول المحتويات والمسارات السريعة (Quick Navigation)
+
+<div class="quick-nav-grid">
+
+| 🚀 البدء والأدوات | 💼 التطبيقات وحزم العمل | 🏛️ المعمارية العميقة |
+|---|---|---|
+| • [دليل التثبيت والتهيئة](/guide/getting-started.ar)<br>• [مرجع أوامر الطرفية (CLI)](/tools/cli.ar)<br>• [خادم بروتوكول MCP](/tools/mcp-server.ar)<br>• [دليل الاستخدام الشامل](/user_manual.ar) | • [تطبيقات الإنتاجية الدقيقة](/apps/productivity.ar)<br>• [حزمة الأعمال (@tidy/office)](/apps/office-suite.ar)<br>• [تطبيق سطح المكتب (HUD)](/apps/desktop-hud.ar)<br>• [بوابة الويب المحلية (Port 3840)](/apps/productivity.ar) | • [بنية الذاكرة ومحرك البحث](/architecture/memory-and-search.ar)<br>• [معمارية الحلقات وجدار الحماية](/architecture/3-ring-context.ar)<br>• [الوكلاء ومحمل المهارات](/architecture/subagents-and-skills.ar)<br>• [المواصفة المعمارية الكاملة](/specs/architecture_spec.ar) |
+
+</div>
+
+---
+
+## 🗺️ خريطة المستندات والمصادر (Documentation Topology)
 
 ```text
 docs/
-├── index.md                           <-- (أنت هنا) بوابة التوثيق التفاعلية
-├── README.md                          <-- الفهرس العام على المستودع
-├── PROJECT_STATUS.ar.md               <-- تقرير الحالة الفنية الشامل ومسارات SemVer القادمة
-├── user_manual.ar.md                  <-- دليل المستخدم والتشغيل الكامل (CLI, MCP, GUI, Micro-Apps)
-├── specs/                             <-- المواصفات الفنية والمعمارية العميقة
-│   ├── architecture_spec.ar.md        <-- المواصفات الهندسية للنواة ونموذج الحلقات الثلاث
-│   ├── pocketoffice_migration_and_design_system.ar.md <-- دمج مكتسبات PocketOffice وثيمات Qahera
-│   └── tidyoffice_evolution_roadmap.ar.md            <-- خارطة تطور حزمة إدارة الأعمال
-├── i18n/                              <-- التراجم الرسمية لملف التعريف والبدء السريع
-│   ├── README.ar.md                   <-- النسخة العربية الكاملة
-│   ├── README.de.md                   <-- Deutsch
-│   ├── README.es.md                   <-- Español
-│   ├── README.fa.md                   <-- فارسی
-│   ├── README.fr.md                   <-- Français
-│   ├── README.pt.md                   <-- Português
-│   └── README.zh.md                   <-- 中文
-└── archive/                           <-- خطط العمل والمسودات السابقة المكتملة
-    └── implementation_plan_v3.md      <-- خطة إطلاق الإصدار 1.3
+├── index.md                           <-- بوابة التوثيق التفاعلية الموحدة (أنت هنا)
+├── guide/
+│   └── getting-started.ar.md          <-- التثبيت، الضبط الصامت، وإعداد البيئة
+├── tools/
+│   ├── cli.ar.md                      <-- مرجع أوامر الطرفية السريعة (q, m, task, who, govern)
+│   └── mcp-server.ar.md               <-- 16 أداة MCP و 4 موارد حية لبيئات IDE
+├── apps/
+│   ├── productivity.ar.md             <-- تطبيقات tasks, snippets, journal, vault
+│   ├── office-suite.ar.md             <-- حزمة @tidy/office لإدارة CRM والفواتير والسيولة
+│   └── desktop-hud.ar.md              <-- تطبيق Electron ونافذة HUD العائمة (Alt+Space)
+├── architecture/
+│   ├── memory-and-search.ar.md        <-- معمارية SQLite WAL، FTS5 BM25، ومعادلة النسيان
+│   ├── 3-ring-context.ar.md           <-- نموذج الحلقات الثلاث وجدار الحماية السياقي
+│   └── subagents-and-skills.ar.md     <-- تفويض الوكلاء الفرعيين ومولد ملخصات المهام
+└── specs/
+    ├── architecture_spec.ar.md        <-- المواصفات الفنية المعتمدة
+    └── tidyoffice_evolution_roadmap.ar.md <-- خارطة تطور حزمة المكتب
 ```
 
 ---
 
-## 🧭 مسارات القراءة الموصى بها (Reading Pathways)
+## 🌐 التراجم العالمية المعتمدة (International Translations)
 
-### 1. لمطوري التطبيقات والمستخدمين اليوميين:
-* ابدأ بـ [دليل الاستخدام الشامل](/user_manual.ar): يغطي كافة أوامر الطرفية السريعة (`tidy q`، `tidy m`، `tidy task`)، إعداد خادم الـ MCP مع IDEs، واستخدام شاشة الـ HUD الطافية.
-* تصفح [النسخة العربية لملف التعريف](/i18n/README.ar) للاطلاع على الملخص العام.
+| اللغة | الرمز | رابط النسخة | الاتجاه |
+|---|:---:|---|:---:|
+| **العربية** (Native) | `ar` | [بوابة التوثيق الرئيسية](/) | RTL |
+| **English** (Master) | `en` | [English Documentation Hub](/en/) | LTR |
+| **Español** | `es` | [Centro de Documentación](/es/) | LTR |
+| **Deutsch** | `de` | [Dokumentationszentrum](/de/) | LTR |
+| **Français** | `fr` | [Portail de Documentation](/fr/) | LTR |
+| **Português** | `pt` | [Centro de Documentação](/pt/) | LTR |
+| **简体中文** | `zh` | [简体中文文档中心](/zh/) | LTR |
+| **فارسی** | `fa` | [مرکز اسناد و مدارک](/fa/) | RTL |
 
-### 2. للمهندسين المعماريين ومطوري النواة:
-* اطلع على [المواصفات الهندسية للنواة](/specs/architecture_spec.ar) لمعرفة تفاصيل `node:sqlite` ووضع `WAL` وفهرسة FTS5 BM25.
-* راجع [المواصفات المعمارية الجذرية](../ARCHITECTURE.md) لمعاينة تفويض الوكلاء وجدران الحماية السياقية.
-* راجع [تعليمات وكلاء الذكاء الاصطناعي](../AGENTS.md) لفهم الحوكمة غير القابلة للتفاوض وميثاق العمل.
-
-### 3. لإدارة الإصدارات ومتابعة التطوير:
-* تفقد [تقرير حالة المشروع ومسارات SemVer](/PROJECT_STATUS.ar) للاطلاع على ما تم إنجازه والترتيب التسلسلي للإصدارات من `v1.4.3` إلى `v2.0.0`.
-* تابع [خارطة الطريق الاستراتيجية](../ROADMAP.md) و [سجل التغييرات](../CHANGELOG.md).
-
----
-
-## 🌐 التراجم العالمية (International Translations)
-
-| اللغة | ملف التوثيق | الاتجاه |
-|---|---|:---:|
-| **العربية** (Native) | [docs/i18n/README.ar.md](/i18n/README.ar) | RTL |
-| **English** (Master) | [README.md](../README.md) | LTR |
-| **Español** | [docs/i18n/README.es.md](/i18n/README.es) | LTR |
-| **Deutsch** | [docs/i18n/README.de.md](/i18n/README.de) | LTR |
-| **Français** | [docs/i18n/README.fr.md](/i18n/README.fr) | LTR |
-| **Português** | [docs/i18n/README.pt.md](/i18n/README.pt) | LTR |
-| **中文** | [docs/i18n/README.zh.md](/i18n/README.zh) | LTR |
-| **فارسی** | [docs/i18n/README.fa.md](/i18n/README.fa) | RTL |
