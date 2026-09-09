@@ -289,30 +289,49 @@ html[dir="rtl"] .VPHomeHero .actions {
 }
 
 /* ==========================================================================
-   3. Feature Cards — Luxury 3-Column Grid (TidyFactor Design Track)
+   3. Feature Cards — Luxury Grid Architecture (TidyFactor Design Track)
    ========================================================================== */
 
-.VPHomeFeatures {
+.VPHomeFeatures,
+.VPFeatures {
   padding-bottom: 80px !important;
-  max-width: 1180px !important;
+}
+
+.VPFeatures .container {
+  max-width: 1152px !important;
   margin: 0 auto !important;
+  padding: 0 24px !important;
 }
 
-.VPHomeFeatures .items {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 20px !important;
+/* Ensure items container uses flex with wrap and reset negative margins if needed */
+.VPFeatures .items {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin: -10px !important;
 }
 
-@media (max-width: 960px) {
-  .VPHomeFeatures .items {
-    grid-template-columns: repeat(2, 1fr) !important;
+/* Explicit item width calculation to guarantee 3-column layout on desktop */
+.VPFeatures .item {
+  padding: 10px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  display: flex !important;
+}
+
+@media (min-width: 640px) {
+  .VPFeatures .item.grid-2,
+  .VPFeatures .item.grid-4,
+  .VPFeatures .item.grid-6,
+  .VPFeatures .item {
+    width: 50% !important;
   }
 }
 
-@media (max-width: 640px) {
-  .VPHomeFeatures .items {
-    grid-template-columns: 1fr !important;
+@media (min-width: 960px) {
+  .VPFeatures .item.grid-3,
+  .VPFeatures .item.grid-6,
+  .VPFeatures .item {
+    width: 33.333333% !important;
   }
 }
 
@@ -329,6 +348,9 @@ html[dir="rtl"] .VPHomeHero .actions {
   flex-direction: column !important;
   justify-content: flex-start !important;
   box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05) !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Subtle luxury accent gradient glow */
