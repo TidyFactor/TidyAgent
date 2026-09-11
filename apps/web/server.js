@@ -416,6 +416,7 @@ const server = http.createServer(async (req, res) => {
         itemType: i.itemType,
         description: i.description,
         primaryPath: i.primaryPath,
+        primaryDir: i.primaryDir,
         tools: i.tools,
         authorTag: i.authorTag,
         sizeFormatted: i.sizeFormatted,
@@ -703,15 +704,29 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/shell/open' && req.method === 'POST') {
       const body = await parseBody(req);
-      const targetPath = body?.path;
+      const targetPath = (body?.path || '').trim();
       if (!targetPath) return sendJson(res, 400, { ok: false, error: 'Path required' });
       try {
-        const { exec } = require('child_process');
-        const cmd = process.platform === 'win32' ? `explorer "${targetPath.replace(/"/g, '')}"` :
-                    process.platform === 'darwin' ? `open "${targetPath}"` :
-                    `xdg-open "${targetPath}"`;
-        exec(cmd);
-        return sendJson(res, 200, { ok: true, data: { opened: targetPath } });
+        const { spawn, exec } = require('child_process');
+        let resolved = path.resolve(targetPath);
+        if (!fs.existsSync(resolved)) {
+          resolved = path.dirname(resolved);
+        }
+
+        if (process.platform === 'win32') {
+          const winDir = process.env.SystemRoot || process.env.WINDIR || 'C:\\Windows';
+          const explorerExe = path.join(winDir, 'explorer.exe');
+          const winPath = resolved.replace(/[\\/]+$/, '');
+          const isFile = fs.existsSync(winPath) && fs.statSync(winPath).isFile();
+          const args = isFile ? [`/select,${winPath}`] : [winPath];
+          const child = spawn(explorerExe, args, { detached: true, stdio: 'ignore' });
+          child.unref();
+        } else if (process.platform === 'darwin') {
+          exec(`open "${resolved}"`);
+        } else {
+          exec(`xdg-open "${resolved}"`);
+        }
+        return sendJson(res, 200, { ok: true, data: { opened: resolved } });
       } catch (err) {
         return sendJson(res, 500, { ok: false, error: err.message });
       }
@@ -724,13 +739,24 @@ const server = http.createServer(async (req, res) => {
       const acceptEncoding = req.headers['accept-encoding'] || '';
       const headers = {
         'Content-Type': MIME_TYPES[ext] || 'text/plain',
-        'Vary': 'Accept-Encoding'
+        'Vary': 'Accept-Encoding',
+        'Cache-Control': 'no-cache, must-revalidate'
       };
 
       if (isHtml) {
-        headers['Cache-Control'] = 'no-cache, must-revalidate';
-      } else {
-        headers['Cache-Control'] = 'no-cache, must-revalidate';
+        let content = fs.readFileSync(targetPath, 'utf8');
+        // Ensure all relative assets (css, js, images) resolve relative to root /
+        if (!content.includes('<base ')) {
+          content = content.replace(/<head>/i, '<head>\n  <base href="/">');
+        }
+        headers['Content-Type'] = 'text/html; charset=utf-8';
+        if (/\bgzip\b/.test(acceptEncoding) && content.length > 512) {
+          headers['Content-Encoding'] = 'gzip';
+          res.writeHead(200, headers);
+          return zlib.gzip(Buffer.from(content, 'utf8'), (_, zipped) => res.end(zipped));
+        }
+        res.writeHead(200, headers);
+        return res.end(content);
       }
 
       const stream = fs.createReadStream(targetPath);
@@ -749,12 +775,24 @@ const server = http.createServer(async (req, res) => {
       return stream.pipe(res);
     }
 
+    // Direct markdown requests (e.g. /maintainers/audit.md) redirected safely to dashboard
+    if (pathname.endsWith('.md') || pathname.endsWith('.mdc')) {
+      res.writeHead(302, { Location: '/' });
+      return res.end();
+    }
+
     let filePath = path.join(STATIC_DIR, pathname === '/' ? 'index.html' : pathname);
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       return serveStaticFile(filePath, pathname === '/' || pathname.endsWith('.html'));
     }
 
-    // Fallback to index.html for client routing
+    // Missing static assets (.css, .js, .png, etc.) return 404 to avoid MIME type corruption
+    const reqExt = path.extname(pathname).toLowerCase();
+    if (reqExt && reqExt !== '.html') {
+      return sendJson(res, 404, { ok: false, error: `Static asset not found: ${pathname}` });
+    }
+
+    // Fallback to index.html for client SPA routing
     const indexHtml = path.join(STATIC_DIR, 'index.html');
     if (fs.existsSync(indexHtml)) {
       return serveStaticFile(indexHtml, true);

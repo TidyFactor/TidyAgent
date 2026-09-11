@@ -93,6 +93,8 @@ function getStandardScanLocations(cwd = process.cwd()) {
   return [
     // ── Global User ─────────────────────────────────────────────────────────
     { tool: 'global', type: 'skill', dir: path.join(home, '.agents', 'skills') },
+    { tool: 'global', type: 'agent', dir: path.join(home, '.agents', 'agents') },
+    { tool: 'global', type: 'agent', dir: path.join(home, '.tidy', 'agents') },
 
     // ── Claude Code ──────────────────────────────────────────────────────────
     { tool: 'claude', type: 'skill', dir: path.join(home, '.claude', 'skills') },
@@ -136,7 +138,9 @@ function getStandardScanLocations(cwd = process.cwd()) {
     { tool: 'antigravity', type: 'ki', dir: path.join(geminiRoot, 'knowledge', 'global') },
     { tool: 'antigravity', type: 'ki', dir: path.join(geminiRoot, 'knowledge', 'tech') },
     { tool: 'antigravity', type: 'ki', dir: path.join(geminiRoot, 'knowledge', 'projects') },
-    { tool: 'antigravity', type: 'ki', dir: path.join(geminiRoot, 'knowledge', 'session') },
+    // 7. Antigravity / Gemini Agents
+    { tool: 'antigravity', type: 'agent', dir: path.join(geminiRoot, 'config', 'agents') },
+    { tool: 'antigravity', type: 'agent', dir: path.join(geminiRoot, 'antigravity-ide', 'agents') },
 
     // ── Project-Level Detection ───────────────────────────────────────────────
     { tool: 'copilot', type: 'rule', dir: path.join(cwd, '.github', 'copilot-instructions.md'), isDirectFile: true },
@@ -144,6 +148,8 @@ function getStandardScanLocations(cwd = process.cwd()) {
     { tool: 'copilot', type: 'agent', dir: path.join(cwd, '.github', 'agents') },
     { tool: 'aider', type: 'rule', dir: path.join(cwd, '.aider.conf.yml'), isDirectFile: true },
     { tool: 'global', type: 'skill', dir: path.join(cwd, '.agents', 'skills') },
+    { tool: 'global', type: 'agent', dir: path.join(cwd, '.agents', 'agents') },
+    { tool: 'global', type: 'agent', dir: path.join(cwd, 'agents') },
 
     // Antigravity project-level skills
     { tool: 'antigravity', type: 'skill', dir: path.join(cwd, 'skills') },
@@ -238,6 +244,9 @@ function scanAllTools(options = {}) {
       } catch { }
     }
 
+    // Ingest SQLite SSOT Subagents (planner, coder, researcher, etc.)
+    ingestSqliteSubagents(itemsBySlug);
+
     _cachedItemsBySlug = itemsBySlug;
     _cachedScanTimestamp = now;
   }
@@ -308,6 +317,109 @@ function buildToolCounters(items) {
   }
   return counts;
 }
+
+let _subagentsModule = null;
+function getSubagentsModule() {
+  if (!_subagentsModule) {
+    _subagentsModule = require('./subagents');
+  }
+  return _subagentsModule;
+}
+
+/**
+ * Ingest SQLite SSOT Subagents into the items registry.
+ * Ensures each subagent has a synchronized markdown representation in ~/.tidy/agents/<name>.md
+ */
+function ingestSqliteSubagents(itemsBySlug) {
+  try {
+    const subMod = getSubagentsModule();
+    const subagents = subMod.listSubagents({ includeDisabled: true });
+    const agentsDir = path.join(os.homedir(), '.tidy', 'agents');
+
+    if (!fs.existsSync(agentsDir)) {
+      try {
+        fs.mkdirSync(agentsDir, { recursive: true });
+      } catch { }
+    }
+
+    for (const subagent of subagents) {
+      const slug = normalizeSlug(subagent.name);
+      const agentFilePath = path.join(agentsDir, `${slug}.md`);
+
+      // If file doesn't exist, create persistent markdown file
+      if (!fs.existsSync(agentFilePath)) {
+        try {
+          const toolsYaml = (subagent.allowed_tools || []).map(t => `  - ${t}`).join('\n');
+          const mdContent = `---
+name: ${subagent.name}
+role: ${subagent.role || ''}
+type: agent
+tools:
+${toolsYaml || '  - tidy_recall'}
+enabled: ${Boolean(subagent.is_enabled)}
+---
+
+# @${subagent.name} — ${subagent.role || 'Subagent'}
+
+${subagent.description || ''}
+
+## System Prompt
+
+${subagent.system_prompt || ''}
+`;
+          fs.writeFileSync(agentFilePath, mdContent, 'utf8');
+        } catch { }
+      }
+
+      let sizeBytes = 0;
+      let mtime = new Date().toISOString();
+      try {
+        if (fs.existsSync(agentFilePath)) {
+          const stats = fs.statSync(agentFilePath);
+          sizeBytes = stats.size;
+          mtime = stats.mtime.toISOString();
+        }
+      } catch { }
+
+      const existing = itemsBySlug.get(slug);
+      if (existing) {
+        existing.itemType = 'agent';
+        if (!existing.tools.includes('global')) existing.tools.push('global');
+        if (!existing.tools.includes('antigravity')) existing.tools.push('antigravity');
+      } else {
+        itemsBySlug.set(slug, {
+          id: `agent_${slug}`,
+          slug,
+          name: subagent.name,
+          title: `@${subagent.name} (${subagent.role})`,
+          itemType: 'agent',
+          description: subagent.description || subagent.role || 'Tidy Sovereign Subagent',
+          primaryPath: agentFilePath,
+          primaryDir: agentsDir,
+          tools: ['global', 'antigravity'],
+          locations: [{ tool: 'global', path: agentFilePath, dir: agentsDir }],
+          frontmatter: {
+            name: subagent.name,
+            role: subagent.role,
+            type: 'agent',
+            tools: subagent.allowed_tools || [],
+            enabled: Boolean(subagent.is_enabled)
+          },
+          rawFrontmatter: `name: ${subagent.name}\nrole: ${subagent.role}\ntype: agent`,
+          commands: [],
+          manifest: null,
+          sizeBytes,
+          sizeFormatted: formatBytes(sizeBytes),
+          mtime,
+          authorTag: 'tidy'
+        });
+      }
+    }
+  } catch (err) {
+    console.error('[MultiToolScanner] ingestSqliteSubagents error:', err);
+  }
+}
+
 /**
  * Parse a Knowledge Item (KI) directory from TidyFactor Brain.
  * Structure: {ki-dir}/metadata.json + artifacts/
@@ -427,19 +539,27 @@ function parseSingleItemFile(filePath, tool, itemType, itemsBySlug) {
     const titleMatch = parsed.body.match(/^#\s+(.+)$/m);
     const title = titleMatch ? titleMatch[1].trim() : name;
 
+    let effectiveType = itemType;
+    if (parsed.frontmatter.type === 'agent' || parsed.frontmatter.role || filePath.toLowerCase().includes('agents')) {
+      effectiveType = 'agent';
+    } else if (parsed.frontmatter.type === 'rule' || filePath.toLowerCase().includes('rules')) {
+      effectiveType = 'rule';
+    }
+
     if (itemsBySlug.has(slug)) {
       const existing = itemsBySlug.get(slug);
+      if (effectiveType === 'agent') existing.itemType = 'agent';
       if (!existing.tools.includes(tool)) existing.tools.push(tool);
       if (!existing.locations.some(l => l.path === filePath)) {
         existing.locations.push({ tool, path: filePath, dir: path.dirname(filePath) });
       }
     } else {
       itemsBySlug.set(slug, {
-        id: `${itemType}_${slug}`,
+        id: `${effectiveType}_${slug}`,
         slug,
         name,
         title,
-        itemType,
+        itemType: effectiveType,
         description,
         primaryPath: filePath,
         primaryDir: path.dirname(filePath),
@@ -545,6 +665,25 @@ function saveStudioItem(filePath, content) {
   }
 
   fs.writeFileSync(resolved, content, 'utf8');
+
+  // Bidirectional sync to SQLite SSOT for subagents
+  try {
+    const parsed = parseFrontmatter(content);
+    if (parsed.frontmatter.type === 'agent' || parsed.frontmatter.role || resolved.includes(path.join('.tidy', 'agents'))) {
+      const name = parsed.frontmatter.name || path.basename(resolved, path.extname(resolved));
+      const subMod = getSubagentsModule();
+      if (subMod.getSubagent(name)) {
+        subMod.updateSubagent(name, {
+          role: parsed.frontmatter.role,
+          description: parsed.frontmatter.description || extractLeadingParagraph(parsed.body),
+          systemPrompt: parsed.body,
+          allowedTools: Array.isArray(parsed.frontmatter.tools) ? parsed.frontmatter.tools : undefined,
+          isEnabled: parsed.frontmatter.enabled !== undefined ? Boolean(parsed.frontmatter.enabled) : undefined
+        });
+      }
+    }
+  } catch { }
+
   invalidateScanCache();
   const stats = fs.statSync(resolved);
 

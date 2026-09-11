@@ -339,16 +339,59 @@ async function selectStudioItem(item) {
   }).join('');
   if (favBtn) favBtn.classList.toggle('active', Boolean(item.isFavorite));
 
-  // Folder-open button: show and wire click handler
+  // ── Footer icon buttons: Folder open + Copy path ───────────────────────
   const openFolderBtn = document.getElementById('btnOpenSkillFolder');
+  const copyPathBtn   = document.getElementById('btnCopySkillPath');
+  const filePath      = item.primaryPath || item.primaryDir || '';
+
+  /** Open the file's containing folder in the OS file explorer.
+   *  window.api.shell.openPath is the unified bridge (api.js):
+   *  → Electron: routes to tidyApi.shell.openPath (IPC)
+   *  → Web:      routes to POST /api/shell/open (REST)
+   */
+  const openFolderFn = (e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (!filePath) return;
+    if (window.api?.shell?.openPath) {
+      window.api.shell.openPath(filePath);
+    }
+  };
+
   if (openFolderBtn) {
     openFolderBtn.style.display = 'inline-flex';
-    openFolderBtn.onclick = () => {
-      const dir = item.primaryDir || item.primaryPath.replace(/[\\/][^\\/]+$/, '');
-      if (window.api?.shell?.openPath) {
-        window.api.shell.openPath(dir);
+    openFolderBtn.onclick = openFolderFn;
+  }
+
+  /** Copy the raw file path to the clipboard with brief visual confirmation */
+  if (copyPathBtn) {
+    copyPathBtn.style.display = 'inline-flex';
+    copyPathBtn.onclick = (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (!filePath) return;
+      try {
+        navigator.clipboard.writeText(filePath).then(() => {
+          copyPathBtn.classList.add('copied');
+          setTimeout(() => copyPathBtn.classList.remove('copied'), 1500);
+        });
+      } catch (_) {
+        // Fallback for non-HTTPS or older browsers
+        const ta = document.createElement('textarea');
+        ta.value = filePath;
+        ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copyPathBtn.classList.add('copied');
+        setTimeout(() => copyPathBtn.classList.remove('copied'), 1500);
       }
     };
+  }
+
+  if (pathEl) {
+    pathEl.style.cursor = 'default';
+    pathEl.title = '';
+    pathEl.onclick = null;
   }
 
   // Dispatcher pre-fill
@@ -465,6 +508,7 @@ function clearStudioDetails() {
   const textEditor    = document.getElementById('studioTextEditor');
   const pathEl        = document.getElementById('studioStatusPath');
   const openFolderBtn = document.getElementById('btnOpenSkillFolder');
+  const copyPathBtn   = document.getElementById('btnCopySkillPath');
   const lang          = window.getCurrentLang ? window.getCurrentLang() : 'ar';
 
   if (skillCard) {
@@ -472,6 +516,7 @@ function clearStudioDetails() {
     skillCard.innerHTML = '';
   }
   if (openFolderBtn) openFolderBtn.style.display = 'none';
+  if (copyPathBtn)   copyPathBtn.style.display   = 'none';
   if (previewBody)  previewBody.innerHTML = `<div style="text-align:center;color:var(--text-tertiary);padding:80px 20px;font-size:13px;">${lang === 'ar' ? 'اختر عنصراً من القائمة لعرضه وتحريره' : 'Select an item from the list to inspect and edit.'}</div>`;
   if (fmBox)        fmBox.style.display   = 'none';
   if (textEditor)   textEditor.value       = '';
@@ -518,7 +563,7 @@ function renderMarkdownSimple(md) {
   html = html.replace(/\*(.+?)\*/g,         '<em>$1</em>');
 
   // ── Links ──
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="studio-md-link" data-href="$2" target="_blank" rel="noopener">$1</a>');
 
   // ── Tables ──
   html = html.replace(/\|(.+)\|/g, match => {
@@ -685,6 +730,10 @@ function setupStudioListeners() {
       document.querySelectorAll('[data-studio-view]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       studioState.view = btn.getAttribute('data-studio-view');
+      // Clear tool & collection filters so user immediately sees all items for this library category
+      studioState.activeTool = null;
+      studioState.activeCollection = null;
+      renderStudioSidebar();
       filterAndRenderStudioItems();
     });
   });
@@ -1029,6 +1078,150 @@ function setupStudioListeners() {
       updateMaximizeState(!isMaximized);
     };
   }
+
+  // 15. Smart Markdown Link Navigation & Resolution
+  const previewBody = document.getElementById('studioPreviewBody');
+  if (previewBody && !previewBody._linksBound) {
+    previewBody._linksBound = true;
+    previewBody.addEventListener('click', async (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const rawHref = link.getAttribute('data-href') || link.getAttribute('href');
+      if (!rawHref) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Case A: In-page anchor link (#section)
+      if (rawHref.startsWith('#')) {
+        const targetId = rawHref.slice(1);
+        const targetEl = previewBody.querySelector(`[id="${CSS.escape(targetId)}"]`) ||
+          Array.from(previewBody.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+            .find(h => h.textContent.trim().toLowerCase().replace(/\s+/g, '-') === targetId.toLowerCase());
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        return;
+      }
+
+      // Case B: External web URLs (http, https, mailto)
+      if (/^(https?:\/\/|mailto:)/i.test(rawHref)) {
+        if (window.tidyApi?.shell?.openExternal) {
+          window.tidyApi.shell.openExternal(rawHref);
+        } else {
+          window.open(rawHref, '_blank', 'noopener,noreferrer');
+        }
+        return;
+      }
+
+      // Case C: Local document / relative file navigation
+      if (!studioState.selectedItem) return;
+
+      const currentPath = studioState.selectedItem.primaryPath;
+      const currentDir = studioState.selectedItem.primaryDir ||
+        currentPath.substring(0, Math.max(currentPath.lastIndexOf('/'), currentPath.lastIndexOf('\\')));
+
+      const resolvedPath = resolveRelativeFilePath(currentDir, rawHref);
+
+      try {
+        const res = await window.api.studio.readItem(resolvedPath);
+        if (res && res.ok && res.data) {
+          renderReferencedDocPreview(res.data, rawHref, resolvedPath);
+        } else {
+          showDocNotFoundNotice(rawHref, resolvedPath);
+        }
+      } catch (err) {
+        showDocNotFoundNotice(rawHref, resolvedPath);
+      }
+    });
+  }
+}
+
+function resolveRelativeFilePath(baseDir, relativePath) {
+  const cleanBase = (baseDir || '').replace(/\\/g, '/').replace(/\/$/, '');
+  const cleanRel = (relativePath || '').replace(/\\/g, '/').split('#')[0].split('?')[0];
+
+  if (/^([a-zA-Z]:|\/)/.test(cleanRel)) {
+    return cleanRel;
+  }
+
+  const baseParts = cleanBase ? cleanBase.split('/') : [];
+  const relParts = cleanRel.split('/');
+
+  for (const part of relParts) {
+    if (part === '.' || part === '') continue;
+    if (part === '..') {
+      if (baseParts.length > 1) baseParts.pop();
+    } else {
+      baseParts.push(part);
+    }
+  }
+
+  return baseParts.join('/');
+}
+
+function renderReferencedDocPreview(docData, relPath, absPath) {
+  const previewBody = document.getElementById('studioPreviewBody');
+  if (!previewBody) return;
+
+  const lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+  const parentItem = studioState.selectedItem;
+
+  const navBar = document.createElement('div');
+  navBar.className = 'studio-ref-doc-banner';
+  navBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:16px;background:var(--bg-surface-elevated,#f8fafc);border:1px solid var(--border-subtle,#e2e8f0);border-radius:8px;font-size:12.5px;';
+  navBar.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-studio-back-ref" id="btnStudioRefBack" style="background:var(--bg-card,#ffffff);border:1px solid var(--border-subtle,#cbd5e1);border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;color:var(--text-primary,#0f172a);">
+        <span>←</span>
+        <span>${lang === 'ar' ? 'العودة إلى' : 'Back to'} ${escapeHtml(parentItem.name)}</span>
+      </button>
+      <span style="color:var(--text-tertiary,#94a3b8);">•</span>
+      <span style="font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--text-secondary,#475569);">${escapeHtml(relPath)}</span>
+    </div>
+    <span style="font-size:11.5px;color:var(--text-tertiary,#94a3b8);">${docData.sizeFormatted || ''}</span>
+  `;
+
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'studio-ref-doc-content';
+  const mdSrc = stripFrontmatter(docData.body || docData.rawContent || '');
+  contentDiv.innerHTML = renderMarkdownSimple(mdSrc);
+
+  previewBody.innerHTML = '';
+  previewBody.appendChild(navBar);
+  previewBody.appendChild(contentDiv);
+
+  const backBtn = navBar.querySelector('#btnStudioRefBack') || document.getElementById('btnStudioRefBack');
+  backBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (parentItem) {
+      selectStudioItem(parentItem);
+    }
+  });
+}
+
+function showDocNotFoundNotice(relPath, absPath) {
+  const lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+  const previewBody = document.getElementById('studioPreviewBody');
+  if (!previewBody) return;
+
+  const existing = previewBody.querySelector('.studio-ref-not-found');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.className = 'studio-ref-not-found';
+  banner.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:12.5px;color:#b91c1c;';
+  banner.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:15px;">⚠️</span>
+      <span>${lang === 'ar' ? 'الملف المشار إليه غير متوفر محلياً:' : 'Referenced file not found on disk:'} <strong style="font-family:var(--font-mono);">${escapeHtml(relPath)}</strong></span>
+    </div>
+    <button style="background:transparent;border:none;cursor:pointer;color:#b91c1c;font-size:15px;padding:0 4px;" onclick="this.parentElement.remove()">✕</button>
+  `;
+  previewBody.prepend(banner);
+  setTimeout(() => { if (banner.isConnected) banner.remove(); }, 6000);
 }
 
 // Global exports

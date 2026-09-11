@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tidyfactor.dev/schemas/tidy/subagent-result.schema.json",
+  "title": "Tidy Sub-Agent Run Result",
+  "type": "object",
+  "required": ["agent_name", "task", "node_id"],
+  "properties": {
+    "agent_name": { "type": "string" },
+    "task": { "type": "string" },
+    "node_id": { "type": "string" },
+    "output": { "type": "string" }
+  }
+}
