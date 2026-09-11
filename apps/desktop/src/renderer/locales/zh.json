@@ -113,5 +113,49 @@
     "validate": "验证",
     "maximize": "展开",
     "restore": "还原"
+  },
+  "harvester": {
+    "kicker": "自主知识采集器",
+    "title": "知识收割机",
+    "subtitle": "发现、检查并采集跨 AI 代理和大脑的知识与决策模式",
+    "rescanBtn": "重新扫描源",
+    "selectAll": "全选",
+    "importSelected": "导入所选 ({count})",
+    "openInStudio": "在工作室中打开",
+    "importSingle": "导入",
+    "copyContent": "复制完整内容",
+    "copied": "已复制！",
+    "noSelection": "从列表中选择一项以预览其完整内容并调整参数",
+    "fullContent": "完整文档内容",
+    "sourcePath": "源文件路径：",
+    "category": "类别：",
+    "tier": "认知层级：",
+    "importance": "重要性评级：",
+    "filters": {
+      "all": "全部",
+      "new": "新项目",
+      "imported": "已在记忆中",
+      "gemini": "Gemini 知识",
+      "brain": "Antigravity Brain",
+      "rules": "代理规则"
+    },
+    "stats": {
+      "total": "发现总数：",
+      "new": "新候选：",
+      "imported": "已在记忆中："
+    },
+    "searchPlaceholder": "快速过滤标题和路径...",
+    "statusImported": "已在记忆中",
+    "statusNew": "新项目",
+    "importSuccess": "已成功将 {count} 项导入 SQLite SSOT。",
+    "editCandidate": "编辑草稿",
+    "tabPreview": "预览",
+    "tabEdit": "原地编辑",
+    "editTitle": "提取的记忆标题：",
+    "editContent": "草稿内容（支持完整 Markdown）：",
+    "saveDraftBtn": "保存到草稿",
+    "cancelDraftBtn": "取消",
+    "editedBadge": "已修改",
+    "saveSuccess": "候选草稿已更新。"
   }
 }

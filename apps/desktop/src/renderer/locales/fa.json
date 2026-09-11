@@ -113,5 +113,49 @@
     "validate": "اعتبارسنجی",
     "maximize": "بزرگ‌کردن",
     "restore": "بازگردانی"
+  },
+  "harvester": {
+    "kicker": "دروگر خودکار دانش",
+    "title": "دروگر دانش",
+    "subtitle": "کشف، بازرسی و جمع‌آوری دانش، تصمیمات و الگوها در میان عامل‌های هوش مصنوعی",
+    "rescanBtn": "اسکن مجدد منابع",
+    "selectAll": "انتخاب همه",
+    "importSelected": "وارد کردن موارد انتخابی ({count})",
+    "openInStudio": "باز کردن در استودیو",
+    "importSingle": "وارد کردن",
+    "copyContent": "کپی کل محتوا",
+    "copied": "کپی شد!",
+    "noSelection": "یک مورد را برای پیش‌نمایش و تنظیم پارامترها انتخاب کنید",
+    "fullContent": "محتوای کامل سند",
+    "sourcePath": "مسیر فایل منبع:",
+    "category": "دسته‌بندی:",
+    "tier": "سطح شناختی:",
+    "importance": "درجه اهمیت:",
+    "filters": {
+      "all": "همه",
+      "new": "موارد جدید",
+      "imported": "در حافظه موجود است",
+      "gemini": "دانش Gemini",
+      "brain": "Antigravity Brain",
+      "rules": "قوانین عامل"
+    },
+    "stats": {
+      "total": "کل موارد کشف‌شده:",
+      "new": "کاندیداهای جدید:",
+      "imported": "موجود در حافظه:"
+    },
+    "searchPlaceholder": "فیلتر سریع عناوین و مسیرها...",
+    "statusImported": "در حافظه موجود است",
+    "statusNew": "مورد جدید",
+    "importSuccess": "{count} مورد با موفقیت به پایگاه داده وارد شد.",
+    "editCandidate": "ویرایش پیش‌نویس",
+    "tabPreview": "پیش‌نمایش",
+    "tabEdit": "ویرایش درجا",
+    "editTitle": "عنوان حافظه استخراج‌شده:",
+    "editContent": "محتوای پیش‌نویس (پشتیبانی کامل از Markdown):",
+    "saveDraftBtn": "ذخیره در پیش‌نویس",
+    "cancelDraftBtn": "لغو",
+    "editedBadge": "ویرایش‌شده",
+    "saveSuccess": "پیش‌نویس با موفقیت به‌روزرسانی شد."
   }
 }

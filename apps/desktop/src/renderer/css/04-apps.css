@@ -283,12 +283,16 @@
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 16px 18px 14px 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  height: 236px;
+  box-sizing: border-box;
   backdrop-filter: blur(12px);
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .memory-card:hover {
@@ -302,6 +306,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .memory-meta-group {
@@ -323,12 +328,149 @@
 
 .memory-content {
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--text-primary);
   flex: 1;
-  white-space: pre-wrap;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
   unicode-bidi: plaintext;
   text-align: start;
+  padding-inline-end: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+.memory-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.memory-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.memory-content::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 99px;
+  transition: background 0.2s ease;
+}
+
+.memory-card:hover .memory-content::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Markdown typography inside memory cards */
+.memory-content p {
+  margin: 0 0 6px 0;
+}
+
+.memory-content p:last-child {
+  margin-bottom: 0;
+}
+
+.memory-content .memory-md-h {
+  margin: 8px 0 4px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.memory-content .memory-md-h:first-child {
+  margin-top: 0;
+}
+
+.memory-content h5.memory-md-h {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, var(--text-primary));
+}
+
+.memory-content strong {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.memory-content em {
+  font-style: italic;
+  color: var(--text-secondary, inherit);
+}
+
+.memory-content .memory-md-hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 8px 0;
+}
+
+.memory-content .memory-md-quote {
+  border-inline-start: 3px solid var(--accent-primary, #6366f1);
+  padding: 2px 8px;
+  margin: 6px 0;
+  color: var(--text-muted);
+  background: var(--surface-muted, rgba(255, 255, 255, 0.02));
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+}
+
+.memory-content .memory-md-ul,
+.memory-content .memory-md-ol {
+  margin: 4px 0 6px 0;
+  padding-inline-start: 18px;
+}
+
+.memory-content .memory-md-ul li,
+.memory-content .memory-md-ol li {
+  margin-bottom: 3px;
+  line-height: 1.5;
+}
+
+.memory-content .memory-task-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: -14px;
+}
+
+.memory-content .memory-inline-code {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--surface-muted, rgba(148, 163, 184, 0.12));
+  color: var(--accent-cyan, #06b6d4);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.05));
+}
+
+.memory-content .memory-code-block {
+  margin: 6px 0;
+  padding: 8px 10px;
+  background: var(--bg-surface, #0d1117);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.memory-content .memory-code-block code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  color: var(--text-primary);
+}
+
+.memory-content .memory-md-link {
+  color: var(--accent-primary, #6366f1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.memory-content .memory-md-link:hover {
+  opacity: 0.85;
 }
 
 .memory-footer {
@@ -339,6 +481,8 @@
   color: var(--text-muted);
   border-top: 1px solid var(--border-subtle);
   padding-top: 10px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .memory-actions {
@@ -372,6 +516,186 @@
 
 .memory-action-btn.copied {
   color: var(--accent-green, #10b981) !important;
+}
+
+/* ----------------- Memory Node Create/Edit Modal Polish ----------------- */
+.modal-card-memory {
+  max-width: 680px;
+  width: 92vw;
+  box-shadow: var(--shadow-lg), 0 0 35px rgba(99, 102, 241, 0.14);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm, 6px);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--accent-primary, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-subtitle-id {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+  margin-top: 2px;
+}
+
+.editor-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.editor-tabs {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  gap: 2px;
+}
+
+[data-mode="light"] .editor-tabs {
+  background: #f1f5f9;
+}
+
+.editor-tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.editor-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.editor-tab-btn.active {
+  background: var(--surface-active, rgba(255, 255, 255, 0.12));
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.editor-input-wrapper {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+.memory-modal-textarea {
+  width: 100% !important;
+  display: block;
+  box-sizing: border-box;
+  min-height: 220px;
+  max-height: 380px;
+  resize: vertical;
+  line-height: 1.6;
+  font-size: 13px;
+  font-family: var(--font-mono, monospace);
+  padding: 12px 14px;
+  unicode-bidi: plaintext;
+  border-radius: var(--radius-sm, 6px);
+}
+
+.memory-modal-preview-pane {
+  width: 100% !important;
+  display: block;
+  box-sizing: border-box;
+  min-height: 220px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm, 6px);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--border-subtle);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+[data-mode="light"] .memory-modal-preview-pane {
+  background: #f8fafc;
+}
+
+.memory-modal-preview-pane.hidden,
+.memory-modal-textarea.hidden {
+  display: none !important;
+}
+
+.editor-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.markdown-hint code {
+  background: var(--surface-muted, rgba(255, 255, 255, 0.06));
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  color: var(--accent-cyan, #06b6d4);
+}
+
+.form-row-memory-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.modal-footer-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  margin-inline-end: auto;
+}
+
+.modal-footer-hint kbd {
+  background: var(--surface-muted, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary);
+  margin: 0 2px;
+}
+
+.modal-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-save-memory {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* ----------------- Tab 3: Tasks Board (Kanban Columns) ----------------- */
@@ -1104,6 +1428,72 @@
   margin-inline-start: auto;
 }
 
+.inspector-actions-group .btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm, 6px);
+  flex-shrink: 0;
+}
+
+.harvester-inspector-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.harvester-inspector-meta-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.harvester-edit-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.harvester-edit-container.hidden {
+  display: none !important;
+}
+
+.harvester-edit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.harvester-card-edit-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.harvester-card-edit-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
 .harvester-document-body {
   flex: 1;
   overflow-y: auto;
@@ -1185,6 +1575,66 @@
   border: 0;
   border-top: 1px solid var(--border-subtle);
   margin: 20px 0;
+}
+
+/* Harvester In-Place Candidate Editor */
+.harvester-inspector-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.harvester-inspector-meta-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.harvester-edit-container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--surface-ground);
+}
+
+.harvester-edit-container.hidden {
+  display: none !important;
+}
+
+.harvester-edit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: auto;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.harvester-card-edit-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs, 4px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast, 150ms ease);
+}
+
+.harvester-card-edit-btn:hover {
+  color: var(--brand-primary);
+  background: var(--surface-muted);
+  border-color: var(--border-subtle);
 }
 
 @media (max-width: 1024px) {

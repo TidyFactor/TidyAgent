@@ -113,5 +113,49 @@
     "validate": "Validieren",
     "maximize": "Erweitern",
     "restore": "Wiederherstellen"
+  },
+  "harvester": {
+    "kicker": "AUTONOMER WISSENSERNTER",
+    "title": "Wissenssammler",
+    "subtitle": "Wissen, Entscheidungen und Muster über KI-Agenten hinweg entdecken und ernten",
+    "rescanBtn": "Quellen neu scannen",
+    "selectAll": "Alle auswählen",
+    "importSelected": "Ausgewählte importieren ({count})",
+    "openInStudio": "Im Studio öffnen",
+    "importSingle": "Importieren",
+    "copyContent": "Inhalt kopieren",
+    "copied": "Kopiert!",
+    "noSelection": "Wählen Sie ein Element aus der Liste aus",
+    "fullContent": "Vollständiger Dokumentinhalt",
+    "sourcePath": "Quelldateipfad:",
+    "category": "Kategorie:",
+    "tier": "Kognitive Stufe:",
+    "importance": "Wichtigkeitsbewertung:",
+    "filters": {
+      "all": "Alle",
+      "new": "Neue Elemente",
+      "imported": "Bereits im Speicher",
+      "gemini": "Gemini-Wissen",
+      "brain": "Antigravity-Brain",
+      "rules": "Agenten-Regeln"
+    },
+    "stats": {
+      "total": "Gesamt entdeckt:",
+      "new": "Neue Kandidaten:",
+      "imported": "Bereits im Speicher:"
+    },
+    "searchPlaceholder": "Titel und Pfade filtern...",
+    "statusImported": "Bereits im Speicher",
+    "statusNew": "Neues Element",
+    "importSuccess": "{count} Elemente erfolgreich importiert.",
+    "editCandidate": "Kandidat bearbeiten",
+    "tabPreview": "Vorschau",
+    "tabEdit": "Direkt bearbeiten",
+    "editTitle": "Titel des Wissenselements:",
+    "editContent": "Entwurfsinhalt (Markdown vollständig unterstützt):",
+    "saveDraftBtn": "In Entwurf speichern",
+    "cancelDraftBtn": "Abbrechen",
+    "editedBadge": "Bearbeitet",
+    "saveSuccess": "Kandidatenentwurf direkt aktualisiert."
   }
 }

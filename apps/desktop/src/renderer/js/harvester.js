@@ -221,6 +221,10 @@
         ? `<span class="badge amber" style="font-size: 10px;">${arabic ? 'مسجل' : 'In Memory'}</span>`
         : `<span class="badge green" style="font-size: 10px;">${arabic ? 'جديد' : 'New'}</span>`;
 
+      const editedChip = item.isEdited
+        ? `<span class="badge purple" style="font-size: 9.5px; padding: 1px 5px;">${arabic ? 'مُعدل' : 'Edited'}</span>`
+        : '';
+
       return `
         <div class="harvester-item-card ${isActive ? 'active' : ''} ${isImported ? 'imported' : ''}" data-id="${item.id}">
           <div style="display: flex; align-items: flex-start; gap: 10px;">
@@ -232,7 +236,13 @@
             <div style="flex: 1; overflow: hidden;">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px;">
                 <span class="badge-tag ${item.category || 'fact'}" style="font-size: 9.5px; padding: 1px 6px;">${item.category || 'fact'}</span>
-                ${statusChip}
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  ${editedChip}
+                  ${statusChip}
+                  <button class="harvester-card-edit-btn" data-id="${item.id}" title="${arabic ? 'تعديل المسودة في مكانها' : 'Edit Candidate in Place'}" type="button">
+                    <svg class="qhr-icon qhr-icon--xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                </div>
               </div>
               <h4 style="margin: 0 0 4px 0; font-size: 13.5px; font-weight: 700; color: var(--text-primary); line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ${escapeHtml(item.title)}
@@ -250,18 +260,29 @@
       `;
     }).join('');
 
-    // Attach click listeners to cards and checkboxes
+    // Attach click listeners to cards, checkboxes, and edit buttons
     listScroll.querySelectorAll('.harvester-item-card').forEach(card => {
       card.addEventListener('click', (e) => {
-        // If clicking checkbox, don't trigger full card selection
-        if (e.target.classList.contains('harvester-chk-item')) return;
+        if (e.target.classList.contains('harvester-chk-item') || e.target.closest('.harvester-card-edit-btn')) return;
         const id = card.getAttribute('data-id');
         const targetItem = candidatesList.find(c => c.id === id);
         if (targetItem) {
           inspectCandidate(targetItem);
-          // Highlight card
           listScroll.querySelectorAll('.harvester-item-card').forEach(c => c.classList.remove('active'));
           card.classList.add('active');
+        }
+      });
+    });
+
+    listScroll.querySelectorAll('.harvester-card-edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const targetItem = candidatesList.find(c => c.id === id);
+        if (targetItem) {
+          inspectCandidate(targetItem, true);
+          listScroll.querySelectorAll('.harvester-item-card').forEach(c => c.classList.remove('active'));
+          btn.closest('.harvester-item-card')?.classList.add('active');
         }
       });
     });
@@ -290,9 +311,147 @@
   }
 
   /**
+   * Update character and word counter for in-place draft editor
+   */
+  function updateHarvesterDocCounter(text) {
+    const chars = text ? text.length : 0;
+    const words = text ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+    const counterEl = document.getElementById('harvesterDocCounter');
+    if (counterEl) {
+      counterEl.textContent = isAr()
+        ? `${chars} حرف • ${words} كلمة`
+        : `${chars} chars • ${words} words`;
+    }
+  }
+
+  /**
+   * Switch Harvester Inspector to Preview Mode
+   */
+  function switchToPreviewMode() {
+    const btnPreview = document.getElementById('btnHarvesterTabPreview');
+    const btnEdit = document.getElementById('btnHarvesterTabEdit');
+    const bodyEl = document.getElementById('inspectorDocBody');
+    const editContainer = document.getElementById('harvesterEditContainer');
+
+    if (btnPreview) btnPreview.classList.add('active');
+    if (btnEdit) btnEdit.classList.remove('active');
+    if (bodyEl) bodyEl.style.display = 'block';
+    if (editContainer) editContainer.classList.add('hidden');
+  }
+
+  /**
+   * Switch Harvester Inspector to In-Place Rich Edit Mode
+   */
+  function switchToEditMode() {
+    const btnPreview = document.getElementById('btnHarvesterTabPreview');
+    const btnEdit = document.getElementById('btnHarvesterTabEdit');
+    const bodyEl = document.getElementById('inspectorDocBody');
+    const editContainer = document.getElementById('harvesterEditContainer');
+    const textarea = document.getElementById('harvesterEditTextarea');
+    const titleInput = document.getElementById('harvesterEditTitleInput');
+
+    if (btnPreview) btnPreview.classList.remove('active');
+    if (btnEdit) btnEdit.classList.add('active');
+    if (bodyEl) bodyEl.style.display = 'none';
+    if (editContainer) editContainer.classList.remove('hidden');
+
+    if (activeCandidate) {
+      if (titleInput && (!titleInput.value || titleInput.value !== activeCandidate.title)) {
+        titleInput.value = activeCandidate.title || '';
+      }
+      const cached = fullDocumentCache.get(activeCandidate.sourcePath);
+      const currentContent = cached?.content || cached?.rawContent || activeCandidate.content || '';
+      if (textarea && textarea.value !== currentContent) {
+        textarea.value = currentContent;
+      }
+      updateHarvesterDocCounter(textarea ? textarea.value : '');
+    }
+
+    if (textarea) textarea.focus();
+  }
+
+  /**
+   * Save candidate draft modifications in-place into memory cache before importing
+   */
+  function saveCandidateDraft() {
+    if (!activeCandidate) return;
+
+    const titleInput = document.getElementById('harvesterEditTitleInput');
+    const textarea = document.getElementById('harvesterEditTextarea');
+    const catSelect = document.getElementById('inspectorCategorySelect');
+    const tierSelect = document.getElementById('inspectorTierSelect');
+    const impSelect = document.getElementById('inspectorImportanceSelect');
+    const arabic = isAr();
+
+    const newTitle = titleInput ? titleInput.value.trim() : '';
+    const newContent = textarea ? textarea.value : '';
+
+    if (!newTitle) {
+      alert(arabic ? 'يرجى إدخال عنوان للذاكرة' : 'Please enter a title for the candidate');
+      titleInput?.focus();
+      return;
+    }
+
+    // Update candidate model in-place
+    activeCandidate.title = newTitle;
+    activeCandidate.content = newContent;
+    activeCandidate.isEdited = true;
+
+    if (catSelect) activeCandidate.category = catSelect.value;
+    if (tierSelect) activeCandidate.tier = tierSelect.value;
+    if (impSelect) activeCandidate.importance = Number(impSelect.value);
+
+    // Auto-extract first informative lines as summary
+    const cleanLines = newContent
+      .split('\n')
+      .map(l => l.trim())
+      .filter(l => l && !l.startsWith('#') && !l.startsWith('---'));
+    activeCandidate.summary = cleanLines.slice(0, 2).join(' ').slice(0, 260) || newTitle;
+
+    // Update document cache with revised content and metadata
+    const linesCount = newContent.split('\n').length;
+    fullDocumentCache.set(activeCandidate.sourcePath, {
+      content: newContent,
+      rawContent: newContent,
+      linesCount,
+      mtimeFormatted: arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now'
+    });
+
+    // Update inspector view headers
+    const titleEl = document.getElementById('inspectorDocTitle');
+    if (titleEl) titleEl.textContent = newTitle;
+
+    const linesEl = document.getElementById('inspectorDocLines');
+    if (linesEl) linesEl.textContent = `${linesCount} ${arabic ? 'سطر' : 'lines'}`;
+
+    const mtimeEl = document.getElementById('inspectorDocMtime');
+    if (mtimeEl) mtimeEl.textContent = arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now';
+
+    const editedBadge = document.getElementById('harvesterEditedBadge');
+    if (editedBadge) editedBadge.style.display = 'inline-block';
+
+    // Refresh preview with new markdown
+    renderInspectorBody({
+      content: newContent,
+      linesCount,
+      mtimeFormatted: arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now'
+    });
+
+    // Switch back to preview tab
+    switchToPreviewMode();
+
+    // Re-render candidates list so the active card reflects updated title, summary, and badge
+    renderCandidatesList();
+
+    if (window.showToast) {
+      window.showToast(arabic ? '✓ تم حفظ تعديل المسودة بنجاح' : '✓ Candidate draft updated in-place', 'success');
+    }
+  }
+
+  /**
    * Inspect a specific candidate: loads full document content on demand
    */
-  async function inspectCandidate(candidate) {
+  async function inspectCandidate(candidate, autoEdit = false) {
     activeCandidate = candidate;
     const arabic = isAr();
 
@@ -304,12 +463,16 @@
     // Populate header info immediately from candidate metadata
     const titleEl = document.getElementById('inspectorDocTitle');
     const statusBadgeEl = document.getElementById('inspectorDocStatusBadge');
+    const editedBadgeEl = document.getElementById('harvesterEditedBadge');
     const sourceEl = document.getElementById('inspectorDocSource');
     const sizeEl = document.getElementById('inspectorDocSize');
     const linesEl = document.getElementById('inspectorDocLines');
     const mtimeEl = document.getElementById('inspectorDocMtime');
     const pathEl = document.getElementById('inspectorDocPath');
     const bodyEl = document.getElementById('inspectorDocBody');
+
+    const titleInput = document.getElementById('harvesterEditTitleInput');
+    const textarea = document.getElementById('harvesterEditTextarea');
 
     const catSelect = document.getElementById('inspectorCategorySelect');
     const tierSelect = document.getElementById('inspectorTierSelect');
@@ -320,6 +483,14 @@
     if (sourceEl) sourceEl.textContent = candidate.sourceLabel || candidate.source;
     if (sizeEl) sizeEl.textContent = candidate.sizeFormatted || '';
     if (pathEl) pathEl.textContent = candidate.sourcePath || '';
+
+    if (editedBadgeEl) {
+      editedBadgeEl.style.display = candidate.isEdited ? 'inline-block' : 'none';
+    }
+
+    if (titleInput) {
+      titleInput.value = candidate.title || '';
+    }
 
     if (statusBadgeEl) {
       statusBadgeEl.innerHTML = candidate.alreadyImported
@@ -343,10 +514,22 @@
       openStudioBtn.style.display = isStudioTarget ? 'inline-flex' : 'none';
     }
 
+    const populateEditorContent = (content) => {
+      if (textarea) textarea.value = content;
+      updateHarvesterDocCounter(content);
+    };
+
+    if (autoEdit) {
+      switchToEditMode();
+    } else {
+      switchToPreviewMode();
+    }
+
     // Lazy load full content
     if (fullDocumentCache.has(candidate.sourcePath)) {
       const cached = fullDocumentCache.get(candidate.sourcePath);
       renderInspectorBody(cached);
+      populateEditorContent(cached.content || cached.rawContent || candidate.content || '');
     } else {
       if (bodyEl) {
         bodyEl.innerHTML = `
@@ -354,6 +537,9 @@
             ${arabic ? 'جاري قراءة محتوى المستند الكامل...' : 'Streaming full document content...'}
           </div>
         `;
+      }
+      if (candidate.content) {
+        populateEditorContent(candidate.content);
       }
 
       try {
@@ -363,14 +549,17 @@
           // If the user hasn't switched to another candidate while fetching
           if (activeCandidate && activeCandidate.sourcePath === candidate.sourcePath) {
             renderInspectorBody(res.data);
+            populateEditorContent(res.data.content || res.data.rawContent || '');
           }
         } else if (candidate.content) {
           // Fallback to initial scanned content if read API fails
-          renderInspectorBody({
+          const fallbackData = {
             content: candidate.content,
             linesCount: candidate.content.split('\n').length,
             mtimeFormatted: candidate.mtime ? new Date(candidate.mtime).toLocaleString() : ''
-          });
+          };
+          renderInspectorBody(fallbackData);
+          populateEditorContent(candidate.content);
         }
       } catch (err) {
         console.error('Error reading full harvest item:', err);
@@ -379,6 +568,7 @@
             content: candidate.content,
             linesCount: candidate.content.split('\n').length
           });
+          populateEditorContent(candidate.content);
         } else if (bodyEl) {
           bodyEl.innerHTML = `<div style="color: var(--accent-red); padding: 20px;">${escapeHtml(err.message)}</div>`;
         }
@@ -623,9 +813,16 @@
       const btn = document.getElementById('btnInspectorCopyContent');
       const arabic = isAr();
       if (btn) {
-        const origText = btn.innerHTML;
-        btn.innerHTML = `<span>${arabic ? 'تم النسخ!' : 'Copied!'}</span>`;
-        setTimeout(() => { btn.innerHTML = origText; }, 1500);
+        const origHtml = btn.innerHTML;
+        btn.classList.add('active');
+        btn.innerHTML = `<svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+        setTimeout(() => {
+          btn.innerHTML = origHtml;
+          btn.classList.remove('active');
+        }, 1200);
+      }
+      if (window.showToast) {
+        window.showToast(arabic ? 'تم نسخ المحتوى إلى الحافظة' : 'Content copied to clipboard', 'info');
       }
     });
   }
@@ -641,9 +838,37 @@
 
     // Inspector Action buttons
     document.getElementById('btnInspectorOpenStudio')?.addEventListener('click', handleOpenInStudio);
+    document.getElementById('btnInspectorEditCandidate')?.addEventListener('click', () => {
+      const editContainer = document.getElementById('harvesterEditContainer');
+      if (editContainer && !editContainer.classList.contains('hidden')) {
+        switchToPreviewMode();
+      } else {
+        switchToEditMode();
+      }
+    });
     document.getElementById('btnInspectorImportSingle')?.addEventListener('click', handleImportSingleCandidate);
     document.getElementById('btnInspectorCopyContent')?.addEventListener('click', handleCopyInspectorContent);
     document.getElementById('btnCopyInspectorPath')?.addEventListener('click', handleCopyInspectorPath);
+
+    // Harvester In-Place Tabs & Draft Action buttons
+    document.getElementById('btnHarvesterTabPreview')?.addEventListener('click', switchToPreviewMode);
+    document.getElementById('btnHarvesterTabEdit')?.addEventListener('click', switchToEditMode);
+    document.getElementById('btnHarvesterSaveDraft')?.addEventListener('click', saveCandidateDraft);
+    document.getElementById('btnHarvesterCancelDraft')?.addEventListener('click', switchToPreviewMode);
+
+    // Live character & word counter on textarea typing
+    const editTextarea = document.getElementById('harvesterEditTextarea');
+    editTextarea?.addEventListener('input', (e) => {
+      updateHarvesterDocCounter(e.target.value);
+    });
+
+    // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to save draft immediately
+    document.getElementById('harvesterEditContainer')?.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        saveCandidateDraft();
+      }
+    });
 
     // Category / Tier / Importance inline tuning listeners
     document.getElementById('inspectorCategorySelect')?.addEventListener('change', (e) => {

@@ -113,5 +113,49 @@
     "validate": "Validar",
     "maximize": "Expandir",
     "restore": "Restaurar"
+  },
+  "harvester": {
+    "kicker": "COLETOR AUTÔNOMO DE CONHECIMENTO",
+    "title": "Coletor de Conhecimento",
+    "subtitle": "Descubra, inspecione e colete conhecimento e padrões entre agentes de IA",
+    "rescanBtn": "Reescanear fontes",
+    "selectAll": "Selecionar tudo",
+    "importSelected": "Importar selecionados ({count})",
+    "openInStudio": "Abrir no Studio",
+    "importSingle": "Importar",
+    "copyContent": "Copiar conteúdo completo",
+    "copied": "Copiado!",
+    "noSelection": "Selecione um item da lista",
+    "fullContent": "Conteúdo completo do documento",
+    "sourcePath": "Caminho do arquivo de origem:",
+    "category": "Categoria:",
+    "tier": "Nível cognitivo:",
+    "importance": "Avaliação de importância:",
+    "filters": {
+      "all": "Todos",
+      "new": "Novos itens",
+      "imported": "Já na memória",
+      "gemini": "Conhecimento Gemini",
+      "brain": "Antigravity Brain",
+      "rules": "Regras do agente"
+    },
+    "stats": {
+      "total": "Total descoberto:",
+      "new": "Novos candidatos:",
+      "imported": "Já na memória:"
+    },
+    "searchPlaceholder": "Filtrar títulos e caminhos...",
+    "statusImported": "Já na memória",
+    "statusNew": "Novo item",
+    "importSuccess": "{count} itens importados com sucesso.",
+    "editCandidate": "Editar candidato",
+    "tabPreview": "Prévia",
+    "tabEdit": "Editar no local",
+    "editTitle": "Título da memória extraída:",
+    "editContent": "Conteúdo do rascunho (Markdown suportado):",
+    "saveDraftBtn": "Salvar no rascunho",
+    "cancelDraftBtn": "Cancelar",
+    "editedBadge": "Editado",
+    "saveSuccess": "Rascunho do candidato atualizado."
   }
 }

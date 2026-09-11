@@ -113,5 +113,49 @@
     "validate": "Valider",
     "maximize": "Agrandir",
     "restore": "Réduire"
+  },
+  "harvester": {
+    "kicker": "RÉCOLTEUR AUTONOME DE CONNAISSANCES",
+    "title": "Récolteur de Connaissances",
+    "subtitle": "Découvrez, inspectez et récoltez les connaissances à travers vos agents IA",
+    "rescanBtn": "Réanalyser les sources",
+    "selectAll": "Tout sélectionner",
+    "importSelected": "Importer la sélection ({count})",
+    "openInStudio": "Ouvrir dans Studio",
+    "importSingle": "Importer",
+    "copyContent": "Copier tout le contenu",
+    "copied": "Copié !",
+    "noSelection": "Sélectionnez un élément dans la liste",
+    "fullContent": "Contenu complet du document",
+    "sourcePath": "Chemin du fichier source :",
+    "category": "Catégorie :",
+    "tier": "Niveau cognitif :",
+    "importance": "Niveau d'importance :",
+    "filters": {
+      "all": "Tous",
+      "new": "Nouveaux éléments",
+      "imported": "Déjà en mémoire",
+      "gemini": "Connaissances Gemini",
+      "brain": "Antigravity Brain",
+      "rules": "Règles d'agents"
+    },
+    "stats": {
+      "total": "Total découverts :",
+      "new": "Nouveaux candidats :",
+      "imported": "Déjà en mémoire :"
+    },
+    "searchPlaceholder": "Filtrer titres et chemins...",
+    "statusImported": "Déjà en mémoire",
+    "statusNew": "Nouvel élément",
+    "importSuccess": "{count} éléments importés avec succès.",
+    "editCandidate": "Modifier le candidat",
+    "tabPreview": "Aperçu",
+    "tabEdit": "Modifier sur place",
+    "editTitle": "Titre de la mémoire extraite :",
+    "editContent": "Contenu du brouillon (Markdown supporté) :",
+    "saveDraftBtn": "Enregistrer dans le brouillon",
+    "cancelDraftBtn": "Annuler",
+    "editedBadge": "Modifié",
+    "saveSuccess": "Brouillon du candidat mis à jour."
   }
 }

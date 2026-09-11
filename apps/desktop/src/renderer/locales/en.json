@@ -282,7 +282,11 @@
       "importance": "Importance Rating:",
       "saveBtn": "Save Memory",
       "updateBtn": "Save Changes",
-      "cancelBtn": "Cancel"
+      "cancelBtn": "Cancel",
+      "tabWrite": "Write",
+      "tabPreview": "Preview",
+      "saveShortcut": "to save",
+      "markdownHint": "Markdown supported: **bold**, `code`, # header, - list"
     },
     "empty": "No memory nodes found matching your search.",
     "deleteConfirm": "Are you sure you want to permanently delete this memory node?",
@@ -297,7 +301,7 @@
     "selectAll": "Select All",
     "importSelected": "Import Selected ({count})",
     "openInStudio": "Open in Studio",
-    "importSingle": "Import This Item",
+    "importSingle": "Import",
     "copyContent": "Copy Full Content",
     "copied": "Copied!",
     "noSelection": "Select an item from the list to preview its complete content and adjust parameters",
@@ -322,6 +326,15 @@
     "searchPlaceholder": "Quick filter titles and file paths...",
     "statusImported": "Already in Memory",
     "statusNew": "New Item",
-    "importSuccess": "Successfully imported {count} items to SQLite SSOT."
+    "importSuccess": "Successfully imported {count} items to SQLite SSOT.",
+    "editCandidate": "Edit Candidate",
+    "tabPreview": "Preview",
+    "tabEdit": "Edit in Place",
+    "editTitle": "Extracted Memory Title:",
+    "editContent": "Draft Content (Full Markdown Support):",
+    "saveDraftBtn": "Save to Draft",
+    "cancelDraftBtn": "Cancel",
+    "editedBadge": "Edited",
+    "saveSuccess": "Candidate draft updated in-place (ready for import)."
   }
 }

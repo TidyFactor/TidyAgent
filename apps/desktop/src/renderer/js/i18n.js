@@ -120,6 +120,13 @@ async function applyLanguage(lang) {
     if (val) el.textContent = val;
   });
 
+  // Translate all DOM elements with data-i18n-title
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const val = resolveI18nKey(dict, key);
+    if (val) el.setAttribute('title', val);
+  });
+
   // Translate all inputs with data-i18n-placeholder
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');

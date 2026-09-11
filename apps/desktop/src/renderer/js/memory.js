@@ -28,6 +28,148 @@
     ephemeral: { ar: 'عابر', en: 'Ephemeral' }
   };
 
+  const _mdCache = new Map();
+  const MD_CACHE_LIMIT = 200;
+
+  /**
+   * Escape HTML entities to prevent XSS
+   */
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /**
+   * Fast, secure markdown to HTML renderer tailored for memory cards
+   */
+  function renderMemoryMarkdown(raw) {
+    if (!raw) return '';
+    const src = String(raw).trim();
+    if (_mdCache.has(src)) return _mdCache.get(src);
+
+    let text = src;
+
+    // 1. Strip YAML frontmatter if present
+    text = text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+
+    // 2. Protect fenced code blocks
+    const codeBlocks = [];
+    text = text.replace(/(?:^|\n)```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)\r?\n```/g, (match, lang, code) => {
+      const idx = codeBlocks.push({ lang, code: escapeHtml(code) }) - 1;
+      return `\n\x00CODEBLOCK_${idx}\x00\n`;
+    });
+
+    // 3. Protect inline code
+    const inlineCodes = [];
+    text = text.replace(/`([^`\n]+)`/g, (match, code) => {
+      const idx = inlineCodes.push(escapeHtml(code)) - 1;
+      return `\x00INLINECODE_${idx}\x00`;
+    });
+
+    // 4. Escape remaining HTML
+    let html = escapeHtml(text);
+
+    // 5. Horizontal rules
+    html = html.replace(/^(?:---|\*\*\*|___)\s*$/gm, '<hr class="memory-md-hr" />');
+
+    // 6. Headers (scaled down proportionally for card display)
+    html = html.replace(/^#### (.*$)/gm, '<h6 class="memory-md-h">$1</h6>');
+    html = html.replace(/^### (.*$)/gm, '<h5 class="memory-md-h">$1</h5>');
+    html = html.replace(/^## (.*$)/gm, '<h4 class="memory-md-h">$1</h4>');
+    html = html.replace(/^# (.*$)/gm, '<h4 class="memory-md-h">$1</h4>');
+
+    // 7. Blockquotes
+    html = html.replace(/^>\s*(.+)$/gm, '<blockquote class="memory-md-quote">$1</blockquote>');
+
+    // 8. Bold & Italic
+    html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+    html = html.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    html = html.replace(/~~(.+?)~~/g, '<del>$1</del>');
+
+    // 9. Markdown Links
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="memory-md-link" target="_blank" rel="noopener">$1</a>');
+
+    // 10. Process lists (ordered, unordered, and task checkboxes)
+    const lines = html.split('\n');
+    const out = [];
+    let inUl = false;
+    let inOl = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const ulMatch = line.match(/^(\s*)[-*+]\s+(.+)$/);
+      const olMatch = line.match(/^(\s*)\d+\.\s+(.+)$/);
+
+      if (ulMatch) {
+        if (inOl) { out.push('</ol>'); inOl = false; }
+        if (!inUl) { out.push('<ul class="memory-md-ul">'); inUl = true; }
+        let content = ulMatch[2];
+        if (/^\[ \]\s*/.test(content)) {
+          out.push(`<li class="memory-task-item"><input type="checkbox" disabled /> <span>${content.replace(/^\[ \]\s*/, '')}</span></li>`);
+        } else if (/^\[x\]\s*/i.test(content)) {
+          out.push(`<li class="memory-task-item"><input type="checkbox" checked disabled /> <span>${content.replace(/^\[x\]\s*/i, '')}</span></li>`);
+        } else {
+          out.push(`<li>${content}</li>`);
+        }
+        continue;
+      } else if (inUl) {
+        out.push('</ul>');
+        inUl = false;
+      }
+
+      if (olMatch) {
+        if (inUl) { out.push('</ul>'); inUl = false; }
+        if (!inOl) { out.push('<ol class="memory-md-ol">'); inOl = true; }
+        out.push(`<li>${olMatch[2]}</li>`);
+        continue;
+      } else if (inOl) {
+        out.push('</ol>');
+        inOl = false;
+      }
+
+      out.push(line);
+    }
+    if (inUl) out.push('</ul>');
+    if (inOl) out.push('</ol>');
+    html = out.join('\n');
+
+    // 11. Paragraphs & Multiline breaks
+    html = html.split(/\n{2,}/).map(block => {
+      block = block.trim();
+      if (!block) return '';
+      if (/^<(h[1-6]|ul|ol|li|table|div|pre|blockquote|hr)/i.test(block)) return block;
+      if (block.startsWith('\x00CODEBLOCK')) return block;
+      return `<p>${block.replace(/\n/g, '<br />')}</p>`;
+    }).join('');
+
+    // 12. Restore inline code
+    html = html.replace(/\x00INLINECODE_(\d+)\x00/g, (_, i) => {
+      return `<code class="memory-inline-code">${inlineCodes[+i]}</code>`;
+    });
+
+    // 13. Restore code blocks
+    html = html.replace(/\x00CODEBLOCK_(\d+)\x00/g, (_, i) => {
+      const b = codeBlocks[+i];
+      const langClass = b.lang ? ` class="language-${escapeHtml(b.lang)}"` : '';
+      return `<pre class="memory-code-block"><code${langClass}>${b.code}</code></pre>`;
+    });
+
+    // Cache management
+    if (_mdCache.size >= MD_CACHE_LIMIT) {
+      _mdCache.delete(_mdCache.keys().next().value);
+    }
+    _mdCache.set(src, html);
+
+    return html;
+  }
+
   /**
    * Calculate and update memory telemetry numbers
    */
@@ -138,7 +280,7 @@
             <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">★ ${m.importance || 3}/5</span>
           </div>
 
-          <div class="memory-content" dir="auto">${escapeHtml(m.content)}</div>
+          <div class="memory-content" dir="auto">${renderMemoryMarkdown(m.content)}</div>
 
           <div class="memory-footer">
             <span style="font-family: var(--font-mono); font-size: 11px;">
@@ -233,9 +375,62 @@
           <span class="badge-tag ${m.category}">[${(m.category || 'fact').toUpperCase()}]</span>
           <span class="version-pill" style="font-size: 10px;">${m.tier || 'project'}</span>
         </div>
-        <div class="overview-item-body" dir="auto">${escapeHtml(m.content)}</div>
+        <div class="overview-item-body" dir="auto">${renderMemoryMarkdown(m.content)}</div>
       </div>
     `).join('');
+  }
+
+  /**
+   * Update character and word counter for memory modal editor
+   */
+  function updateMemoryModalCounter() {
+    const contentInput = document.getElementById('inputMemoryContent');
+    const counterEl = document.getElementById('memContentCounter');
+    if (!contentInput || !counterEl) return;
+    const val = contentInput.value;
+    const charCount = val.length;
+    const wordCount = val.trim() ? val.trim().split(/\s+/).length : 0;
+    const arabic = isAr();
+    counterEl.textContent = arabic
+      ? `${charCount} حرف • ${wordCount} كلمة`
+      : `${charCount} chars • ${wordCount} words`;
+  }
+
+  /**
+   * Ensure modal tabs, hints, and labels match current language
+   */
+  function updateMemoryModalI18n() {
+    const arabic = isAr();
+    const writeText = document.getElementById('memTabWriteText');
+    const previewText = document.getElementById('memTabPreviewText');
+    const hintText = document.getElementById('memMarkdownHint');
+    const shortcutText = document.getElementById('memSaveShortcutText');
+
+    if (writeText) writeText.textContent = arabic ? 'تحرير' : 'Write';
+    if (previewText) previewText.textContent = arabic ? 'معاينة' : 'Preview';
+    if (shortcutText) shortcutText.textContent = arabic ? 'للحفظ السريع' : 'to save';
+    if (hintText) {
+      hintText.innerHTML = arabic
+        ? 'Markdown مدعوم: <code>**عريض**</code> <code>`كود`</code> <code># عنوان</code> <code>- قائمة</code>'
+        : 'Markdown supported: <code>**bold**</code> <code>`code`</code> <code># header</code> <code>- list</code>';
+    }
+  }
+
+  /**
+   * Reset modal editor tabs to 'Write' mode
+   */
+  function resetMemoryModalEditorState() {
+    const btnWrite = document.getElementById('btnMemTabWrite');
+    const btnPreview = document.getElementById('btnMemTabPreview');
+    const contentInput = document.getElementById('inputMemoryContent');
+    const previewPane = document.getElementById('memoryModalPreview');
+
+    btnWrite?.classList.add('active');
+    btnPreview?.classList.remove('active');
+    contentInput?.classList.remove('hidden');
+    previewPane?.classList.add('hidden');
+    updateMemoryModalCounter();
+    updateMemoryModalI18n();
   }
 
   /**
@@ -243,6 +438,7 @@
    */
   function openEditMemoryModal(node) {
     const modalTitle = document.getElementById('modalMemoryTitle');
+    const modalSubtitle = document.getElementById('modalMemorySubtitle');
     const submitBtnText = document.getElementById('btnSaveMemoryText');
     const idInput = document.getElementById('inputMemoryEditId');
     const contentInput = document.getElementById('inputMemoryContent');
@@ -259,7 +455,12 @@
     const arabic = isAr();
     if (modalTitle) modalTitle.textContent = arabic ? 'تعديل الذاكرة المعرفية' : 'Edit Memory Node';
     if (submitBtnText) submitBtnText.textContent = arabic ? 'حفظ التعديلات' : 'Save Changes';
+    if (modalSubtitle) {
+      modalSubtitle.textContent = `#${node.id} • ${node.access_count || 0} ${arabic ? 'استدعاء' : 'hits'}`;
+      modalSubtitle.style.display = 'block';
+    }
 
+    resetMemoryModalEditorState();
     window.openModal('modalNewMemory');
   }
 
@@ -268,6 +469,7 @@
    */
   function openCreateMemoryModal() {
     const modalTitle = document.getElementById('modalMemoryTitle');
+    const modalSubtitle = document.getElementById('modalMemorySubtitle');
     const submitBtnText = document.getElementById('btnSaveMemoryText');
     const idInput = document.getElementById('inputMemoryEditId');
     const contentInput = document.getElementById('inputMemoryContent');
@@ -284,7 +486,12 @@
     const arabic = isAr();
     if (modalTitle) modalTitle.textContent = arabic ? 'تسجيل ذاكرة أو قرار جديد' : 'Store New Memory';
     if (submitBtnText) submitBtnText.textContent = arabic ? 'حفظ الذاكرة' : 'Save Memory';
+    if (modalSubtitle) {
+      modalSubtitle.textContent = '';
+      modalSubtitle.style.display = 'none';
+    }
 
+    resetMemoryModalEditorState();
     window.openModal('modalNewMemory');
   }
 
@@ -443,6 +650,57 @@
 
     // Modal submit button
     document.getElementById('btnSaveMemorySubmit')?.addEventListener('click', handleMemorySubmit);
+
+    // Modal editor tabs and live preview interactions
+    initMemoryModalInteractions();
+  }
+
+  /**
+   * Initialize Write / Preview Tabs and Editor Keyboard Shortcuts
+   */
+  function initMemoryModalInteractions() {
+    const btnWrite = document.getElementById('btnMemTabWrite');
+    const btnPreview = document.getElementById('btnMemTabPreview');
+    const contentInput = document.getElementById('inputMemoryContent');
+    const previewPane = document.getElementById('memoryModalPreview');
+    const modal = document.getElementById('modalNewMemory');
+
+    function switchToWrite() {
+      if (!btnWrite || !btnPreview || !contentInput || !previewPane) return;
+      btnWrite.classList.add('active');
+      btnPreview.classList.remove('active');
+      contentInput.classList.remove('hidden');
+      previewPane.classList.add('hidden');
+      contentInput.focus();
+    }
+
+    function switchToPreview() {
+      if (!btnWrite || !btnPreview || !contentInput || !previewPane) return;
+      btnPreview.classList.add('active');
+      btnWrite.classList.remove('active');
+      contentInput.classList.add('hidden');
+      previewPane.classList.remove('hidden');
+      const val = contentInput.value.trim();
+      if (val) {
+        previewPane.innerHTML = renderMemoryMarkdown(val);
+      } else {
+        const arabic = isAr();
+        previewPane.innerHTML = `<div style="color: var(--text-muted); padding: 24px 0; text-align: center; font-style: italic;">${arabic ? 'لا يوجد محتوى للمعاينة بعد...' : 'No content to preview yet...'}</div>`;
+      }
+    }
+
+    btnWrite?.addEventListener('click', switchToWrite);
+    btnPreview?.addEventListener('click', switchToPreview);
+
+    contentInput?.addEventListener('input', updateMemoryModalCounter);
+
+    // Keyboard shortcut: Ctrl+Enter or Cmd+Enter submits modal
+    modal?.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleMemorySubmit();
+      }
+    });
   }
 
   let harvestedCandidatesCache = [];

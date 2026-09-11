@@ -321,6 +321,11 @@
   color: var(--text-primary);
   unicode-bidi: plaintext;
   text-align: start;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-height: 84px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /* ----------------- Form Controls & Filter Bars ----------------- */

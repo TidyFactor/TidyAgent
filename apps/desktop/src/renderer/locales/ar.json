@@ -282,7 +282,11 @@
       "importance": "درجة الأهمية:",
       "saveBtn": "حفظ الذاكرة",
       "updateBtn": "حفظ التعديلات",
-      "cancelBtn": "إلغاء"
+      "cancelBtn": "إلغاء",
+      "tabWrite": "تحرير",
+      "tabPreview": "معاينة",
+      "saveShortcut": "للحفظ السريع",
+      "markdownHint": "Markdown مدعوم: **عريض**، `كود`، # عنوان، - قائمة"
     },
     "empty": "لم يتم العثور على عقد ذاكرة تطابق البحث.",
     "deleteConfirm": "هل أنت متأكد من حذف هذه الذاكرة نهائياً؟",
@@ -297,7 +301,7 @@
     "selectAll": "تحديد الكل",
     "importSelected": "استيراد المحدد ({count})",
     "openInStudio": "فتح في الأستوديو",
-    "importSingle": "استيراد هذا العنصر",
+    "importSingle": "استيراد",
     "copyContent": "نسخ المحتوى بالكامل",
     "copied": "تم النسخ!",
     "noSelection": "اختر عنصراً من القائمة لمعاينة محتواه الكامل وتعديل بياناته",
@@ -322,6 +326,15 @@
     "searchPlaceholder": "تصفية سريعة في العناوين والمسارات...",
     "statusImported": "مسجل مسبقاً",
     "statusNew": "عنصر جديد",
-    "importSuccess": "تم استيراد {count} عنصر بنجاح إلى قاعدة البيانات السيادية."
+    "importSuccess": "تم استيراد {count} عنصر بنجاح إلى قاعدة البيانات السيادية.",
+    "editCandidate": "تعديل المسودة",
+    "tabPreview": "معاينة",
+    "tabEdit": "تعديل في المكان",
+    "editTitle": "عنوان الذاكرة المستخرجة:",
+    "editContent": "محتوى المسودة (Markdown مدعوم بالكامل):",
+    "saveDraftBtn": "حفظ التعديلات في المسودة",
+    "cancelDraftBtn": "إلغاء",
+    "editedBadge": "مُعدل",
+    "saveSuccess": "تم تحديث مسودة الذاكرة بنجاح في مكانها (جاهزة للاستيراد)."
   }
 }
