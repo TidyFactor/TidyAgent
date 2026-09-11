@@ -14,7 +14,7 @@
   "nav": {
     "platform": "PLATFORM",
     "overview": "Overview",
-    "subagents": "Skills & Agents Studio",
+    "subagents": "Skills & Agents",
     "memory": "Memory Explorer",
     "harvester": "Knowledge Harvester",
     "dispatcher": "Agent Runner",
@@ -33,15 +33,19 @@
     "memories": "Stored Memories",
     "tasks": "Pending Tasks",
     "subagents": "Skills & Agents",
+    "harvester": "Knowledge Harvester",
     "engine": "Engine Mode"
   },
   "overview": {
-    "recentMemories": "Recent Memories & Decisions",
+    "recentMemories": "Recent Memories",
     "topTasks": "Top Priority Tasks",
     "viewAll": "View All →",
     "manageTasks": "Manage Tasks →",
     "refreshBtn": "Refresh",
-    "kicker": "SOVEREIGN ENGINE & MEMORY TELEMETRY"
+    "kicker": "SOVEREIGN ENGINE & MEMORY TELEMETRY",
+    "subagentsSpotlight": "Agents Workforce",
+    "harvesterPulse": "Harvester Pulse",
+    "harvestInsights": "Harvest Insights"
   },
   "titles": {
     "overview": "System Overview",
@@ -325,7 +329,7 @@
     },
     "searchPlaceholder": "Quick filter titles and file paths...",
     "statusImported": "Already in Memory",
-    "statusNew": "New Item",
+    "statusNew": "New",
     "importSuccess": "Successfully imported {count} items to SQLite SSOT.",
     "editCandidate": "Edit Candidate",
     "tabPreview": "Preview",
@@ -335,6 +339,21 @@
     "saveDraftBtn": "Save to Draft",
     "cancelDraftBtn": "Cancel",
     "editedBadge": "Edited",
-    "saveSuccess": "Candidate draft updated in-place (ready for import)."
+    "saveSuccess": "Candidate draft updated in-place (ready for import).",
+    "deselectAll": "Deselect All",
+    "selectedCount": "{count} selected",
+    "itemCount": "items",
+    "noMatch": "No candidates match active filter criteria.",
+    "streaming": "Streaming full document content...",
+    "lines": "lines",
+    "statusInMem": "In Memory",
+    "editedLocally": "Edited locally just now",
+    "chars": "chars",
+    "words": "words",
+    "importSingleSuccess": "Successfully imported \"{title}\" to SQLite SSOT.",
+    "importBatchSuccess": "Successfully imported {count} items to SQLite SSOT.",
+    "importFailed": "Failed to import: {err}",
+    "batchImportFailed": "Batch import failed: {err}",
+    "titleRequired": "Please enter a title for the candidate"
   }
 }

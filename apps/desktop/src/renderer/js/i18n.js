@@ -183,6 +183,7 @@ async function applyLanguage(lang) {
     memory: dict.nav?.memory,
     tasks: dict.nav?.tasks,
     subagents: dict.nav?.subagents,
+    harvester: dict.nav?.harvester,
     dispatcher: dict.nav?.dispatcher,
     snippets: dict.nav?.snippets,
     journal: dict.nav?.journal,
@@ -205,15 +206,6 @@ async function applyLanguage(lang) {
     }
   });
 
-  // Stat Labels
-  const statLabels = document.querySelectorAll('.stat-details .stat-label');
-  if (statLabels.length >= 4 && dict.stat) {
-    statLabels[0].textContent = dict.stat.memories;
-    statLabels[1].textContent = dict.stat.tasks;
-    statLabels[2].textContent = dict.stat.subagents;
-    statLabels[3].textContent = dict.stat.engine;
-  }
-
   // Tab Titles & Subtitles
   const titlePairs = [
     ['headerTitleOverview', dict.titles?.overview],
@@ -224,6 +216,8 @@ async function applyLanguage(lang) {
     ['headerSubtitleTasks', dict.titles?.tasksSubtitle],
     ['headerTitleSubagents', dict.titles?.subagents],
     ['headerSubtitleSubagents', dict.titles?.subagentsSubtitle],
+    ['headerTitleHarvester', dict.titles?.harvester],
+    ['headerSubtitleHarvester', dict.titles?.harvesterSubtitle],
     ['headerTitleDispatcher', dict.titles?.dispatcher],
     ['headerSubtitleDispatcher', dict.titles?.dispatcherSubtitle],
     ['headerTitleSnippets', dict.titles?.snippets],
@@ -240,6 +234,8 @@ async function applyLanguage(lang) {
     ['headerSubtitleInvoices', dict.titles?.invoicesSubtitle],
     ['headerTitleCashflow', dict.titles?.cashflow],
     ['headerSubtitleCashflow', dict.titles?.cashflowSubtitle],
+    ['panelHeaderSubagentsSpotlight', dict.overview?.subagentsSpotlight],
+    ['panelHeaderHarvesterPulse', dict.overview?.harvesterPulse],
     ['panelHeaderRecentMemories', dict.overview?.recentMemories],
     ['panelHeaderTopTasks', dict.overview?.topTasks],
     ['linkViewAllMemories', dict.overview?.viewAll],
@@ -298,9 +294,20 @@ function initLanguageSelector() {
   });
 }
 
+// Global translation helper
+window.t = function(path, fallback = '') {
+  const dict = localeCache[currentLang];
+  let val = resolveI18nKey(dict, path);
+  if (!val && localeCache['en']) {
+    val = resolveI18nKey(localeCache['en'], path);
+  }
+  return val !== null && val !== undefined ? val : fallback;
+};
+
 // Global exports
 window.applyLanguage = applyLanguage;
 window.initLanguageSelector = initLanguageSelector;
 window.getCurrentLang = () => currentLang;
+window.isRtl = () => LANG_CONFIG[currentLang]?.dir === 'rtl';
 window.FLAG_SVGS = FLAG_SVGS;
 window.LANG_CONFIG = LANG_CONFIG;

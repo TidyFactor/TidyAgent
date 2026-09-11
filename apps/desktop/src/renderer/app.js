@@ -73,7 +73,7 @@ function refreshCurrentTab() {
   switchTab(activeTab);
 }
 
-// ----------------- Core Engine Telemetry -----------------
+// ----------------- Core Engine Telemetry & Overview Spotlights -----------------
 async function loadStats() {
   const res = await window.api.getStats();
   if (res && res.ok && res.data) {
@@ -84,6 +84,20 @@ async function loadStats() {
     if (memEl) memEl.textContent = d.counts?.memories ?? 0;
     if (tskEl) tskEl.textContent = d.counts?.tasks ?? 0;
     if (subEl) subEl.textContent = d.counts?.subagents ?? 4;
+
+    // Granular memory breakdown pills
+    const coreEl = document.getElementById('statCoreMemoriesCount');
+    const decEl = document.getElementById('statDecisionsCount');
+    const ephEl = document.getElementById('statEphemeralCount');
+    if (coreEl) coreEl.textContent = d.counts?.core_memories ?? 0;
+    if (decEl) decEl.textContent = d.counts?.decision_memories ?? 0;
+    if (ephEl) ephEl.textContent = d.counts?.ephemeral_memories ?? 0;
+
+    // Skills and Context counts
+    const sklEl = document.getElementById('statSkillsCount');
+    const ctxEl = document.getElementById('statContextsCount');
+    if (sklEl) sklEl.textContent = d.counts?.skills ?? d.counts?.subagents ?? 0;
+    if (ctxEl) ctxEl.textContent = d.counts?.contexts ?? 1;
 
     if (d.activeContext) {
       const wsBadge = document.getElementById('activeWorkspaceName');
@@ -99,6 +113,102 @@ async function loadStats() {
       if (diagPath) diagPath.textContent = d.dbPath;
       if (storageLabel) storageLabel.textContent = `SSOT: ${d.dbPath.split(/[\\/]/).pop()}`;
     }
+  }
+
+  // Load Quadrants
+  await Promise.all([
+    renderOverviewSubagentsSpotlight(),
+    renderOverviewHarvesterPulse()
+  ]);
+}
+
+async function renderOverviewSubagentsSpotlight() {
+  const container = document.getElementById('overviewSubagentsSpotlight');
+  if (!container) return;
+
+  try {
+    const res = await window.api.listSubagents();
+    const agents = (res && res.ok && Array.isArray(res.data)) ? res.data : [];
+    if (agents.length === 0) {
+      container.innerHTML = `<div style="color: var(--text-muted); padding: 12px 0; text-align: center;">No subagents registered yet.</div>`;
+      return;
+    }
+
+    // Top 3 featured agents
+    const topAgents = agents.slice(0, 3);
+    container.innerHTML = topAgents.map(a => {
+      const initial = (a.name || 'A').charAt(0).toUpperCase();
+      const role = a.role || a.description || 'Autonomous Agent';
+      const toolsCount = Array.isArray(a.tools) ? a.tools.length : (a.tools ? String(a.tools).split(',').length : 0);
+      return `
+        <div class="overview-agent-item">
+          <div class="overview-agent-left">
+            <div class="overview-agent-avatar">${initial}</div>
+            <div>
+              <div class="overview-agent-name">${a.name}</div>
+              <div class="overview-agent-role" title="${role}">${role}</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge purple" style="font-size: 10px;">${toolsCount} Tools</span>
+            <button class="btn btn-xs btn-outline" data-goto="subagents" title="Inspect in Skills & Agents">Open</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Re-bind data-goto within dynamic container
+    container.querySelectorAll('[data-goto]').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-goto')));
+    });
+  } catch (err) {
+    container.innerHTML = `<div style="color: var(--text-muted); font-size: 12px;">Failed to load subagents spotlight.</div>`;
+  }
+}
+
+async function renderOverviewHarvesterPulse() {
+  const container = document.getElementById('overviewHarvesterPreview');
+  if (!container) return;
+
+  try {
+    const res = await window.api.harvestScan({ checkExisting: true });
+    if (res && res.ok && res.data) {
+      const { totalScanned, newCount, alreadyImportedCount, items } = res.data;
+      
+      const statHarvTotal = document.getElementById('statHarvesterTotalCount');
+      const statHarvNew = document.getElementById('statHarvesterNewCount');
+      const statHarvImp = document.getElementById('statHarvesterImportedCount');
+      if (statHarvTotal) statHarvTotal.textContent = totalScanned || 0;
+      if (statHarvNew) statHarvNew.textContent = newCount || 0;
+      if (statHarvImp) statHarvImp.textContent = alreadyImportedCount || 0;
+
+      // Render top 3 sources breakdown
+      const sourceCounts = {};
+      (items || []).forEach(it => {
+        const src = it.sourceLabel || it.source || 'Knowledge Base';
+        sourceCounts[src] = (sourceCounts[src] || 0) + 1;
+      });
+
+      const sourceEntries = Object.entries(sourceCounts).slice(0, 3);
+      if (sourceEntries.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-muted); padding: 12px 0; text-align: center;">No knowledge items found in agent environments.</div>`;
+        return;
+      }
+
+      container.innerHTML = sourceEntries.map(([src, count]) => `
+        <div class="overview-harvester-source-item">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-amber);"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary);">${src}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="badge yellow" style="font-size: 10.5px;">${count} items</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  } catch (err) {
+    container.innerHTML = `<div style="color: var(--text-muted); font-size: 12px;">Harvester pulse idle.</div>`;
   }
 }
 

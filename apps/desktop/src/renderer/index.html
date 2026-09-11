@@ -321,92 +321,163 @@
             <div class="section-title-block">
               <div class="section-kicker">
                 <span class="kicker-dot"></span>
-                <span class="kicker-text" id="kickerOverview">SOVEREIGN ENGINE & MEMORY TELEMETRY</span>
+                <span class="kicker-text" id="kickerOverview" data-i18n="overview.kicker">النواة السيادية ومؤشرات الذاكرة التراكمية</span>
               </div>
-              <h1 id="headerTitleOverview">System Overview</h1>
-              <p class="subtitle" id="headerSubtitleOverview">Real-time telemetry and state of your sovereign SQLite database</p>
+              <h1 id="headerTitleOverview" data-i18n="titles.overview">نظرة عامة على المنظومة</h1>
+              <p class="subtitle" id="headerSubtitleOverview" data-i18n="titles.overviewSubtitle">مؤشرات حية للحالة وقاعدة بيانات SQLite السيادية</p>
             </div>
-            <button class="btn btn-sm btn-outline btn-refresh" id="btnRefreshStats">
-              <span class="btn-icon-spin"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>
-              <span id="btnRefreshText">Refresh</span>
-            </button>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-secondary" data-goto="harvester">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                <span data-i18n="nav.harvester">Knowledge Harvester</span>
+              </button>
+              <button class="btn btn-primary" data-goto="subagents">
+                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span data-i18n="nav.subagents">Skills & Agents</span>
+              </button>
+              <button class="btn btn-sm btn-outline btn-refresh" id="btnRefreshStats">
+                <span class="btn-icon-spin"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>
+                <span id="btnRefreshText" data-i18n="overview.refreshBtn">تحديث</span>
+              </button>
+            </div>
           </div>
 
-          <div class="stats-grid">
+          <!-- 4 Refined Premium Stat Cards -->
+          <div class="stats-grid" style="margin-bottom: 24px;">
+            <!-- Card 1: Stored Memories -->
             <div class="stat-card">
-              <div class="stat-icon cyan">
-                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-              </div>
               <div class="stat-details">
                 <div class="stat-header-row">
-                  <span class="stat-label">Stored Memories</span>
+                  <span class="stat-label" data-i18n="stat.memories">عقد الذاكرة المخزنة</span>
                   <span class="stat-chip cyan">FTS5 BM25</span>
                 </div>
                 <span class="stat-value" id="statMemoriesCount">--</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon yellow">
-                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-              </div>
-              <div class="stat-details">
-                <div class="stat-header-row">
-                  <span class="stat-label">Pending Tasks</span>
-                  <span class="stat-chip yellow">ACTIVE</span>
+                <div class="stat-pills-row">
+                  <span class="stat-mini-pill cyan"><span id="statCoreMemoriesCount">0</span> Core</span>
+                  <span class="stat-mini-pill purple"><span id="statDecisionsCount">0</span> Decisions</span>
+                  <span class="stat-mini-pill amber"><span id="statEphemeralCount">0</span> Ephemeral</span>
                 </div>
-                <span class="stat-value" id="statTasksCount">--</span>
+              </div>
+              <div class="stat-card-footer">
+                <button class="stat-card-link" data-goto="memory" type="button">
+                  <span data-i18n="nav.memory">Memory Explorer</span> &rarr;
+                </button>
               </div>
             </div>
 
+            <!-- Card 2: Skills & Agents -->
             <div class="stat-card">
-              <div class="stat-icon purple">
-                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
-              </div>
               <div class="stat-details">
                 <div class="stat-header-row">
-                  <span class="stat-label">Subagents Loaded</span>
-                  <span class="stat-chip purple">DISPATCHER</span>
+                  <span class="stat-label" data-i18n="stat.subagents">المهارات والوكلاء</span>
+                  <span class="stat-chip purple">STUDIO</span>
                 </div>
-                <span class="stat-value" id="statSubagentsCount">4</span>
+                <span class="stat-value" id="statSubagentsCount">--</span>
+                <div class="stat-pills-row">
+                  <span class="stat-mini-pill purple"><span id="statSkillsCount">--</span> Skills</span>
+                  <span class="stat-mini-pill green">15 Rules Compliant</span>
+                </div>
+              </div>
+              <div class="stat-card-footer">
+                <button class="stat-card-link" data-goto="subagents" type="button">
+                  <span data-i18n="nav.subagents">Skills & Agents</span> &rarr;
+                </button>
               </div>
             </div>
 
+            <!-- Card 3: Knowledge Harvester -->
             <div class="stat-card">
-              <div class="stat-icon green">
-                <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              </div>
               <div class="stat-details">
                 <div class="stat-header-row">
-                  <span class="stat-label">Engine Mode</span>
+                  <span class="stat-label" data-i18n="stat.harvester">حصاد المعرفة</span>
+                  <span class="stat-chip yellow">HARVEST</span>
+                </div>
+                <span class="stat-value" id="statHarvesterTotalCount">--</span>
+                <div class="stat-pills-row">
+                  <span class="stat-mini-pill green"><span id="statHarvesterNewCount">--</span> New</span>
+                  <span class="stat-mini-pill amber"><span id="statHarvesterImportedCount">--</span> In Memory</span>
+                </div>
+              </div>
+              <div class="stat-card-footer">
+                <button class="stat-card-link" data-goto="harvester" type="button">
+                  <span data-i18n="overview.harvestInsights">Harvest Insights</span> &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 4: Pending Tasks & Concurrency -->
+            <div class="stat-card">
+              <div class="stat-details">
+                <div class="stat-header-row">
+                  <span class="stat-label" data-i18n="stat.tasks">المهام المعلقة</span>
                   <span class="stat-chip green">SQLITE SSOT</span>
                 </div>
-                <span class="stat-value">WAL (Active)</span>
+                <span class="stat-value" id="statTasksCount">--</span>
+                <div class="stat-pills-row">
+                  <span class="stat-mini-pill green">WAL Active</span>
+                  <span class="stat-mini-pill cyan"><span id="statContextsCount">1</span> Contexts</span>
+                </div>
+              </div>
+              <div class="stat-card-footer">
+                <button class="stat-card-link" data-goto="tasks" type="button">
+                  <span data-i18n="overview.manageTasks">Task Board</span> &rarr;
+                </button>
               </div>
             </div>
           </div>
 
-          <div class="two-column-grid">
+          <!-- 2x2 Overview Quadrant Grid -->
+          <div class="overview-quadrant-grid">
+            <!-- Quadrant 1: Agents Workforce -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title-wrap">
+                  <span class="panel-dot purple"></span>
+                  <h3 id="panelHeaderSubagentsSpotlight" data-i18n="overview.subagentsSpotlight">Agents Workforce</h3>
+                </div>
+                <button class="link-btn" data-goto="subagents">Manage All &rarr;</button>
+              </div>
+              <div class="panel-body" id="overviewSubagentsSpotlight" style="padding: 14px;">
+                <div class="skeleton-loader">Loading agents workforce...</div>
+              </div>
+            </div>
+
+            <!-- Quadrant 2: Harvester Pulse -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title-wrap">
+                  <span class="panel-dot amber"></span>
+                  <h3 id="panelHeaderHarvesterPulse" data-i18n="overview.harvesterPulse">Harvester Pulse</h3>
+                </div>
+                <button class="link-btn" data-goto="harvester">Open Harvester &rarr;</button>
+              </div>
+              <div class="panel-body" id="overviewHarvesterPreview" style="padding: 14px;">
+                <div class="skeleton-loader">Scanning knowledge sources...</div>
+              </div>
+            </div>
+
+            <!-- Quadrant 3: Recent Memories -->
             <div class="panel">
               <div class="panel-header">
                 <div class="panel-title-wrap">
                   <span class="panel-dot cyan"></span>
-                  <h3 id="panelHeaderRecentMemories">Recent Memories & Decisions</h3>
+                  <h3 id="panelHeaderRecentMemories" data-i18n="overview.recentMemories">Recent Memories</h3>
                 </div>
-                <button class="link-btn" data-goto="memory" id="linkViewAllMemories">View All →</button>
+                <button class="link-btn" data-goto="memory" id="linkViewAllMemories" data-i18n="overview.viewAll">View All →</button>
               </div>
               <div class="panel-body" id="overviewRecentMemories">
                 <div class="skeleton-loader">Loading memories...</div>
               </div>
             </div>
 
+            <!-- Quadrant 4: Top Priority Tasks -->
             <div class="panel">
               <div class="panel-header">
                 <div class="panel-title-wrap">
-                  <span class="panel-dot amber"></span>
-                  <h3 id="panelHeaderTopTasks">Top Priority Tasks</h3>
+                  <span class="panel-dot yellow"></span>
+                  <h3 id="panelHeaderTopTasks" data-i18n="overview.topTasks">Top Priority Tasks</h3>
                 </div>
-                <button class="link-btn" data-goto="tasks" id="linkManageTasks">Manage Tasks →</button>
+                <button class="link-btn" data-goto="tasks" id="linkManageTasks" data-i18n="overview.manageTasks">Manage Tasks →</button>
               </div>
               <div class="panel-body" id="overviewTopTasks">
                 <div class="skeleton-loader">Loading tasks...</div>
@@ -634,7 +705,7 @@
                   </div>
 
                   <div class="inspector-actions-group">
-                    <button class="btn btn-secondary btn-sm" id="btnInspectorOpenStudio" style="display: none;" title="Open and edit in Universal Studio">
+                    <button class="btn btn-secondary btn-sm" id="btnInspectorOpenStudio" style="display: none;" title="Open and edit in Skills & Agents">
                       <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                       <span data-i18n="harvester.openInStudio">Open in Studio</span>
                     </button>

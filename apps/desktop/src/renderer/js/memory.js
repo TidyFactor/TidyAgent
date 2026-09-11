@@ -10,7 +10,7 @@
   let activeFilterCategory = '';
   let activeFilterTier = '';
 
-  const isAr = () => document.documentElement.getAttribute('lang') !== 'en';
+  const isAr = () => document.documentElement.getAttribute('lang') === 'ar';
 
   const CATEGORY_NAMES = {
     decision: { ar: 'قرار', en: 'Decision' },

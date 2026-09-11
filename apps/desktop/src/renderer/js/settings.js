@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  const isAr = () => document.documentElement.getAttribute('lang') !== 'en';
+  const isAr = () => document.documentElement.getAttribute('lang') === 'ar';
 
   // ----------------- Sub-Tabs Navigation -----------------
   function initSettingsSubtabs() {

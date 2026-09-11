@@ -14,9 +14,9 @@
   "nav": {
     "platform": "المنصة الأساسية",
     "overview": "نظرة عامة",
-    "subagents": "استوديو المهارات والوكلاء",
+    "subagents": "المهارات والوكلاء",
     "memory": "مستكشف الذاكرة",
-    "harvester": "استخراج الذاكرة",
+    "harvester": "حصاد المعرفة",
     "dispatcher": "منفذ الوكلاء والمهام",
     "microApps": "التطبيقات الإنتاجية",
     "snippets": "مكتبة الأكواد",
@@ -33,15 +33,19 @@
     "memories": "عقد الذاكرة المخزنة",
     "tasks": "المهام المعلقة",
     "subagents": "المهارات والوكلاء",
+    "harvester": "حصاد المعرفة",
     "engine": "نمط المحرك"
   },
   "overview": {
-    "recentMemories": "أحدث القرارات والذاكرة",
+    "recentMemories": "أحدث الذكريات",
     "topTasks": "أهم المهام ذات الأولوية",
     "viewAll": "عرض الكل ←",
     "manageTasks": "إدارة المهام ←",
     "refreshBtn": "تحديث",
-    "kicker": "النواة السيادية ومؤشرات الذاكرة التراكمية"
+    "kicker": "النواة السيادية ومؤشرات الذاكرة التراكمية",
+    "subagentsSpotlight": "قوة الوكلاء",
+    "harvesterPulse": "نبض الحصاد",
+    "harvestInsights": "رؤى الحصاد"
   },
   "titles": {
     "overview": "نظرة عامة على المنظومة",
@@ -325,7 +329,7 @@
     },
     "searchPlaceholder": "تصفية سريعة في العناوين والمسارات...",
     "statusImported": "مسجل مسبقاً",
-    "statusNew": "عنصر جديد",
+    "statusNew": "جديد",
     "importSuccess": "تم استيراد {count} عنصر بنجاح إلى قاعدة البيانات السيادية.",
     "editCandidate": "تعديل المسودة",
     "tabPreview": "معاينة",
@@ -335,6 +339,21 @@
     "saveDraftBtn": "حفظ التعديلات في المسودة",
     "cancelDraftBtn": "إلغاء",
     "editedBadge": "مُعدل",
-    "saveSuccess": "تم تحديث مسودة الذاكرة بنجاح في مكانها (جاهزة للاستيراد)."
+    "saveSuccess": "تم تحديث مسودة الذاكرة بنجاح في مكانها (جاهزة للاستيراد).",
+    "deselectAll": "إلغاء تحديد الكل",
+    "selectedCount": "تم تحديد {count} عنصر",
+    "itemCount": "عنصر",
+    "noMatch": "لم يتم العثور على عناصر تطابق معايير التصفية.",
+    "streaming": "جاري قراءة محتوى المستند الكامل...",
+    "lines": "سطر",
+    "statusInMem": "مسجل",
+    "editedLocally": "مُعدل محلياً الآن",
+    "chars": "حرف",
+    "words": "كلمة",
+    "importSingleSuccess": "تم استيراد \"{title}\" بنجاح إلى قاعدة البيانات السيادية.",
+    "importBatchSuccess": "تم استيراد {count} عنصر بنجاح إلى قاعدة البيانات السيادية.",
+    "importFailed": "تعذر الاستيراد: {err}",
+    "batchImportFailed": "تعذر الاستيراد الجماعي: {err}",
+    "titleRequired": "يرجى إدخال عنوان للذاكرة"
   }
 }

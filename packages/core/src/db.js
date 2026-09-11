@@ -464,9 +464,13 @@ function getStats() {
   const db = getDb();
   const counts = {
     memories: db.prepare('SELECT COUNT(*) as c FROM memory_nodes').get().c,
+    core_memories: db.prepare("SELECT COUNT(*) as c FROM memory_nodes WHERE tier = 'core'").get().c,
+    decision_memories: db.prepare("SELECT COUNT(*) as c FROM memory_nodes WHERE category = 'decision'").get().c,
+    ephemeral_memories: db.prepare("SELECT COUNT(*) as c FROM memory_nodes WHERE tier = 'ephemeral'").get().c,
     contexts: db.prepare('SELECT COUNT(*) as c FROM contexts').get().c,
     subagents: db.prepare('SELECT COUNT(*) as c FROM subagents').get().c,
     tasks: db.prepare('SELECT COUNT(*) as c FROM app_tasks').get().c,
+    pending_tasks: db.prepare("SELECT COUNT(*) as c FROM app_tasks WHERE status != 'completed'").get().c,
     snippets: db.prepare('SELECT COUNT(*) as c FROM app_snippets').get().c,
     journal: db.prepare('SELECT COUNT(*) as c FROM app_journal').get().c,
     skills: db.prepare('SELECT COUNT(*) as c FROM registered_skills').get().c,

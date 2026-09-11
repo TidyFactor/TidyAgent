@@ -21,7 +21,8 @@
   let currentSourceFilter = '';    // '' | 'gemini_knowledge' | 'antigravity_brain' | 'rules'
   let currentSearchQuery = '';
 
-  const isAr = () => document.documentElement.getAttribute('lang') !== 'en';
+  const isAr = () => document.documentElement.getAttribute('lang') === 'ar';
+  const t = (k, fb) => (window.t ? window.t(k, fb) : fb);
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -199,13 +200,13 @@
     });
 
     if (listBadge) {
-      listBadge.textContent = `${filtered.length} ${arabic ? 'عنصر' : 'items'}`;
+      listBadge.textContent = `${filtered.length} ${t('harvester.itemCount', 'items')}`;
     }
 
     if (filtered.length === 0) {
       listScroll.innerHTML = `
         <div style="padding: 32px 16px; text-align: center; color: var(--text-secondary);">
-          ${arabic ? 'لم يتم العثور على عناصر تطابق معايير التصفية.' : 'No candidates match active filter criteria.'}
+          ${escapeHtml(t('harvester.noMatch', 'No candidates match active filter criteria.'))}
         </div>
       `;
       return;
@@ -218,11 +219,11 @@
       const srcLabel = item.sourceLabel || item.source;
 
       const statusChip = isImported
-        ? `<span class="badge amber" style="font-size: 10px;">${arabic ? 'مسجل' : 'In Memory'}</span>`
-        : `<span class="badge green" style="font-size: 10px;">${arabic ? 'جديد' : 'New'}</span>`;
+        ? `<span class="badge amber" style="font-size: 10px;">${t('harvester.statusInMem', 'In Memory')}</span>`
+        : `<span class="badge green" style="font-size: 10px;">${t('harvester.statusNew', 'New')}</span>`;
 
       const editedChip = item.isEdited
-        ? `<span class="badge purple" style="font-size: 9.5px; padding: 1px 5px;">${arabic ? 'مُعدل' : 'Edited'}</span>`
+        ? `<span class="badge purple" style="font-size: 9.5px; padding: 1px 5px;">${t('harvester.editedBadge', 'Edited')}</span>`
         : '';
 
       return `
@@ -239,7 +240,7 @@
                 <div style="display: flex; align-items: center; gap: 4px;">
                   ${editedChip}
                   ${statusChip}
-                  <button class="harvester-card-edit-btn" data-id="${item.id}" title="${arabic ? 'تعديل المسودة في مكانها' : 'Edit Candidate in Place'}" type="button">
+                  <button class="harvester-card-edit-btn" data-id="${item.id}" title="${escapeHtml(t('harvester.editCandidate', 'Edit Candidate'))}" type="button">
                     <svg class="qhr-icon qhr-icon--xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </button>
                 </div>
@@ -318,9 +319,9 @@
     const words = text ? text.trim().split(/\s+/).filter(Boolean).length : 0;
     const counterEl = document.getElementById('harvesterDocCounter');
     if (counterEl) {
-      counterEl.textContent = isAr()
-        ? `${chars} حرف • ${words} كلمة`
-        : `${chars} chars • ${words} words`;
+      const cLabel = t('harvester.chars', 'chars');
+      const wLabel = t('harvester.words', 'words');
+      counterEl.textContent = `${chars} ${cLabel} • ${words} ${wLabel}`;
     }
   }
 
@@ -381,13 +382,12 @@
     const catSelect = document.getElementById('inspectorCategorySelect');
     const tierSelect = document.getElementById('inspectorTierSelect');
     const impSelect = document.getElementById('inspectorImportanceSelect');
-    const arabic = isAr();
 
     const newTitle = titleInput ? titleInput.value.trim() : '';
     const newContent = textarea ? textarea.value : '';
 
     if (!newTitle) {
-      alert(arabic ? 'يرجى إدخال عنوان للذاكرة' : 'Please enter a title for the candidate');
+      alert(t('harvester.titleRequired', 'Please enter a title for the candidate'));
       titleInput?.focus();
       return;
     }
@@ -410,11 +410,12 @@
 
     // Update document cache with revised content and metadata
     const linesCount = newContent.split('\n').length;
+    const editedLocallyLabel = t('harvester.editedLocally', 'Edited locally just now');
     fullDocumentCache.set(activeCandidate.sourcePath, {
       content: newContent,
       rawContent: newContent,
       linesCount,
-      mtimeFormatted: arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now'
+      mtimeFormatted: editedLocallyLabel
     });
 
     // Update inspector view headers
@@ -422,10 +423,10 @@
     if (titleEl) titleEl.textContent = newTitle;
 
     const linesEl = document.getElementById('inspectorDocLines');
-    if (linesEl) linesEl.textContent = `${linesCount} ${arabic ? 'سطر' : 'lines'}`;
+    if (linesEl) linesEl.textContent = `${linesCount} ${t('harvester.lines', 'lines')}`;
 
     const mtimeEl = document.getElementById('inspectorDocMtime');
-    if (mtimeEl) mtimeEl.textContent = arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now';
+    if (mtimeEl) mtimeEl.textContent = editedLocallyLabel;
 
     const editedBadge = document.getElementById('harvesterEditedBadge');
     if (editedBadge) editedBadge.style.display = 'inline-block';
@@ -434,7 +435,7 @@
     renderInspectorBody({
       content: newContent,
       linesCount,
-      mtimeFormatted: arabic ? 'مُعدل محلياً الآن' : 'Edited locally just now'
+      mtimeFormatted: editedLocallyLabel
     });
 
     // Switch back to preview tab
@@ -444,7 +445,7 @@
     renderCandidatesList();
 
     if (window.showToast) {
-      window.showToast(arabic ? '✓ تم حفظ تعديل المسودة بنجاح' : '✓ Candidate draft updated in-place', 'success');
+      window.showToast(t('harvester.saveSuccess', 'Candidate draft updated in-place (ready for import).'), 'success');
     }
   }
 
@@ -534,7 +535,7 @@
       if (bodyEl) {
         bodyEl.innerHTML = `
           <div class="skeleton-loader" style="padding: 28px; text-align: center;">
-            ${arabic ? 'جاري قراءة محتوى المستند الكامل...' : 'Streaming full document content...'}
+            ${escapeHtml(t('harvester.streaming', 'Streaming full document content...'))}
           </div>
         `;
       }
@@ -582,7 +583,7 @@
     const mtimeEl = document.getElementById('inspectorDocMtime');
 
     if (linesEl && docData.linesCount) {
-      linesEl.textContent = `${docData.linesCount} ${isAr() ? 'سطر' : 'lines'}`;
+      linesEl.textContent = `${docData.linesCount} ${t('harvester.lines', 'lines')}`;
     }
     if (mtimeEl && docData.mtimeFormatted) {
       mtimeEl.textContent = docData.mtimeFormatted;
@@ -602,23 +603,24 @@
     const btnText = document.getElementById('btnHarvesterBatchImportText');
     const summary = document.getElementById('harvesterSelectionSummary');
     const selectAllBtn = document.getElementById('btnHarvesterSelectAll');
-    const arabic = isAr();
 
     if (btn) btn.disabled = count === 0;
 
     if (btnText) {
-      btnText.textContent = arabic ? `استيراد المحدد (${count})` : `Import Selected (${count})`;
+      const tmpl = t('harvester.importSelected', 'Import Selected ({count})');
+      btnText.textContent = tmpl.replace('{count}', count);
     }
 
     if (summary) {
-      summary.textContent = arabic ? `تم تحديد ${count} عنصر` : `${count} selected`;
+      const tmpl = t('harvester.selectedCount', '{count} selected');
+      summary.textContent = tmpl.replace('{count}', count);
     }
 
     if (selectAllBtn) {
       const allSelected = count > 0 && count === candidatesList.length;
       selectAllBtn.textContent = allSelected
-        ? (arabic ? 'إلغاء تحديد الكل' : 'Deselect All')
-        : (arabic ? 'تحديد الكل' : 'Select All');
+        ? t('harvester.deselectAll', 'Deselect All')
+        : t('harvester.selectAll', 'Select All');
     }
   }
 
@@ -679,12 +681,11 @@
       // Update inspector status badge
       const statusBadgeEl = document.getElementById('inspectorDocStatusBadge');
       if (statusBadgeEl) {
-        statusBadgeEl.innerHTML = `<span class="badge amber">${arabic ? 'مسجل مسبقاً' : 'Already in Memory'}</span>`;
+        statusBadgeEl.innerHTML = `<span class="badge amber">${t('harvester.statusImported', 'Already in Memory')}</span>`;
       }
 
-      alert(arabic
-        ? `✓ تم استيراد "${activeCandidate.title}" بنجاح إلى قاعدة البيانات السيادية.`
-        : `✓ Successfully imported "${activeCandidate.title}" to SQLite SSOT.`);
+      const singleTmpl = t('harvester.importSingleSuccess', '✓ Successfully imported "{title}" to SQLite SSOT.');
+      alert(singleTmpl.replace('{title}', activeCandidate.title));
 
       renderCandidatesList();
       updateBatchImportButtonUI();
@@ -694,7 +695,8 @@
       if (window.loadStats) window.loadStats();
     } catch (err) {
       console.error('Error importing single candidate:', err);
-      alert(arabic ? `تعذر الاستيراد: ${err.message}` : `Failed to import: ${err.message}`);
+      const failTmpl = t('harvester.importFailed', 'Failed to import: {err}');
+      alert(failTmpl.replace('{err}', err.message));
     } finally {
       if (btn) btn.disabled = false;
     }
@@ -706,7 +708,6 @@
   async function handleBatchImport() {
     if (selectedCandidateIds.size === 0) return;
 
-    const arabic = isAr();
     const btn = document.getElementById('btnHarvesterBatchImport');
     if (btn) btn.disabled = true;
 
@@ -742,9 +743,8 @@
       });
       selectedCandidateIds.clear();
 
-      alert(arabic
-        ? `✓ تم استيراد ${importedCount} عنصر بنجاح إلى قاعدة البيانات السيادية.`
-        : `✓ Successfully imported ${importedCount} items to SQLite SSOT.`);
+      const batchTmpl = t('harvester.importBatchSuccess', '✓ Successfully imported {count} items to SQLite SSOT.');
+      alert(batchTmpl.replace('{count}', importedCount));
 
       renderCandidatesList();
       updateBatchImportButtonUI();
@@ -758,7 +758,8 @@
       if (window.loadStats) window.loadStats();
     } catch (err) {
       console.error('Error in batch import:', err);
-      alert(arabic ? `تعذر الاستيراد الجماعي: ${err.message}` : `Batch import failed: ${err.message}`);
+      const batchFailTmpl = t('harvester.batchImportFailed', 'Batch import failed: {err}');
+      alert(batchFailTmpl.replace('{err}', err.message));
     } finally {
       if (btn) btn.disabled = false;
     }
