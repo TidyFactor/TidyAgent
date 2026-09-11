@@ -34,11 +34,12 @@ function test(name, fn) {
 }
 
 const { initDatabase, getDb, getStats, backupDatabase, checkpointWal, checkIntegrity } = require('../scripts/db');
-const { saveMemory, recallMemory, forgetMemory, listMemories, calculateCognitiveScore, pruneDecayedMemories } = require('../scripts/memory');
+const { saveMemory, updateMemory, recallMemory, forgetMemory, listMemories, calculateCognitiveScore, pruneDecayedMemories } = require('../scripts/memory');
 const { addTask, listTasks, completeTask, addSnippet, listSnippets, deleteSnippet, addJournalEntry, listJournal, setSecret, getSecret, deleteSecret } = require('../scripts/apps');
 const { listSubagents, runSubagent } = require('../scripts/subagents');
 const { exportToMarkdown, exportToJson, importFromJson, importFromMarkdown } = require('../scripts/portability');
 const { getConfig, setConfig, listConfig, deleteConfig, getUserProfile, updateUserProfile, getGovernanceRules, setGovernanceRule } = require('../scripts/governance');
+const { scanKnowledgeSources, importBatchMemories } = require('../packages/core/src');
 
 console.log('\n[1] Database Bootstrap & Schema Tests');
 test('Database initializes with tables and WAL mode', () => {
@@ -83,11 +84,22 @@ test('recallMemory retrieves Arabic tokens via FTS5 unicode61', () => {
   assert.ok(resultsAr.length > 0, 'Should find memory by Arabic keyword');
 });
 
+test('updateMemory updates memory content and triggers FTS5 sync', () => {
+  assert.ok(savedMemoryId);
+  const updated = updateMemory(savedMemoryId, {
+    content: 'Tidy uses native node:sqlite for extreme high-speed portability',
+    importance: 4
+  });
+  assert.strictEqual(updated.importance, 4);
+  const searchAfter = recallMemory('extreme');
+  assert.ok(searchAfter.length > 0, 'Updated content should be indexed in FTS5');
+});
+
 test('forgetMemory removes memory from DB and triggers FTS5 sync', () => {
   assert.ok(savedMemoryId, 'Saved memory ID exists');
   const forgotten = forgetMemory(savedMemoryId);
   assert.strictEqual(forgotten, true);
-  const searchAfter = recallMemory('portability');
+  const searchAfter = recallMemory('extreme');
   assert.strictEqual(searchAfter.length, 0, 'Deleted memory should no longer be recalled');
 });
 
@@ -486,6 +498,216 @@ test('CLI One-Liners: tidy govern and tidy cfg execute successfully', () => {
 
   const cfgOut = execSync('node bin/tidy.js cfg list', { env }).toString();
   assert.ok(cfgOut.includes('System Configuration'));
+});
+
+console.log('\n[13] Universal Skills & Agents Studio (v1.4.4) Tests');
+const {
+  scanAllTools,
+  readStudioItem,
+  saveStudioItem,
+  validateSkill,
+  createBoilerplate,
+  listCollections,
+  createCollection,
+  deleteCollection,
+  assignItemToCollection,
+  removeItemFromCollection,
+  toggleFavorite,
+  listFavorites,
+  listDiscoveryCatalog
+} = require('../packages/core/src');
+const { updateSubagent, toggleSubagent, deleteSubagent, registerSubagent, getSubagent } = require('../packages/core/src/subagents');
+const { createSkill, updateSkill, toggleSkill, deleteSkill, getRegisteredSkill: fetchRegisteredSkill } = require('../packages/core/src/skills-loader');
+
+test('Subagents CRUD: create, update, toggle, delete subagent', () => {
+  const agent = registerSubagent({
+    name: 'test_architect',
+    role: 'System Architect',
+    description: 'Designs high-scale distributed systems',
+    systemPrompt: 'You are a lead system architect.',
+    allowedTools: ['tidy_recall', 'tidy_task_add']
+  });
+  assert.strictEqual(agent.name, 'test_architect');
+  assert.strictEqual(agent.role, 'System Architect');
+
+  // Update
+  const updated = updateSubagent('test_architect', { role: 'Principal Architect' });
+  assert.strictEqual(updated.role, 'Principal Architect');
+
+  // Toggle
+  const toggled = toggleSubagent('test_architect', false);
+  assert.strictEqual(toggled.is_enabled, 0);
+
+  // Delete
+  const deleted = deleteSubagent('test_architect');
+  assert.ok(deleted);
+  assert.strictEqual(getSubagent('test_architect'), null);
+});
+
+test('Skills CRUD: create, update, toggle, delete skill with subagent sync', () => {
+  const skill = createSkill({
+    name: 'tidyfactor-test-skill',
+    alias: 'test_skill',
+    description: 'A test skill for Studio',
+    domain: 'ops',
+    allowedTools: ['tidy_memorize']
+  });
+  assert.strictEqual(skill.alias, 'test_skill');
+  assert.strictEqual(skill.domain, 'ops');
+
+  // Verify linked subagent was auto-registered
+  const linkedAgent = getSubagent('test_skill');
+  assert.ok(linkedAgent, 'Linked subagent should be created');
+  assert.strictEqual(linkedAgent.role, 'tidyfactor-test-skill');
+
+  // Update
+  const updated = updateSkill('test_skill', { description: 'Updated test skill description' });
+  assert.strictEqual(updated.description, 'Updated test skill description');
+
+  // Toggle
+  const toggled = toggleSkill('test_skill', false);
+  assert.strictEqual(toggled.is_enabled, 0);
+
+  // Delete
+  const deleted = deleteSkill('test_skill', true);
+  assert.ok(deleted);
+  assert.ok(!getRegisteredSkill('test_skill'));
+  assert.ok(!getSubagent('test_skill'), 'Linked agent should be cleaned up');
+});
+
+test('Studio Collections & Favorites: SQLite SSOT tagging without modifying files', () => {
+  const col = createCollection({ name: 'Security Audits', color: '#ef4444', icon: 'shield' });
+  assert.strictEqual(col.name, 'Security Audits');
+
+  const samplePath = path.join(TEST_DIR, 'sample-skill', 'SKILL.md');
+  assignItemToCollection(col.id, samplePath, 'skill', 'claude');
+
+  const cols = listCollections();
+  const foundCol = cols.find(c => c.id === col.id);
+  assert.ok(foundCol);
+  assert.strictEqual(foundCol.itemsCount, 1);
+
+  // Favorites toggle
+  const fav1 = toggleFavorite(samplePath, 'skill', 'claude');
+  assert.strictEqual(fav1.isFavorite, true);
+
+  const favList = listFavorites();
+  assert.ok(favList.some(f => f.item_path === samplePath));
+
+  const fav2 = toggleFavorite(samplePath, 'skill', 'claude');
+  assert.strictEqual(fav2.isFavorite, false);
+
+  // Remove and delete collection
+  removeItemFromCollection(col.id, samplePath);
+  deleteCollection(col.id);
+  assert.ok(!listCollections().some(c => c.id === col.id));
+});
+
+test('Boilerplate Generator & File I/O: generates valid Claude/Cursor templates', () => {
+  const targetDir = path.join(TEST_DIR, 'generated-skill');
+  const res = createBoilerplate({
+    tool: 'claude',
+    type: 'skill',
+    name: 'quick-crawler',
+    description: 'Scrapes targeted documentation sites',
+    targetDir
+  });
+
+  assert.ok(fs.existsSync(res.filePath));
+  assert.ok(res.content.includes('name: "quick-crawler"'));
+
+  // Read item
+  const item = readStudioItem(res.filePath);
+  assert.strictEqual(item.frontmatter.name, 'quick-crawler');
+  assert.ok(item.charCount > 0);
+
+  // Edit and Save Item (Cmd+S simulation)
+  const modifiedContent = res.content + '\n<!-- edited by test -->';
+  const saveRes = saveStudioItem(res.filePath, modifiedContent);
+  assert.ok(saveRes.ok);
+
+  const reRead = readStudioItem(res.filePath);
+  assert.ok(reRead.rawContent.includes('<!-- edited by test -->'));
+});
+
+test('Skills-LAB 15 Rules Validator: audits SKILL.md compliance', () => {
+  const targetDir = path.join(TEST_DIR, 'generated-skill');
+  const skillFile = path.join(targetDir, 'SKILL.md');
+
+  const report = validateSkill(skillFile);
+  assert.strictEqual(report.valid, true);
+  assert.ok(report.score >= 80);
+  assert.ok(report.checks.length >= 5);
+});
+
+test('Multi-Tool Scanner: discovers tools and handles catalog', () => {
+  const catalog = listDiscoveryCatalog();
+  assert.ok(catalog.length >= 5);
+  assert.ok(catalog.some(c => c.name === 'tidyfactor-doc'));
+
+  const scan = scanAllTools({ cwd: process.cwd(), customDirs: [TEST_DIR] });
+  assert.ok(scan.total >= 1);
+  assert.ok(scan.tools.global);
+});
+
+console.log('\n[12] Knowledge Harvester & Agent Brain Extractor Tests');
+test('Knowledge Harvester: scans agent sources and extracts candidate memories', () => {
+  // Setup simulated agent knowledge folder in test dir
+  const agentDir = path.join(TEST_DIR, 'simulated-agent');
+  fs.mkdirSync(agentDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(agentDir, 'architecture-decision.md'),
+    `---
+domain: Architecture
+scope: global
+---
+# Adopt SQLite WAL Mode for Single Source of Truth
+We decided to adopt SQLite WAL mode to ensure multi-process concurrency across CLI, Electron, and Web.
+`
+  );
+
+  const scanRes = scanKnowledgeSources({ customDirs: [agentDir], checkExisting: true });
+  assert.ok(scanRes.totalScanned > 0, 'Should discover items');
+  const found = scanRes.items.find(i => i.title.includes('Adopt SQLite WAL Mode'));
+  assert.ok(found, 'Should find simulated agent decision');
+  assert.strictEqual(found.category, 'decision');
+  assert.strictEqual(found.alreadyImported, false);
+});
+
+test('Knowledge Harvester: batch imports candidate memories into SQLite SSOT', () => {
+  const itemsToImport = [
+    {
+      title: 'Decoupled Context Engine',
+      summary: 'Separates 3-Ring context layers into Core, Domain, and Task rings',
+      content: 'The 3-Ring context builder partitions cognitive memory into permanent Core truth, contextual Domain rules, and active Task parameters.',
+      category: 'pattern',
+      tier: 'core',
+      importance: 5
+    },
+    {
+      title: 'Contextual Firewall Boundary',
+      summary: 'Prevents dev context bleed into marketing workflows',
+      content: 'Strict domain boundaries and contextual firewall boundary prevent development code snippets from polluting marketing workflows and sales pitch context windows.',
+      category: 'rule',
+      tier: 'project',
+      importance: 4
+    }
+  ];
+
+  const importRes = importBatchMemories(itemsToImport);
+  assert.strictEqual(importRes.ok, true);
+  assert.strictEqual(importRes.importedCount, 2);
+
+  // Verify memories exist in DB and FTS5
+  const recalled = recallMemory({ query: 'bleed marketing', bypassFirewall: true });
+  assert.ok(recalled.length > 0, 'FTS5 should index batch imported items');
+  assert.ok(recalled.some(m => m.summary.includes('marketing workflows') || m.content.includes('marketing workflows')));
+
+  // Test duplication detection on subsequent scan
+  const db = getDb();
+  const checkStmt = db.prepare('SELECT id FROM memory_nodes WHERE summary = ?');
+  const found = checkStmt.get('Prevents dev context bleed into marketing workflows');
+  assert.ok(found, 'Memory should be stored in memory_nodes table');
 });
 
 // Cleanup test DB

@@ -73,6 +73,9 @@ function sendJson(res, statusCode, data, req = null) {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
     'Vary': 'Accept-Encoding'
   };
 
@@ -190,6 +193,39 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 201, { ok: true, data: saved });
     }
 
+    if (pathname === '/api/memories/prune' && req.method === 'POST') {
+      const body = await parseBody(req).catch(() => ({}));
+      const resPruned = core.pruneDecayedMemories(body || {});
+      return sendJson(res, 200, { ok: true, data: resPruned });
+    }
+
+    if ((pathname === '/api/memories/harvest/scan' || pathname === '/api/memories/harvest-scan') && (req.method === 'POST' || req.method === 'GET')) {
+      const body = req.method === 'POST' ? await parseBody(req).catch(() => ({})) : query;
+      const results = core.scanKnowledgeSources(body || {});
+      return sendJson(res, 200, { ok: true, data: results });
+    }
+
+    if ((pathname === '/api/memories/harvest/item' || pathname === '/api/memories/harvest-item') && (req.method === 'POST' || req.method === 'GET')) {
+      const body = req.method === 'POST' ? await parseBody(req).catch(() => ({})) : query;
+      const targetPath = body.sourcePath || body.path || query.path;
+      if (!targetPath) return sendJson(res, 400, { ok: false, error: 'Missing path parameter' });
+      const item = core.readHarvestItem(targetPath);
+      return sendJson(res, 200, { ok: true, data: item });
+    }
+
+    if ((pathname === '/api/memories/harvest/import' || pathname === '/api/memories/harvest-import') && req.method === 'POST') {
+      const body = await parseBody(req);
+      const results = core.importBatchMemories(body.items, body.options || {});
+      return sendJson(res, 201, { ok: true, data: results });
+    }
+
+    if (pathname.startsWith('/api/memories/') && (req.method === 'PUT' || req.method === 'POST') && !pathname.endsWith('/prune') && !pathname.includes('/harvest')) {
+      const id = pathname.split('/')[3];
+      const body = await parseBody(req);
+      const updated = core.updateMemory(id, body);
+      return sendJson(res, 200, { ok: true, data: updated });
+    }
+
     if (pathname.startsWith('/api/memories/') && req.method === 'DELETE') {
       const id = pathname.split('/')[3];
       const deleted = core.forgetMemory(id);
@@ -269,9 +305,36 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ok: true, data: { deleted } });
     }
 
-    // ---------------- Subagents & Skills ----------------
+    // ---------------- Subagents & Skills CRUD ----------------
     if (pathname === '/api/subagents' && req.method === 'GET') {
-      return sendJson(res, 200, { ok: true, data: core.listSubagents() });
+      const includeDisabled = query.all === '1';
+      const domain = query.domain || null;
+      return sendJson(res, 200, { ok: true, data: core.listSubagents({ includeDisabled, domain }) });
+    }
+
+    if (pathname === '/api/subagents' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const agent = core.registerSubagent(body);
+      return sendJson(res, 201, { ok: true, data: agent });
+    }
+
+    if (pathname.startsWith('/api/subagents/') && pathname.endsWith('/toggle') && req.method === 'POST') {
+      const id = pathname.split('/')[3];
+      const toggled = core.toggleSubagent(id);
+      return sendJson(res, 200, { ok: true, data: toggled });
+    }
+
+    if (pathname.startsWith('/api/subagents/') && req.method === 'PUT') {
+      const id = pathname.split('/')[3];
+      const body = await parseBody(req);
+      const updated = core.updateSubagent(id, body);
+      return sendJson(res, 200, { ok: true, data: updated });
+    }
+
+    if (pathname.startsWith('/api/subagents/') && req.method === 'DELETE') {
+      const id = pathname.split('/')[3];
+      const deleted = core.deleteSubagent(id);
+      return sendJson(res, 200, { ok: true, data: { deleted } });
     }
 
     if (pathname === '/api/subagents/run' && req.method === 'POST') {
@@ -281,14 +344,186 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (pathname === '/api/skills' && req.method === 'GET') {
-      const skills = core.listRegisteredSkills ? core.listRegisteredSkills() : [];
+      const includeDisabled = query.all === '1';
+      const skills = core.listRegisteredSkills ? core.listRegisteredSkills({ includeDisabled }) : [];
       return sendJson(res, 200, { ok: true, data: skills });
+    }
+
+    if (pathname === '/api/skills' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const skill = core.createSkill(body);
+      return sendJson(res, 201, { ok: true, data: skill });
+    }
+
+    if (pathname.startsWith('/api/skills/') && pathname.endsWith('/toggle') && req.method === 'POST') {
+      const id = pathname.split('/')[3];
+      const toggled = core.toggleSkill(id);
+      return sendJson(res, 200, { ok: true, data: toggled });
+    }
+
+    if (pathname.startsWith('/api/skills/') && req.method === 'PUT') {
+      const id = pathname.split('/')[3];
+      const body = await parseBody(req);
+      const updated = core.updateSkill(id, body);
+      return sendJson(res, 200, { ok: true, data: updated });
+    }
+
+    if (pathname.startsWith('/api/skills/') && req.method === 'DELETE') {
+      const id = pathname.split('/')[3];
+      const deleted = core.deleteSkill(id);
+      return sendJson(res, 200, { ok: true, data: { deleted } });
     }
 
     if (pathname === '/api/skills/scan' && req.method === 'POST') {
       const body = await parseBody(req);
       const discovered = core.discoverSkills ? core.discoverSkills(body.dir ? [body.dir] : []) : [];
       return sendJson(res, 200, { ok: true, data: discovered });
+    }
+
+    // ---------------- Universal Skills & Agents Studio ----------------
+    if (pathname === '/api/studio/items' && req.method === 'GET') {
+      const force = query.force === '1' || query.rescan === '1';
+      const scanRes = core.scanAllTools({ force });
+      let filtered = scanRes.items;
+
+      if (query.tool) {
+        filtered = filtered.filter(i => i.tools.includes(query.tool));
+      }
+      if (query.type) {
+        filtered = filtered.filter(i => i.itemType === query.type);
+      }
+      if (query.favorites === '1') {
+        filtered = filtered.filter(i => i.isFavorite);
+      }
+      if (query.collection) {
+        filtered = filtered.filter(i => i.collections.includes(query.collection));
+      }
+      if (query.search) {
+        const q = query.search.toLowerCase();
+        filtered = filtered.filter(i =>
+          i.name.toLowerCase().includes(q) ||
+          i.title.toLowerCase().includes(q) ||
+          i.description.toLowerCase().includes(q)
+        );
+      }
+
+      // Compact items for fast serialization
+      const lightItems = filtered.map(i => ({
+        id: i.id,
+        slug: i.slug,
+        name: i.name,
+        title: i.title,
+        itemType: i.itemType,
+        description: i.description,
+        primaryPath: i.primaryPath,
+        tools: i.tools,
+        authorTag: i.authorTag,
+        sizeFormatted: i.sizeFormatted,
+        mtime: i.mtime,
+        isFavorite: i.isFavorite,
+        collections: i.collections
+      }));
+
+      return sendJson(res, 200, {
+        ok: true,
+        data: {
+          total: scanRes.total,
+          skillsCount: scanRes.skillsCount,
+          agentsCount: scanRes.agentsCount,
+          rulesCount: scanRes.rulesCount,
+          favoritesCount: scanRes.favoritesCount,
+          tools: scanRes.tools,
+          filteredCount: lightItems.length,
+          items: lightItems
+        }
+      }, req);
+    }
+
+    if (pathname === '/api/studio/item' && req.method === 'GET') {
+      const itemPath = query.path;
+      if (!itemPath) return sendJson(res, 400, { ok: false, error: 'Path query param required' });
+      try {
+        const item = core.readStudioItem(itemPath);
+        return sendJson(res, 200, { ok: true, data: item }, req);
+      } catch (err) {
+        return sendJson(res, 404, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/studio/item' && req.method === 'PUT') {
+      const body = await parseBody(req);
+      try {
+        const result = core.saveStudioItem(body.path, body.content);
+        if (core.invalidateScanCache) core.invalidateScanCache();
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/studio/item' && req.method === 'DELETE') {
+      const body = await parseBody(req);
+      const targetPath = body.path || query.path;
+      const ok = core.deleteStudioItem(targetPath);
+      if (core.invalidateScanCache) core.invalidateScanCache();
+      return sendJson(res, 200, { ok: true, data: { deleted: ok } });
+    }
+
+    if (pathname === '/api/studio/create' && req.method === 'POST') {
+      const body = await parseBody(req);
+      try {
+        const created = core.createBoilerplate(body);
+        if (core.invalidateScanCache) core.invalidateScanCache();
+        return sendJson(res, 201, { ok: true, data: created });
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/studio/validate' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const report = core.validateSkill(body.path);
+      return sendJson(res, 200, { ok: true, data: report });
+    }
+
+    if (pathname === '/api/studio/collections' && req.method === 'GET') {
+      const cols = core.listCollections();
+      return sendJson(res, 200, { ok: true, data: cols });
+    }
+
+    if (pathname === '/api/studio/collections' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const col = core.createCollection(body);
+      return sendJson(res, 201, { ok: true, data: col });
+    }
+
+    if (pathname.startsWith('/api/studio/collections/') && req.method === 'DELETE') {
+      const id = pathname.split('/')[4];
+      const deleted = core.deleteCollection(id);
+      return sendJson(res, 200, { ok: true, data: { deleted } });
+    }
+
+    if (pathname === '/api/studio/collections/assign' && req.method === 'POST') {
+      const body = await parseBody(req);
+      core.assignItemToCollection(body.collectionId, body.itemPath, body.itemType, body.tool);
+      return sendJson(res, 200, { ok: true, data: { assigned: true } });
+    }
+
+    if (pathname === '/api/studio/collections/remove' && req.method === 'POST') {
+      const body = await parseBody(req);
+      core.removeItemFromCollection(body.collectionId, body.itemPath);
+      return sendJson(res, 200, { ok: true, data: { removed: true } });
+    }
+
+    if (pathname === '/api/studio/favorites/toggle' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const fav = core.toggleFavorite(body.itemPath, body.itemType, body.tool);
+      return sendJson(res, 200, { ok: true, data: fav });
+    }
+
+    if (pathname === '/api/studio/discovery' && req.method === 'GET') {
+      const catalog = core.listDiscoveryCatalog();
+      return sendJson(res, 200, { ok: true, data: catalog });
     }
 
     if (pathname === '/api/brief' && req.method === 'POST') {
@@ -312,6 +547,24 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/db/integrity' && req.method === 'POST') {
       const resDb = core.checkIntegrity();
       return sendJson(res, 200, { ok: true, data: resDb });
+    }
+
+    // ---------------- Data Sovereignty & Portability ----------------
+    if (pathname === '/api/export/markdown' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const resExp = core.exportToMarkdown(body.outputDir);
+      return sendJson(res, 200, { ok: true, data: resExp });
+    }
+
+    if (pathname === '/api/export/json' && req.method === 'GET') {
+      const resExp = core.exportToJson();
+      return sendJson(res, 200, { ok: true, data: resExp });
+    }
+
+    if (pathname === '/api/import/json' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const resImp = core.importFromJson(body.filePath);
+      return sendJson(res, 200, { ok: true, data: resImp });
     }
 
     // ---------------- Office Suite Operations (@tidy/office) ----------------
@@ -448,6 +701,22 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ok: true, data: result });
     }
 
+    if (pathname === '/api/shell/open' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const targetPath = body?.path;
+      if (!targetPath) return sendJson(res, 400, { ok: false, error: 'Path required' });
+      try {
+        const { exec } = require('child_process');
+        const cmd = process.platform === 'win32' ? `explorer "${targetPath.replace(/"/g, '')}"` :
+                    process.platform === 'darwin' ? `open "${targetPath}"` :
+                    `xdg-open "${targetPath}"`;
+        exec(cmd);
+        return sendJson(res, 200, { ok: true, data: { opened: targetPath } });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
 
     // ---------------- Static Asset Delivery (Gzip & Smart Caching) ----------------
     function serveStaticFile(targetPath, isHtml = false) {
@@ -461,7 +730,7 @@ const server = http.createServer(async (req, res) => {
       if (isHtml) {
         headers['Cache-Control'] = 'no-cache, must-revalidate';
       } else {
-        headers['Cache-Control'] = 'public, max-age=86400, must-revalidate';
+        headers['Cache-Control'] = 'no-cache, must-revalidate';
       }
 
       const stream = fs.createReadStream(targetPath);

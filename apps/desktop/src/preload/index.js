@@ -26,8 +26,13 @@ const api = {
   // Memory Operations
   recallMemory: (params) => ipcRenderer.invoke('tidy:memory:recall', params),
   saveMemory: (params) => ipcRenderer.invoke('tidy:memory:save', params),
+  updateMemory: (params) => ipcRenderer.invoke('tidy:memory:update', params),
   listMemories: (params) => ipcRenderer.invoke('tidy:memory:list', params),
   forgetMemory: (id) => ipcRenderer.invoke('tidy:memory:forget', id),
+  pruneMemories: (opts) => ipcRenderer.invoke('tidy:memory:prune', opts),
+  harvestScan: (opts) => ipcRenderer.invoke('tidy:memory:harvest-scan', opts),
+  harvestReadItem: (sourcePath) => ipcRenderer.invoke('tidy:memory:harvest-read', sourcePath),
+  harvestImport: (items, options) => ipcRenderer.invoke('tidy:memory:harvest-import', { items, options }),
 
   // Context & Workspaces
   listContexts: () => ipcRenderer.invoke('tidy:context:list'),
@@ -67,6 +72,11 @@ const api = {
   checkpointWal: () => ipcRenderer.invoke('tidy:db:checkpoint'),
   checkIntegrity: () => ipcRenderer.invoke('tidy:db:integrity'),
 
+  // Data Sovereignty & Portability
+  exportMarkdown: (outputDir) => ipcRenderer.invoke('tidy:export:markdown', outputDir),
+  exportJson: (filePath) => ipcRenderer.invoke('tidy:export:json', filePath),
+  importJson: (filePath) => ipcRenderer.invoke('tidy:import:json', filePath),
+
   // Office Suite Operations (@tidy/office)
   office: {
     getStats: () => ipcRenderer.invoke('tidy:office:stats'),
@@ -82,6 +92,28 @@ const api = {
     addExpense: (params) => ipcRenderer.invoke('tidy:office:expenses:add', params),
     getCashflow: () => ipcRenderer.invoke('tidy:office:cashflow'),
     compileDossier: (clientId) => ipcRenderer.invoke('tidy:office:dossier', clientId)
+  },
+
+  // Universal Skills & Agents Studio
+  studio: {
+    scanAll: (options) => ipcRenderer.invoke('tidy:studio:scanAll', options),
+    readItem: (filePath) => ipcRenderer.invoke('tidy:studio:readItem', filePath),
+    saveItem: (filePath, content) => ipcRenderer.invoke('tidy:studio:saveItem', { filePath, content }),
+    createItem: (params) => ipcRenderer.invoke('tidy:studio:createItem', params),
+    deleteItem: (filePath) => ipcRenderer.invoke('tidy:studio:deleteItem', filePath),
+    validateItem: (filePath) => ipcRenderer.invoke('tidy:studio:validateItem', filePath),
+    listCollections: () => ipcRenderer.invoke('tidy:studio:collections:list'),
+    createCollection: (params) => ipcRenderer.invoke('tidy:studio:collections:create', params),
+    deleteCollection: (id) => ipcRenderer.invoke('tidy:studio:collections:delete', id),
+    assignCollection: (params) => ipcRenderer.invoke('tidy:studio:collections:assign', params),
+    removeCollection: (params) => ipcRenderer.invoke('tidy:studio:collections:remove', params),
+    toggleFavorite: (params) => ipcRenderer.invoke('tidy:studio:favorites:toggle', params),
+    listDiscovery: () => ipcRenderer.invoke('tidy:studio:discovery')
+  },
+
+  // Shell / OS Operations
+  shell: {
+    openPath: (targetPath) => ipcRenderer.invoke('tidy:shell:openPath', targetPath)
   }
 };
 

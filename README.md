@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🤖 Tidy `v1.4.2`
+# 🤖 Tidy `v1.4.5`
 ### Sovereign Personal Assistant & Office Suite with Persistent SQLite Memory & Local Stdio MCP Server
 
-Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a dedicated sovereign assistant layer with zero-config persistent memory, subagent delegation, community skills discovery, full B2B CRM, automated itemized invoicing, expense & cashflow telemetry, and instant SQLite FTS5 search.
+Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a dedicated sovereign assistant layer with zero-config persistent memory, subagent delegation, community skills discovery, Universal Skills & Agents Studio, Knowledge Harvester Studio, full B2B CRM, automated itemized invoicing, expense & cashflow telemetry, and instant SQLite FTS5 search.
 
-[![npm version](https://img.shields.io/badge/version-1.4.2-blue.svg?style=for-the-badge)](package.json)
+[![npm version](https://img.shields.io/badge/version-1.4.5-blue.svg?style=for-the-badge)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 [![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](packages/skill/SKILL.md)
@@ -24,13 +24,13 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 **Tidy** is an autonomous personal assistant and sovereign business operations ecosystem built on top of a single local SQLite database as its permanent Single Source of Truth (SSOT). Designed to eliminate cloud lock-in, Tidy unifies cognitive memory, subagents, business pipelines, and micro-apps across your terminal, code editors, and desktop.
 
 ### 📦 Ecosystem Monorepo Packages & Apps
-- **`@tidy/core` (`packages/core`)**: Pure Node 22 + `node:sqlite` kernel. Houses dynamic schema registration (`registerSchema`), WAL concurrency tuning, bilingual FTS5 BM25 search, 3-Ring Context model, Community Skills Discovery (`skills-loader.js`), Task Brief Synthesizer (`brief-generator.js`), subagent dispatcher, and micro-apps (Tasks, Snippets, Journal, Vault).
+- **`@tidy/core` (`packages/core`)**: Pure Node 22 + `node:sqlite` kernel. Houses dynamic schema registration (`registerSchema`), WAL concurrency tuning, bilingual FTS5 BM25 search, 3-Ring Context model, Community Skills Discovery (`skills-loader.js`), Universal Multi-Tool Directory Scanner (`multi-tool-scanner.js`), Skills-LAB 15-Rule Compliance Auditor (`skills-validator.js`), Boilerplate Scaffolding (`boilerplate-generator.js`), SQLite Collections (`studio.js`), Knowledge Harvester (`knowledge-harvester.js`), Task Brief Synthesizer (`brief-generator.js`), subagent dispatcher, and micro-apps (Tasks, Snippets, Journal, Vault).
 - **`@tidy/office` (`packages/office`)**: Standalone business operations pack inheriting and superseding PocketOffice. Provides B2B CRM deal pipelines (`app_crm_clients`), automated itemized invoicing (`app_invoices`), commercial proposals (`app_proposals`), expense tracking & cashflow P&L (`app_expenses`), calendar scheduler, AI Client Dossier synthesizer, and 1-click PocketOffice migration importer.
 - **`@tidy/cli` (`packages/cli`)**: Terminal command interface (`tidy` binary) with interactive `@clack/prompts` navigation wizard.
-- **`@tidy/mcp` (`packages/mcp`)**: Stdio JSON-RPC 2.0 Model Context Protocol server exposing 16 intelligent tools and 4 dynamic live resources.
+- **`@tidy/mcp` (`packages/mcp`)**: Stdio JSON-RPC 2.0 Model Context Protocol server exposing 20 intelligent tools and 6 dynamic live resources.
 - **`@tidy/skill` (`packages/skill`)**: Official TidyFactor Skills-LAB Community Skill (Apache-2.0, 15 structural rules).
-- **`@tidy/desktop` (`apps/desktop`)**: Native Windows x64 Desktop Application (Electron + secure typed IPC + global floating HUD summoned via `Alt+Space`) featuring dedicated visual tabs for CRM, Invoicing, and Cashflow.
-- **`@tidy/web` (`apps/web`)**: Web Management Console running on local HTTP port `3840`.
+- **`@tidy/desktop` (`apps/desktop`)**: Native Windows x64 Desktop Application (Electron + secure typed IPC + global floating HUD summoned via `Alt+Space`) featuring dedicated visual tabs for Universal Skills & Agents Studio, Knowledge Harvester Studio, CRM, Invoicing, and Cashflow.
+- **`@tidy/web` (`apps/web`)**: Web Management Console running on local HTTP port `3840` with full REST API and Universal Skills & Agents Studio.
 
 ### Core Capabilities
 1. **Pluggable Microkernel Architecture**: Pure separation of concerns between core cognitive memory (`@tidy/core`) and business domains (`@tidy/office`). Allows custom enterprise deployments (DevOps, Agencies, Developers) without engine bloat.
@@ -38,10 +38,12 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
    - **Ring 0 (Sovereign Profile)**: Permanent user preferences and assistant persona (~150 tokens).
    - **Ring 1 (Domain Firewall)**: Context switching between `dev`, `marketing`, and `personal` modes without context bleed.
    - **Ring 2 (Dynamic Working Memory)**: BM25-ranked FTS5 recall of relevant decisions, rules, and patterns.
-3. **Sovereign Business Suite**: Manage client pipelines, generate tax-calculated itemized invoices, record operational expenses, monitor real-time cashflow telemetry, and generate AI-powered client dossiers.
-4. **Pluggable Sub-Agents & Skills Hub**: Built-in core roles (`planner`, `coder`, `researcher`, `scribe`) plus dynamic integration of TidyFactor Skills-LAB community skills (`@marketing`, `@design`, `@doc`, `@next`, `@php`, etc.) as sovereign subagents.
-5. **Self-Contained Task Brief Generator**: Synthesizes autonomous task briefs combining Goal/Mission, 3-Ring Context, Skill Operational Rules, and Verification Gates.
-6. **Multi-Surface Access**: CLI, Stdio MCP Server, Electron Windows Desktop App (`Alt+Space` HUD), and Web Dashboard.
+3. **Universal Skills & Agents Studio**: Native discovery across Claude Code, Cursor, Codex, Windsurf, Copilot, Antigravity/Gemini, Amp, and Aider; built-in monospaced code editor with line numbers, AST sync, and live Markdown preview; non-destructive SQLite SSOT collections & tagging; 15-rule Skills-LAB compliance auditing.
+4. **Knowledge Harvester & Agent Brain Extractor**: Standalone 2-Pane Master-Detail Studio for scanning, on-demand full document inspection, and atomic ingestion of knowledge items from `~/.gemini/knowledge/**`, Antigravity session brain plans, and agent rules with seamless "Open in Studio" bridging.
+5. **Sovereign Business Suite**: Manage client pipelines, generate tax-calculated itemized invoices, record operational expenses, monitor real-time cashflow telemetry, and generate AI-powered client dossiers.
+6. **Pluggable Sub-Agents & Skills Hub**: Built-in core roles (`planner`, `coder`, `researcher`, `scribe`) plus dynamic integration of TidyFactor Skills-LAB community skills (`@marketing`, `@design`, `@doc`, `@next`, `@php`, etc.) as sovereign subagents.
+7. **Self-Contained Task Brief Generator**: Synthesizes autonomous task briefs combining Goal/Mission, 3-Ring Context, Skill Operational Rules, and Verification Gates.
+8. **Multi-Surface Access**: CLI, Stdio MCP Server, Electron Windows Desktop App (`Alt+Space` HUD), and Web Dashboard.
 
 ---
 
@@ -171,8 +173,9 @@ Add to your IDE MCP configuration (`mcp_config.json`):
 }
 ```
 
-### Registered Tools (16 Tools)
+### Registered Tools (20 Tools)
 - **Cognitive & Memory**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`.
+- **Governance & Configuration**: `tidy_config_get`, `tidy_config_set`, `tidy_profile_update`, `tidy_govern_rules`.
 - **Tasks & Agents**: `tidy_task_add`, `tidy_task_list`, `tidy_exec_subagent`, `tidy_list_skills`, `tidy_synthesize_brief`.
 - **Database Telemetry**: `tidy_db_stats`.
 - **Office Suite (`@tidy/office`)**:
@@ -183,11 +186,13 @@ Add to your IDE MCP configuration (`mcp_config.json`):
   - `tidy_cashflow_summary`: Live P&L financial statement.
   - `tidy_client_dossier`: Comprehensive AI client dossier fusing financial ledger and institutional memory.
 
-### Dynamic Live Resources (4 Resources)
+### Dynamic Live Resources (6 Resources)
 - `tidy://profile`: Sovereign user profile and operating tone.
 - `tidy://context/current`: Active project context and domain firewall constraints.
 - `tidy://tasks/pending`: Pending tasks queue.
 - `tidy://office/cashflow`: Real-time financial cashflow statement.
+- `tidy://config`: System configuration provider snapshot.
+- `tidy://govern`: Active contextual governance and firewall policies.
 
 ---
 

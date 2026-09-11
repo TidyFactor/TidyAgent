@@ -13,17 +13,46 @@
 const { getDb } = require('./db');
 const { recallMemory } = require('./memory');
 
-function listSubagents() {
+function listSubagents(options = {}) {
   const db = getDb();
-  return db.prepare('SELECT * FROM subagents WHERE is_enabled = 1 ORDER BY name ASC').all();
+  const includeDisabled = options.includeDisabled || false;
+  const domain = options.domain || null;
+
+  let query = 'SELECT * FROM subagents';
+  const conditions = [];
+  const params = [];
+
+  if (!includeDisabled) {
+    conditions.push('is_enabled = 1');
+  }
+  if (domain) {
+    conditions.push('domain = ?');
+    params.push(domain);
+  }
+
+  if (conditions.length > 0) {
+    query += ' WHERE ' + conditions.join(' AND ');
+  }
+  query += ' ORDER BY name ASC';
+
+  const rows = db.prepare(query).all(...params);
+  return rows.map(r => ({
+    ...r,
+    allowed_tools: JSON.parse(r.allowed_tools_json || '[]')
+  }));
 }
 
 function getSubagent(nameOrId) {
   const db = getDb();
-  return db.prepare('SELECT * FROM subagents WHERE id = ? OR name = ? LIMIT 1').get(nameOrId, nameOrId);
+  const agent = db.prepare('SELECT * FROM subagents WHERE id = ? OR name = ? LIMIT 1').get(nameOrId, nameOrId);
+  if (!agent) return null;
+  return {
+    ...agent,
+    allowed_tools: JSON.parse(agent.allowed_tools_json || '[]')
+  };
 }
 
-function registerSubagent({ name, role, description, systemPrompt, allowedTools = [] }) {
+function registerSubagent({ name, role, description, systemPrompt, allowedTools = [], domain = 'general' }) {
   if (!name || !role || !systemPrompt) {
     throw new Error('name, role, and systemPrompt are required to register a sub-agent.');
   }
@@ -49,6 +78,52 @@ function registerSubagent({ name, role, description, systemPrompt, allowedTools 
   logStmt.run('REGISTER_SUBAGENT', 'subagent_runner', JSON.stringify({ id, name, role }));
 
   return getSubagent(id);
+}
+
+function updateSubagent(idOrName, updates = {}) {
+  const db = getDb();
+  const agent = getSubagent(idOrName);
+  if (!agent) throw new Error(`Subagent "${idOrName}" not found`);
+
+  const role = updates.role !== undefined ? updates.role : agent.role;
+  const description = updates.description !== undefined ? updates.description : agent.description;
+  const systemPrompt = updates.systemPrompt !== undefined ? updates.systemPrompt : agent.system_prompt;
+  const allowedTools = updates.allowedTools !== undefined ? updates.allowedTools : agent.allowed_tools;
+  const isEnabled = updates.isEnabled !== undefined ? (updates.isEnabled ? 1 : 0) : agent.is_enabled;
+
+  db.prepare(`
+    UPDATE subagents
+    SET role = ?, description = ?, system_prompt = ?, allowed_tools_json = ?, is_enabled = ?
+    WHERE id = ?
+  `).run(role, description, systemPrompt, JSON.stringify(allowedTools), isEnabled, agent.id);
+
+  return getSubagent(agent.id);
+}
+
+function toggleSubagent(idOrName, isEnabled = null) {
+  const db = getDb();
+  const agent = getSubagent(idOrName);
+  if (!agent) throw new Error(`Subagent "${idOrName}" not found`);
+
+  const nextState = isEnabled !== null ? (isEnabled ? 1 : 0) : (agent.is_enabled ? 0 : 1);
+  db.prepare('UPDATE subagents SET is_enabled = ? WHERE id = ?').run(nextState, agent.id);
+  return getSubagent(agent.id);
+}
+
+function deleteSubagent(idOrName) {
+  const db = getDb();
+  const agent = getSubagent(idOrName);
+  if (!agent) return false;
+
+  // Protect system agent tidy
+  if (agent.name === 'tidy') {
+    throw new Error('Cannot delete primary system agent "@tidy"');
+  }
+
+  const res = db.prepare('DELETE FROM subagents WHERE id = ?').run(agent.id);
+  const logStmt = db.prepare('INSERT INTO audit_log (action, component, details_json) VALUES (?, ?, ?)');
+  logStmt.run('DELETE_SUBAGENT', 'subagent_runner', JSON.stringify({ id: agent.id, name: agent.name }));
+  return res.changes > 0;
 }
 
 function prepareSubagentContext({ name, task, contextId = null }) {
@@ -136,6 +211,9 @@ module.exports = {
   listSubagents,
   getSubagent,
   registerSubagent,
+  updateSubagent,
+  toggleSubagent,
+  deleteSubagent,
   prepareSubagentContext,
   runSubagent
 };

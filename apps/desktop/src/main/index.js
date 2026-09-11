@@ -154,18 +154,27 @@ function registerIpcHandlers() {
     }
   });
 
-  handle('memory:save', async (_, { content, category, importance, tier }) => {
+  handle('memory:save', async (_, { content, category, importance, tier, contextId, summary }) => {
     try {
-      const saved = core.saveMemory({ content, category, importance, tier });
+      const saved = core.saveMemory({ content, category, importance, tier, contextId, summary });
       return { ok: true, data: saved };
     } catch (err) {
       return { ok: false, error: err.message };
     }
   });
 
-  handle('memory:list', async (_, { limit, category, tier }) => {
+  handle('memory:update', async (_, { id, content, summary, tier, category, importance, contextId }) => {
     try {
-      const list = core.listMemories({ limit, category, tier });
+      const updated = core.updateMemory(id, { content, summary, tier, category, importance, contextId });
+      return { ok: true, data: updated };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:list', async (_, { limit, category, tier, contextId } = {}) => {
+    try {
+      const list = core.listMemories({ limit, category, tier, contextId });
       return { ok: true, data: list };
     } catch (err) {
       return { ok: false, error: err.message };
@@ -176,6 +185,43 @@ function registerIpcHandlers() {
     try {
       const ok = core.forgetMemory(id);
       return { ok: true, data: { deleted: ok } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:prune', async (_, opts) => {
+    try {
+      const res = core.pruneDecayedMemories(opts || {});
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Memory Knowledge Harvester
+  handle('memory:harvest-scan', async (_, opts) => {
+    try {
+      const results = core.scanKnowledgeSources(opts || {});
+      return { ok: true, data: results };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:harvest-read', async (_, sourcePath) => {
+    try {
+      const item = core.readHarvestItem(sourcePath);
+      return { ok: true, data: item };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('memory:harvest-import', async (_, { items, options }) => {
+    try {
+      const results = core.importBatchMemories(items, options || {});
+      return { ok: true, data: results };
     } catch (err) {
       return { ok: false, error: err.message };
     }
@@ -392,6 +438,34 @@ function registerIpcHandlers() {
     }
   });
 
+  // Data Sovereignty & Portability
+  handle('export:markdown', async (_, outputDir) => {
+    try {
+      const res = core.exportToMarkdown(outputDir);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('export:json', async (_, filePath) => {
+    try {
+      const res = core.exportToJson(filePath);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('import:json', async (_, filePath) => {
+    try {
+      const res = core.importFromJson(filePath);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
   // Office Suite Handlers (@tidy/office)
   handle('office:stats', async () => {
     try {
@@ -527,6 +601,139 @@ function registerIpcHandlers() {
       if (!office) return { ok: false, error: 'Office pack not installed' };
       const dossier = office.compileClientDossier(clientId);
       return { ok: true, data: dossier };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Universal Skills & Agents Studio
+  handle('studio:scanAll', async (_, options) => {
+    try {
+      const scanRes = core.scanAllTools(options || {});
+      return { ok: true, data: scanRes };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:readItem', async (_, filePath) => {
+    try {
+      const item = core.readStudioItem(filePath);
+      return { ok: true, data: item };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:saveItem', async (_, { filePath, content }) => {
+    try {
+      const res = core.saveStudioItem(filePath, content);
+      if (core.invalidateScanCache) core.invalidateScanCache();
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:createItem', async (_, params) => {
+    try {
+      const created = core.createBoilerplate(params);
+      if (core.invalidateScanCache) core.invalidateScanCache();
+      return { ok: true, data: created };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:deleteItem', async (_, filePath) => {
+    try {
+      const deleted = core.deleteStudioItem(filePath);
+      if (core.invalidateScanCache) core.invalidateScanCache();
+      return { ok: true, data: { deleted } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:validateItem', async (_, filePath) => {
+    try {
+      const report = core.validateSkill(filePath);
+      return { ok: true, data: report };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:collections:list', async () => {
+    try {
+      const cols = core.listCollections();
+      return { ok: true, data: cols };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:collections:create', async (_, params) => {
+    try {
+      const col = core.createCollection(params);
+      return { ok: true, data: col };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:collections:delete', async (_, id) => {
+    try {
+      const deleted = core.deleteCollection(id);
+      return { ok: true, data: { deleted } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:collections:assign', async (_, { collectionId, itemPath, itemType, tool }) => {
+    try {
+      core.assignItemToCollection(collectionId, itemPath, itemType, tool);
+      return { ok: true, data: { assigned: true } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:collections:remove', async (_, { collectionId, itemPath }) => {
+    try {
+      core.removeItemFromCollection(collectionId, itemPath);
+      return { ok: true, data: { removed: true } };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:favorites:toggle', async (_, { itemPath, itemType, tool }) => {
+    try {
+      const fav = core.toggleFavorite(itemPath, itemType, tool);
+      return { ok: true, data: fav };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('studio:discovery', async () => {
+    try {
+      const catalog = core.listDiscoveryCatalog();
+      return { ok: true, data: catalog };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // Native OS Shell operations
+  handle('shell:openPath', async (_, targetPath) => {
+    try {
+      if (!targetPath) return { ok: false, error: 'Path required' };
+      const err = await shell.openPath(targetPath);
+      if (err) return { ok: false, error: err };
+      return { ok: true, data: { opened: targetPath } };
     } catch (err) {
       return { ok: false, error: err.message };
     }

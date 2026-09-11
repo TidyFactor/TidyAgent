@@ -1,6 +1,6 @@
 {
   "name": "@tidy/mcp",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "Tidy Local Stdio Model Context Protocol (MCP) Server",
   "main": "src/server.js",
   "bin": {

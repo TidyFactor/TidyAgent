@@ -4,6 +4,25 @@ All notable changes to the `tidy` skill and CLI engine are documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.5] - 2026-09-11
+
+### Added
+- **Knowledge Harvester & Agent Brain Extractor Studio**:
+  - Standalone 2-Pane Master-Detail Studio for scanning and inspecting agent memories and session plans.
+  - On-demand streaming of full markdown documents with YAML frontmatter parsing.
+  - Non-destructive "Open in Studio" bridging to Universal Skills & Agents Studio.
+  - Atomic batch and single imports to SQLite SSOT with FTS5 BM25 indexing.
+
+## [1.4.4] - 2026-09-11
+
+### Added
+- **Universal Skills & Agents Studio**:
+  - Multi-tool discovery across Claude Code, Cursor, Codex, Windsurf, Copilot, Aider, Amp, Antigravity/Gemini.
+  - Built-in monospaced editor with `Cmd+S`/`Ctrl+S` instant save and YAML frontmatter synchronization.
+  - Non-destructive SQLite collections (`skill_collections`, `skill_collection_items`) and favorites.
+  - 15-Rule Skills-LAB compliance validator with real-time health grading.
+  - Multi-platform starter boilerplate generator.
+
 ## [1.4.2] - 2026-09-08
 
 ### Added

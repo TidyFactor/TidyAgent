@@ -1,6 +1,6 @@
 {
   "name": "@tidy/core",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "Tidy Sovereign Engine Kernel — SQLite SSOT, FTS5 Memory Engine, Subagents & Micro-Apps",
   "main": "src/index.js",
   "license": "Apache-2.0",

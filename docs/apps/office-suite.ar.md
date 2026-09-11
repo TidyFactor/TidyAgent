@@ -113,6 +113,6 @@ tidy office cashflow --period "Q3-2026"
 
 ```bash
 # استيراد كافة العملاء والفواتير تلقائياً إلى قاعدة SQLite
-tidy office import-pocket --path "c:/wamp64/www/PocketOffice/resources/app/data"
+tidy office import-pocket --path "~/PocketOffice/resources/app/data"
 ```
 يقوم الأمر بالتحقق من صحة المخطط (Schema Validation)، منع تكرار المعرفات، وترقية البيانات فوراً إلى جداول SQLite المؤمّنة بـ WAL.

@@ -4,6 +4,36 @@ All notable changes to the `tidy` skill and CLI engine are documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.5] - 2026-09-11
+
+### Added
+- **Knowledge Harvester & Agent Brain Extractor Studio (`@tidy/core`, `apps/desktop`, `apps/web`)**:
+  - **Autonomous Knowledge Scanner (`packages/core/src/knowledge-harvester.js`)**: Scans agent knowledge bases and brains across `~/.gemini/knowledge/**`, `~/.gemini/antigravity-ide/brain/**/implementation_plan.md` & `walkthrough.md`, `.cursor/rules`, `~/.gemini/config/rules`, and `GEMINI.md`. Detects duplication and flags existing items with SQLite content fingerprints.
+  - **On-Demand Full Document Streaming (`readHarvestItem`)**: High-performance lazy-loading of full markdown documents with YAML frontmatter parsing, line counts, and metadata inspection without slowing down initial directory scans.
+  - **Standalone 2-Pane Master-Detail Studio (`data-tab="harvester"`)**:
+    - Master list pane with live search, status chips (`all`, `new`, `imported`, `knowledge`, `brain`, `rules`), multi-select checkboxes, and atomic batch selection.
+    - Detail inspector pane with real-time Markdown document rendering, inline metadata tuning (category, tier, importance), and copyable file paths.
+  - **Cross-Studio Interoperability**: "Open in Studio" integration (`window.openItemInStudio`) that seamlessly routes discovered skills, agents, and rules directly into the Universal Skills & Agents Studio editor.
+  - **Atomic Batch Memory Ingestion (`importBatchMemories`)**: Safe SQLite transactional import with FTS5 BM25 index synchronization and audit logging.
+  - **Full IPC and Web REST Parity**: Added `tidy:memory:harvest-scan`, `tidy:memory:harvest-read`, `tidy:memory:harvest-import` to Electron IPC and `/api/memories/harvest/*` to Web Management Console.
+  - **Bilingual Pure Dictionaries**: Clean, separate Arabic and English translations in `ar.json` and `en.json` without mixed parenthetical terms.
+  - **Comprehensive Automated Tests**: Suite [12] expanded in `tests/run.js` verifying 46/46 passed tests (100% pass rate).
+
+## [1.4.4] - 2026-09-11
+
+### Added
+- **Universal Skills & Agents Studio (`@tidy/core`, `apps/desktop`, `apps/web`)**:
+  - **Multi-Tool Discovery Engine (`multi-tool-scanner.js`)**: Discovers skills and agents across Claude Code (`~/.claude/skills`), Cursor (`.cursor/rules`), Codex (`~/.codex/skills`), Windsurf (`.windsurf/rules`), Copilot (`.github/copilot-instructions.md`), Aider, Amp, Antigravity/Gemini (`.gemini/antigravity-ide/builtin/skills`, `~/.gemini/config/skills`), and custom workspace locations.
+  - **Built-in Monospaced Editor**: Full-featured code editor with `Cmd+S` / `Ctrl+S` instant saving, dirty state indicators, line-counter metadata, and automatic YAML frontmatter synchronization.
+  - **Non-Destructive SQLite SSOT Collections (`skill_collections`, `skill_collection_items`)**: Organize skills into custom workflows (e.g. Marketing, Design, Development) and star favorites without modifying or relocating source files on disk.
+  - **Skills-LAB 15-Rule Compliance Auditor (`skills-validator.js`)**: Real-time linting of YAML budget (<= 1024 chars), description quality, memory freshness timestamps, and relative reference integrity.
+  - **Universal Starter Generator (`boilerplate-generator.js`)**: Instant scaffolding for Claude Code, Cursor, Codex, Windsurf, and Skills-LAB compliant skills and subagents.
+  - **Luxury 3-Pane Management UI**: Apple x Cartier aesthetic with sidebar tool/collection filtering, searchable FTS5 BM25 item list with status badges, split-view inspector/editor, and modal wizards for creation, validation, and tagging.
+- **REST & IPC Parity**:
+  - Stdio MCP, Web REST (`/api/studio/*`), and Electron typed IPC (`tidy:studio:*`) parity across all features.
+- **Comprehensive Automated Tests**:
+  - Added Suite [13] in `tests/run.js` with 100% pass rate (43/43 tests passing).
+
 ## [1.4.3] - 2026-09-08
 
 ### Added

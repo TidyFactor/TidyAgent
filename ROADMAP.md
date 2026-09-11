@@ -14,8 +14,10 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 └────────────────────────────────────────────────────────────────────────┘
   Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
   Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
-  Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2 - Current)
+  Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2)
   Phase 3: Cognitive OS Services & Platform Hubs (v1.4.3-v1.5) 🚀 In Progress
+    ├── v1.4.3 Core Governance & Settings Engine               ✅ Done (v1.4.3)
+    └── v1.4.4 Universal Skills & Agents Studio                ✅ Done (v1.4.4 - Current)
   Phase 4: Sovereign Office & Commerce Suite (v1.6.0)          ⏳ Planned
   Phase 5: Multi-Device Sync & Cross-Platform (v2.0.0)         🔮 Vision
 ```
@@ -76,18 +78,24 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 - [x] Fast CLI one-liners: `tidy govern` / `tidy gov`, `tidy cfg`, `tidy who --update`.
 - [x] Full MCP Server, REST API, and Desktop IPC parity for governance and configuration.
 
-#### 📦 `v1.4.4` — Professional Task Board v2 (Kanban & Subagent Delegation) 🎯 [Next Immediate Release]
+#### 📦 `v1.4.4` — Universal Skills & Agents Studio (Multi-Tool Discovery, Monospaced Editor & Full CRUD) ✅ (Completed — v1.4.4)
+- [x] **Multi-Tool Directory Scanner**: Seamless discovery across Global (`~/.agents/skills/`), Claude Code (`~/.claude/skills/`, `~/.claude/agents/`), Cursor (`~/.cursor/skills/`, `~/.cursor/rules`, `~/.cursor/agents/`), Windsurf (`~/.codeium/windsurf/memories/`, `~/.windsurf/rules`), Codex (`~/.codex/skills/`, `~/.codex/agents/`), Amp (`~/.config/amp/skills/`), Antigravity (`~/.gemini/config/skills`), plus project-level Copilot & Aider detection.
+- [x] **3-Pane Luxury Studio GUI**: Apple-grade 3-column workspace (Sidebar: Library/Tools/Collections, Middle: Searchable Item Grid/List, Right: Monospaced Editor & YAML/Markdown Inspector).
+- [x] **Full CRUD & Boilerplate Generator**: Create, read, edit, delete, and duplicate skills/agents with correct tool-specific boilerplates and YAML frontmatter.
+- [x] **Built-in Monospaced Editor**: Monospaced code editor with line numbers, Cmd+S / Ctrl+S instant save, frontmatter AST parsing, and live rendered Markdown preview.
+- [x] **Collections & Non-Destructive Tagging**: Organize skills and agents into user collections (Marketing, Design, Development) stored in SQLite SSOT without touching source files.
+- [x] **Real-Time File Watching**: Instant auto-sync and refresh on disk changes across all watched tool directories.
+- [x] **FTS5 BM25 Full-Text Search**: Instant search across skill/agent name, description, tags, and full Markdown body content.
+- [x] **Remote Servers & Skills Discovery Hub**: Connect to remote registries (OpenClaw, Hermes, TidyFactor Skills-LAB) to browse, inspect, and install skills in 1 click.
+
+#### 📦 `v1.4.5` — Professional Task Board v2 (Kanban & Subagent Delegation) 🎯 [Next Immediate Release]
 - [ ] Comprehensive Kanban and list views with fluid drag-and-drop state transitions.
 - [ ] Deep integration with Subagent delegation (`@planner`, `@coder`, `@researcher`, `@scribe`).
 - [ ] Autonomous task-to-memory auto-synthesis loop on task completion.
 
-#### 📦 `v1.4.5` — Cognitive Memory, Advanced Search & Rich Text Editor
+#### 📦 `v1.4.6` — Cognitive Memory, Advanced Search & Rich Text Editor
 - [ ] Full-featured Markdown/Text editor with syntax highlighting, live preview, auto-save, and tag extraction.
 - [ ] Enhanced FTS5 BM25 search with hybrid filtering, query operators, and visual memory inspector.
-
-#### 📦 `v1.4.6` — Agents & Skills Management Hub (Full CRUD)
-- [ ] Full lifecycle management (Create, Read, Update, Delete) for Subagents and Skills.
-- [ ] Capability definition, system prompt editing, tool bindings, and contextual firewall assignment.
 
 #### 📦 `v1.4.7` — Core Productivity Micro-Apps Hardening
 - [ ] **Snippets Vault**: Syntax-highlighted code vault with tags, language filter, 1-click copy, and IDE export.

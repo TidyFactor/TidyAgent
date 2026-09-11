@@ -4,89 +4,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tidy Studio — Sovereign Assistant & Memory OS</title>
+  <link rel="icon" type="image/png" href="logo.png?v=1.4.4">
+  <link rel="shortcut icon" href="favicon.ico?v=1.4.4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   </noscript>
-  <link rel="stylesheet" href="qahera.css">
-  <link rel="stylesheet" href="qahera-themes.css">
-  <link rel="stylesheet" href="css/01-variables.css">
-  <link rel="stylesheet" href="css/02-layout.css">
-  <link rel="stylesheet" href="css/03-components.css">
-  <link rel="stylesheet" href="css/04-apps.css">
+  <link rel="stylesheet" href="qahera.css?v=1.4.4">
+  <link rel="stylesheet" href="qahera-themes.css?v=1.4.4">
+  <link rel="stylesheet" href="css/01-variables.css?v=1.4.4">
+  <link rel="stylesheet" href="css/02-layout.css?v=1.4.4">
+  <link rel="stylesheet" href="css/03-components.css?v=1.4.4">
+  <link rel="stylesheet" href="css/04-apps.css?v=1.4.4">
+  <link rel="stylesheet" href="css/05-studio.css?v=1.4.4">
+  <link rel="stylesheet" href="css/06-dispatcher.css?v=1.4.4">
 </head>
 <body data-theme="zeitoun" data-mode="light">
   <div class="app-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-logo">
-          <svg class="qhr-icon qhr-icon--brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+    <aside class="sidebar" id="mainSidebar">
+      <!-- 1. Top Section: Active Workspace Dropdown Menu Component -->
+      <div class="sidebar-header-top">
+        <div class="workspace-badge" id="currentWorkspaceBadge" role="button" tabindex="0" title="Switch Workspace Context / تبديل مساحة العمل" aria-haspopup="true" aria-expanded="false">
+          <div class="workspace-badge-header">
+            <div class="workspace-badge-status">
+              <span class="badge-dot"></span>
+              <span class="badge-label" data-i18n="activeWorkspace">Active Workspace</span>
+            </div>
+            <svg class="workspace-badge-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <div class="workspace-badge-body">
+            <span class="badge-name" id="activeWorkspaceName">General Workspace</span>
+          </div>
+          <div class="workspace-badge-footer">
+            <div class="storage-status-inline" title="SQLite Single Source of Truth">
+              <span class="status-indicator online"></span>
+              <span class="status-text" id="storagePathLabel">SSOT: Active</span>
+            </div>
+          </div>
         </div>
-        <div class="brand-text">
-          <h2>Tidy Studio</h2>
-          <span class="version-pill">v1.4.2 Sovereign</span>
+
+        <!-- Floating Workspace Switcher Dropdown Menu -->
+        <div class="workspace-dropdown-menu" id="workspaceDropdownMenu" hidden>
+          <div class="workspace-dropdown-header">
+            <span class="ws-drop-title" data-i18n="workspaces">Workspaces</span>
+            <span class="ws-drop-count" id="workspaceCountBadge">1 Active</span>
+          </div>
+          <div class="workspace-dropdown-list" id="workspaceDropdownList">
+            <!-- Dynamically populated from SQLite contexts -->
+          </div>
         </div>
       </div>
 
-      <div class="workspace-badge" id="currentWorkspaceBadge">
-        <span class="badge-dot"></span>
-        <div class="badge-info">
-          <span class="badge-label">Active Workspace</span>
-          <span class="badge-name" id="activeWorkspaceName">General Workspace</span>
-        </div>
-      </div>
-
+      <!-- 2. Navigation Menu -->
       <nav class="sidebar-nav">
-        <div class="nav-section-title">PLATFORM</div>
-        <button class="nav-item active" data-tab="overview">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg></span> Overview
+        <div class="nav-section-title" data-i18n="nav.platform">PLATFORM</div>
+        <!-- 1. Overview -->
+        <button class="nav-item active" data-tab="overview" title="Overview">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg></span> <span class="nav-label" data-i18n="nav.overview">Overview</span>
         </button>
-        <button class="nav-item" data-tab="memory">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span> Memory Explorer
+        <!-- 2. Skills & Agents Studio -->
+        <button class="nav-item" data-tab="subagents" title="Skills & Agents Studio">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg></span> <span class="nav-label" data-i18n="nav.subagents">Skills & Agents</span>
         </button>
-        <button class="nav-item" data-tab="tasks">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span> Tasks Board
+        <!-- 3. Memory Explorer -->
+        <button class="nav-item" data-tab="memory" title="Memory Explorer">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span> <span class="nav-label" data-i18n="nav.memory">Memory Explorer</span>
         </button>
-        <button class="nav-item" data-tab="subagents">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg></span> Subagents Hub
+        <!-- 4. Knowledge Harvester -->
+        <button class="nav-item" data-tab="harvester" title="Knowledge Harvester">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span> <span class="nav-label" data-i18n="nav.harvester">Knowledge Harvester</span>
         </button>
-
-        <div class="nav-section-title">MICRO-APPS</div>
-        <button class="nav-item" data-tab="snippets">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></span> Code Snippets
-        </button>
-        <button class="nav-item" data-tab="journal">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></span> Daily Journal
-        </button>
-        <button class="nav-item" data-tab="vault">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span> Vault & Secrets
+        <!-- 5. Agent Runner / Dispatcher -->
+        <button class="nav-item" data-tab="dispatcher" title="Agent Runner">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="12" x2="5" y2="12"/></svg></span> <span class="nav-label" data-i18n="nav.dispatcher">Agent Runner</span>
         </button>
 
-        <div class="nav-section-title">OFFICE SUITE</div>
-        <button class="nav-item" data-tab="crm">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span> CRM Pipeline
+        <!-- Apps Section (Includes Tasks Board) -->
+        <div class="nav-section-title" data-i18n="nav.microApps">MICRO-APPS</div>
+        <!-- Tasks Board moved to Apps -->
+        <button class="nav-item" data-tab="tasks" title="Tasks Board">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span> <span class="nav-label" data-i18n="nav.tasks">Tasks Board</span>
         </button>
-        <button class="nav-item" data-tab="invoices">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg></span> Invoices & Billing
+        <button class="nav-item" data-tab="snippets" title="Code Snippets">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></span> <span class="nav-label" data-i18n="nav.snippets">Code Snippets</span>
         </button>
-        <button class="nav-item" data-tab="cashflow">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></span> Cashflow & P&L
+        <button class="nav-item" data-tab="journal" title="Daily Journal">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></span> <span class="nav-label" data-i18n="nav.journal">Daily Journal</span>
+        </button>
+        <button class="nav-item" data-tab="vault" title="Vault & Secrets">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span> <span class="nav-label" data-i18n="nav.vault">Vault & Secrets</span>
         </button>
 
-        <div class="nav-section-title">SYSTEM</div>
-        <button class="nav-item" data-tab="settings">
-          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span> Settings & Health
+        <div class="nav-section-title" data-i18n="nav.officeSuite">OFFICE SUITE</div>
+        <button class="nav-item" data-tab="crm" title="CRM Pipeline">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span> <span class="nav-label" data-i18n="nav.crm">CRM Pipeline</span>
+        </button>
+        <button class="nav-item" data-tab="invoices" title="Invoices & Billing">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg></span> <span class="nav-label" data-i18n="nav.invoices">Invoices & Billing</span>
+        </button>
+        <button class="nav-item" data-tab="cashflow" title="Cashflow & P&L">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></span> <span class="nav-label" data-i18n="nav.cashflow">Cashflow & P&L</span>
+        </button>
+
+        <div class="nav-section-title" data-i18n="nav.system">SYSTEM</div>
+        <button class="nav-item" data-tab="settings" title="Settings & Health">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span> <span class="nav-label" data-i18n="nav.settings">Settings & Health</span>
         </button>
       </nav>
 
+      <!-- 3. Footer: App Branding & Version Badge + Collapse Sidebar Toggle -->
       <div class="sidebar-footer">
-        <div class="storage-status">
-          <span class="status-indicator online"></span>
-          <span class="status-text" id="storagePathLabel">SQLite SSOT: Active</span>
+        <div class="sidebar-brand-badge" title="Tidy Studio Sovereign Assistant">
+          <div class="brand-logo-mini">
+            <img src="logo.png?v=1.4.4" alt="Tidy Studio" class="brand-logo-img" />
+          </div>
+          <div class="brand-badge-info">
+            <span class="brand-badge-title">Tidy Studio</span>
+            <span class="version-pill">v1.4.4 Sovereign</span>
+          </div>
         </div>
+        <button class="btn-sidebar-toggle" id="btnToggleSidebar" title="Collapse Sidebar / طي القائمة (Ctrl+B)" aria-label="Toggle Sidebar">
+          <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
       </div>
     </aside>
 
@@ -95,6 +139,9 @@
       <!-- Top Header -->
       <header class="top-bar">
         <div class="top-bar-start">
+          <button class="btn-topbar-sidebar-toggle" id="btnTopbarToggleSidebar" title="Toggle Sidebar / إظهار أو طي القائمة (Ctrl+B)" aria-label="Toggle Sidebar">
+            <svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
           <div class="global-search-wrap">
             <span class="search-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></span>
             <input type="text" id="globalSearchInput" placeholder="Quick Search Memory (FTS5 BM25)... Press / to focus" />
@@ -107,9 +154,60 @@
             <span id="themeToggleIcon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
           </button>
 
-          <button class="btn-lang-toggle" id="btnToggleLang" title="Toggle Language / تبديل اللغة">
-            <span id="langToggleIcon"></span>
-          </button>
+          <!-- Circular Flag Language Selector (Qahera-native) -->
+          <div class="qhr-dropdown" id="langDropdown">
+            <button class="btn-lang-toggle" id="btnToggleLang" type="button" aria-haspopup="true" aria-expanded="false" title="Select Language / اختيار اللغة">
+              <span class="lang-current-flag" id="langCurrentFlag"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" rx="2" fill="#006C35"/><path d="M4 5.2c1-.3 2.2-.3 3.3 0 .7.2 1.4.2 2.1 0 1-.3 2.3-.3 3.3 0 .6.2 1.2.2 1.8 0v.8c-.6.2-1.2.2-1.8 0-1-.3-2.3-.3-3.3 0-.7.2-1.4.2-2.1 0-1-.3-2.3-.3-3.3 0v-.8z" fill="#ffffff"/><path d="M4.5 8h10v.7h-10zm1.3-.8v2.3M13.5 7.6l1.2.7-1.2.7z" fill="#ffffff"/></svg></span>
+            </button>
+            <div class="qhr-dropdown-menu qhr-dropdown-menu--compact qhr-dropdown-menu--end" id="langMenu" role="menu">
+              <div class="lang-menu-header">
+                <span class="lang-menu-header-title" data-i18n="lang.selectLanguage">Select Language</span>
+                <span class="lang-menu-header-badge">8</span>
+              </div>
+              <div class="lang-menu-list">
+                <button class="qhr-dropdown-item lang-item active" data-lang="ar" role="menuitem" aria-selected="true">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" rx="2" fill="#006C35"/><path d="M4 5.2c1-.3 2.2-.3 3.3 0 .7.2 1.4.2 2.1 0 1-.3 2.3-.3 3.3 0 .6.2 1.2.2 1.8 0v.8c-.6.2-1.2.2-1.8 0-1-.3-2.3-.3-3.3 0-.7.2-1.4.2-2.1 0-1-.3-2.3-.3-3.3 0v-.8z" fill="#ffffff"/><path d="M4.5 8h10v.7h-10zm1.3-.8v2.3M13.5 7.6l1.2.7-1.2.7z" fill="#ffffff"/></svg></span>
+                  <span class="lang-name">العربية</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="en" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" rx="2" fill="#012169"/><path d="M0 0l20 14M20 0L0 14" stroke="#ffffff" stroke-width="2.6"/><path d="M0 0l20 14M20 0L0 14" stroke="#C8102E" stroke-width="1.3"/><path d="M10 0v14M0 7h20" stroke="#ffffff" stroke-width="4.2"/><path d="M10 0v14M0 7h20" stroke="#C8102E" stroke-width="2.5"/></svg></span>
+                  <span class="lang-name">English</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="fr" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="6.66" height="14" fill="#002654"/><rect x="6.66" width="6.68" height="14" fill="#FFFFFF"/><rect x="13.34" width="6.66" height="14" fill="#ED2939"/></svg></span>
+                  <span class="lang-name">Français</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="es" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="3.5" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/><rect y="10.5" width="20" height="3.5" fill="#AA151B"/><rect x="4" y="5.2" width="2.6" height="3.6" rx="0.6" fill="#AA151B"/><circle cx="5.3" cy="6.8" r="0.8" fill="#F1BF00"/></svg></span>
+                  <span class="lang-name">Español</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="de" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="4.66" fill="#000000"/><rect y="4.66" width="20" height="4.68" fill="#DD0000"/><rect y="9.34" width="20" height="4.66" fill="#FFCC00"/></svg></span>
+                  <span class="lang-name">Deutsch</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="fa" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="4.66" fill="#239F40"/><rect y="4.66" width="20" height="4.68" fill="#FFFFFF"/><rect y="9.34" width="20" height="4.66" fill="#DA0000"/><circle cx="10" cy="7" r="1.4" fill="#DA0000"/><circle cx="10" cy="7" r="0.7" fill="#FFFFFF"/></svg></span>
+                  <span class="lang-name">فارسی</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="zh" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#DE2910"/><polygon points="4,2.2 4.6,3.8 6.3,3.8 4.9,4.8 5.4,6.4 4,5.4 2.6,6.4 3.1,4.8 1.7,3.8 3.4,3.8" fill="#FFDE00"/><circle cx="7.8" cy="2.8" r="0.6" fill="#FFDE00"/><circle cx="8.8" cy="4.2" r="0.6" fill="#FFDE00"/><circle cx="8.8" cy="6" r="0.6" fill="#FFDE00"/><circle cx="7.8" cy="7.4" r="0.6" fill="#FFDE00"/></svg></span>
+                  <span class="lang-name">中文</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+                <button class="qhr-dropdown-item lang-item" data-lang="pt" role="menuitem" aria-selected="false">
+                  <span class="lang-flag-wrapper"><svg class="lang-flag-svg" viewBox="0 0 20 14" width="20" height="14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#009C3B"/><polygon points="10,1.8 18,7 10,12.2 2,7" fill="#FFDF00"/><circle cx="10" cy="7" r="2.7" fill="#002776"/><path d="M7.7 7.2a2.7 2.7 0 0 1 4.5-.7" stroke="#FFFFFF" stroke-width="0.6" fill="none"/></svg></span>
+                  <span class="lang-name">Português</span>
+                  <span class="lang-check-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
 
           <div class="select-container">
             <select id="workspaceSelector" class="workspace-select" title="Switch Workspace Context">
@@ -321,44 +419,240 @@
         <section class="tab-pane" id="pane-memory">
           <div class="section-header">
             <div>
-              <h1 id="headerTitleMemory">Memory Explorer</h1>
-              <p class="subtitle" id="headerSubtitleMemory">Search, filter, and inspect persistent facts, rules, and architectural decisions</p>
+              <div class="section-kicker">
+                <span class="kicker-dot cyan"></span>
+                <span id="kickerMemory" data-i18n="memory.kicker">محرك الذاكرة المعرفية</span>
+              </div>
+              <h1 id="headerTitleMemory" data-i18n="memory.title">مستكشف الذاكرة</h1>
+              <p class="subtitle" id="headerSubtitleMemory" data-i18n="memory.subtitle">البحث والتصفية وإدارة المعارف والقرارات الدائمة</p>
             </div>
-            <button class="btn btn-primary" id="btnCreateMemory">+ Add Memory Node</button>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-secondary" id="btnHarvestMemories" data-goto="harvester" title="استخراج المعارف من بيئات الوكلاء">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                <span data-i18n="memory.harvestBtn">استخراج المعارف</span>
+              </button>
+              <button class="btn btn-secondary" id="btnPruneMemories" title="تنظيف الذكريات العابرة المتراجعة">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                <span data-i18n="memory.pruneBtn">تنظيف العابر</span>
+              </button>
+              <button class="btn btn-primary" id="btnCreateMemory">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+                <span data-i18n="memory.addBtn">+ إضافة ذاكرة</span>
+              </button>
+            </div>
           </div>
 
-          <div class="filter-bar">
-            <div class="filter-group">
-              <label>Filter by Category:</label>
-              <select id="memoryCategoryFilter" class="form-select">
-                <option value="">All Categories</option>
-                <option value="fact">Fact</option>
-                <option value="decision">Decision</option>
-                <option value="pattern">Pattern</option>
-                <option value="preference">Preference</option>
-                <option value="task">Task</option>
-                <option value="rule">Rule</option>
-              </select>
+          <!-- Memory Telemetry Strip -->
+          <div class="memory-telemetry-bar" id="memoryTelemetryBar">
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="memory.telemetryTotal">إجمالي الذكريات:</span>
+              <strong class="chip-value" id="memTelemetryTotal">--</strong>
+            </div>
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="memory.telemetryCore">نواة دائم:</span>
+              <strong class="chip-value cyan" id="memTelemetryCore">--</strong>
+            </div>
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="memory.telemetryDecisions">قرارات:</span>
+              <strong class="chip-value green" id="memTelemetryDecisions">--</strong>
+            </div>
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="memory.telemetryEphemeral">عابر:</span>
+              <strong class="chip-value amber" id="memTelemetryEphemeral">--</strong>
+            </div>
+          </div>
+
+          <!-- Memory Toolbar: Filter Chips & Search -->
+          <div class="memory-toolbar">
+            <div class="memory-filter-chips" id="memoryFilterChips">
+              <button class="filter-chip active" data-chip-cat="" data-i18n="memory.chips.all">الكل</button>
+              <button class="filter-chip" data-chip-cat="decision" data-i18n="memory.chips.decisions">القرارات</button>
+              <button class="filter-chip" data-chip-cat="rule" data-i18n="memory.chips.rules">القواعد</button>
+              <button class="filter-chip" data-chip-cat="fact" data-i18n="memory.chips.facts">الحقائق</button>
+              <button class="filter-chip" data-chip-tier="core" data-i18n="memory.chips.core">النواة</button>
             </div>
 
-            <div class="filter-group">
-              <label>Tier:</label>
-              <select id="memoryTierFilter" class="form-select">
-                <option value="">All Tiers</option>
-                <option value="core">Core (Permanent)</option>
-                <option value="project">Project</option>
-                <option value="session">Session</option>
-                <option value="ephemeral">Ephemeral</option>
-              </select>
-            </div>
-
-            <div class="search-input-wrap">
-              <input type="text" id="memorySearchInput" class="form-input" placeholder="Search with FTS5 BM25..." />
+            <div class="memory-filter-controls">
+              <div class="filter-group">
+                <select id="memoryTierFilter" class="form-select">
+                  <option value="" data-i18n="memory.tiers.all">كافة الطبقات</option>
+                  <option value="core" data-i18n="memory.tiers.core">نواة دائم</option>
+                  <option value="project" data-i18n="memory.tiers.project">مشروع</option>
+                  <option value="session" data-i18n="memory.tiers.session">جلسة</option>
+                  <option value="ephemeral" data-i18n="memory.tiers.ephemeral">عابر</option>
+                </select>
+              </div>
+              <div class="search-input-wrap">
+                <input type="text" id="memorySearchInput" class="form-input" data-i18n-placeholder="memory.searchPlaceholder" placeholder="بحث فوري بنظام FTS5 BM25..." />
+              </div>
             </div>
           </div>
 
           <div class="memory-cards-grid" id="memoryListContainer">
             <div class="skeleton-loader">Loading memory nodes...</div>
+          </div>
+        </section>
+
+        <!-- Tab: Knowledge Harvester (Autonomous Agent Memory Studio) -->
+        <section class="tab-pane" id="pane-harvester">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">
+                <span class="kicker-dot cyan"></span>
+                <span id="kickerHarvester" data-i18n="harvester.kicker">AUTONOMOUS KNOWLEDGE HARVESTER</span>
+              </div>
+              <h1 id="headerTitleHarvester" data-i18n="harvester.title">Knowledge Harvester</h1>
+              <p class="subtitle" id="headerSubtitleHarvester" data-i18n="harvester.subtitle">Discover, inspect, and harvest knowledge, decisions, and patterns across AI agents and brains</p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="btnHarvesterRescan" title="Rescan All Sources">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                <span data-i18n="harvester.rescanBtn">Rescan Sources</span>
+              </button>
+              <button class="btn btn-secondary" id="btnHarvesterSelectAll">
+                <span data-i18n="harvester.selectAll">Select All</span>
+              </button>
+              <button class="btn btn-primary" id="btnHarvesterBatchImport" disabled>
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span id="btnHarvesterBatchImportText" data-i18n="harvester.importSelected">Import Selected (0)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Telemetry Bar -->
+          <div class="memory-telemetry-bar" id="harvesterTelemetryBar">
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="harvester.stats.total">Total Discovered:</span>
+              <strong class="chip-value" id="harvesterTotalCount">--</strong>
+            </div>
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="harvester.stats.new">New Candidates:</span>
+              <strong class="chip-value green" id="harvesterNewCount">--</strong>
+            </div>
+            <div class="telemetry-chip">
+              <span class="chip-label" data-i18n="harvester.stats.imported">Already in Memory:</span>
+              <strong class="chip-value amber" id="harvesterImportedCount">--</strong>
+            </div>
+          </div>
+
+          <!-- Toolbar: Filter Chips & Search -->
+          <div class="memory-toolbar" style="margin-bottom: 14px;">
+            <div class="memory-filter-chips" id="harvesterFilterChips">
+              <button class="filter-chip active" data-harvester-filter="all" data-i18n="harvester.filters.all">All</button>
+              <button class="filter-chip" data-harvester-filter="new" data-i18n="harvester.filters.new">New Items</button>
+              <button class="filter-chip" data-harvester-filter="imported" data-i18n="harvester.filters.imported">Already in Memory</button>
+              <button class="filter-chip" data-harvester-source="gemini_knowledge" data-i18n="harvester.filters.gemini">Gemini Knowledge</button>
+              <button class="filter-chip" data-harvester-source="antigravity_brain" data-i18n="harvester.filters.brain">Antigravity Brain</button>
+              <button class="filter-chip" data-harvester-source="rules" data-i18n="harvester.filters.rules">Agent Rules</button>
+            </div>
+            <div class="memory-filter-controls">
+              <div class="search-input-wrap">
+                <input type="text" id="harvesterSearchInput" class="form-input" data-i18n-placeholder="harvester.searchPlaceholder" placeholder="Quick filter titles and file paths..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2-Pane Studio Layout -->
+          <div class="harvester-studio-layout">
+            <!-- Left Master Pane: Candidate Cards List -->
+            <div class="harvester-list-pane">
+              <div class="harvester-list-header">
+                <span id="harvesterSelectionSummary">0 selected</span>
+                <span class="version-pill" id="harvesterListBadge">-- items</span>
+              </div>
+              <div class="harvester-items-scroll" id="harvesterItemsList">
+                <div class="skeleton-loader">Scanning agent knowledge sources...</div>
+              </div>
+            </div>
+
+            <!-- Right Detail Pane: Full Document Inspector & Studio Bridge -->
+            <div class="harvester-preview-pane" id="harvesterPreviewPane">
+              <!-- Empty state default -->
+              <div class="harvester-empty-inspector" id="harvesterEmptyInspector">
+                <svg class="qhr-icon qhr-icon--lg" style="width: 48px; height: 48px; opacity: 0.35; margin-bottom: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <h4 data-i18n="harvester.noSelection">Select an item from the list to preview its complete content</h4>
+              </div>
+
+              <!-- Active Document Inspector Content (hidden by default) -->
+              <div class="harvester-inspector-content" id="harvesterInspectorContent" style="display: none;">
+                <!-- Inspector Header -->
+                <div class="harvester-inspector-header">
+                  <div class="harvester-inspector-title-row">
+                    <h2 class="harvester-inspector-title" id="inspectorDocTitle">Document Title</h2>
+                    <div id="inspectorDocStatusBadge"></div>
+                  </div>
+                  <div class="harvester-inspector-meta-row">
+                    <span class="harvest-source-tag" id="inspectorDocSource">Source</span>
+                    <span class="version-pill" id="inspectorDocSize">0 KB</span>
+                    <span class="version-pill" id="inspectorDocLines">0 lines</span>
+                    <span class="version-pill" id="inspectorDocMtime">--</span>
+                  </div>
+                  <div class="harvester-path-box">
+                    <span class="harvester-path-label" data-i18n="harvester.sourcePath">Source File Path:</span>
+                    <code class="harvester-path-code" id="inspectorDocPath">/path/to/file</code>
+                    <button class="btn btn-secondary btn-sm" id="btnCopyInspectorPath" title="Copy Path" type="button">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Inspector Tuning Toolbar: Category, Tier, Importance, & Action Buttons -->
+                <div class="harvester-inspector-toolbar">
+                  <div class="inspector-controls-group">
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="harvester.category">Category:</label>
+                      <select id="inspectorCategorySelect" class="form-select" style="font-size: 12px; padding: 4px 8px;">
+                        <option value="decision" data-i18n="memory.categories.decision">Decision</option>
+                        <option value="rule" data-i18n="memory.categories.rule">Rule</option>
+                        <option value="pattern" data-i18n="memory.categories.pattern">Pattern</option>
+                        <option value="fact" data-i18n="memory.categories.fact">Fact</option>
+                        <option value="preference" data-i18n="memory.categories.preference">Preference</option>
+                        <option value="task" data-i18n="memory.categories.task">Task</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="harvester.tier">Tier:</label>
+                      <select id="inspectorTierSelect" class="form-select" style="font-size: 12px; padding: 4px 8px;">
+                        <option value="core" data-i18n="memory.tiers.core">Core</option>
+                        <option value="project" data-i18n="memory.tiers.project">Project</option>
+                        <option value="session" data-i18n="memory.tiers.session">Session</option>
+                        <option value="ephemeral" data-i18n="memory.tiers.ephemeral">Ephemeral</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="harvester.importance">Importance:</label>
+                      <select id="inspectorImportanceSelect" class="form-select" style="font-size: 12px; padding: 4px 8px;">
+                        <option value="5">★★★★★ 5</option>
+                        <option value="4">★★★★☆ 4</option>
+                        <option value="3" selected>★★★☆☆ 3</option>
+                        <option value="2">★★☆☆☆ 2</option>
+                        <option value="1">★☆☆☆☆ 1</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="inspector-actions-group">
+                    <button class="btn btn-secondary btn-sm" id="btnInspectorOpenStudio" style="display: none;" title="Open and edit in Universal Studio">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      <span data-i18n="harvester.openInStudio">Open in Studio</span>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="btnInspectorCopyContent">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      <span data-i18n="harvester.copyContent">Copy Full Content</span>
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnInspectorImportSingle">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+                      <span data-i18n="harvester.importSingle">Import This Item</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Full Document Body Container (Scrollable styled markdown viewport) -->
+                <div class="harvester-document-body" id="inspectorDocBody"></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -419,59 +713,277 @@
           </div>
         </section>
 
-        <!-- Tab 4: Subagents Hub -->
+        <!-- Tab 4: Subagents & Skills Studio (3-Pane Studio) -->
         <section class="tab-pane" id="pane-subagents">
           <div class="section-header">
             <div>
-              <h1 id="headerTitleSubagents">Subagents & Community Skills Hub</h1>
-              <p class="subtitle" id="headerSubtitleSubagents">Autonomous AI subagents and community skills with 3-Ring Context Window injection</p>
+              <div class="section-kicker">
+                <span class="kicker-dot"></span>
+                <span class="kicker-text" id="kickerStudio">UNIVERSAL MULTI-TOOL OS</span>
+              </div>
+              <h1 id="headerTitleSubagents">Universal Skills & Agents Studio</h1>
+              <p class="subtitle" id="headerSubtitleSubagents">Browse, edit, and manage skills & agents across Claude Code, Cursor, Windsurf, Codex, and Antigravity</p>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button class="btn btn-secondary" id="btnScanCommunitySkills">
+              <button class="btn btn-secondary" id="btnStudioRescan">
                 <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <span id="btnTextScanSkills">Scan Skills</span>
+                <span id="btnTextRescan">Rescan All Tools</span>
+              </button>
+              <button class="btn btn-primary" id="btnStudioQuickNew">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+                <span id="btnTextNewItem">New Skill / Agent</span>
               </button>
             </div>
           </div>
 
-          <div class="subagents-grid" id="subagentsListContainer">
-            <!-- Rendered dynamically -->
+          <!-- 3-Pane Luxury Studio Container -->
+          <div class="studio-container">
+            <!-- Left Sidebar (Library, Tools, Collections) -->
+            <div class="studio-sidebar">
+              <div class="studio-section-title" id="studioTitleLibrary">Library</div>
+              <div class="studio-nav-list">
+                <button class="studio-nav-item active" data-studio-view="skill" id="tabNavAllSkills">
+                  <span class="studio-nav-icon"><svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                  <span class="studio-nav-label" id="lblNavSkills">All Skills</span>
+                  <span class="studio-badge" id="badgeTotalSkills">0</span>
+                </button>
+                <button class="studio-nav-item" data-studio-view="agent" id="tabNavAllAgents">
+                  <span class="studio-nav-icon"><svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span>
+                  <span class="studio-nav-label" id="lblNavAgents">All Agents</span>
+                  <span class="studio-badge" id="badgeTotalAgents">0</span>
+                </button>
+                <button class="studio-nav-item" data-studio-view="favorite" id="tabNavFavorites">
+                  <span class="studio-nav-icon"><svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+                  <span class="studio-nav-label" id="lblNavFavorites">Favorites</span>
+                  <span class="studio-badge" id="badgeTotalFavorites">0</span>
+                </button>
+              </div>
+
+              <div class="studio-section-title" id="studioTitleTools" style="margin-top: 10px;">Tools</div>
+              <div class="studio-nav-list" id="studioToolsNavList">
+                <!-- Dynamically populated per tool with tool badges & counts -->
+              </div>
+
+              <div class="studio-section-header-row" style="margin-top: 10px;">
+                <div class="studio-section-title" id="studioTitleCollections">Collections</div>
+                <button class="studio-btn-add-collection" id="btnAddCollectionModal" title="Add Collection">+</button>
+              </div>
+              <div class="studio-nav-list" id="studioCollectionsNavList">
+                <!-- Dynamically populated from SQLite SSOT -->
+              </div>
+            </div>
+
+            <!-- Middle Column (Filterable Items List) -->
+            <div class="studio-middle">
+              <div class="studio-middle-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button class="studio-btn-icon-toggle" id="btnToggleStudioTools" title="Toggle Tools & Collections Sidebar / طي أو إظهار شريط الأدوات">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+                    </button>
+                    <h2 id="studioCurrentViewTitle">All Skills</h2>
+                  </div>
+                  <span class="stat-chip cyan" id="studioCurrentCountChip">0</span>
+                </div>
+                <div class="studio-search-bar">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input type="text" id="studioFilterSearch" placeholder="Search skills & agents..." />
+                </div>
+              </div>
+              <div class="studio-items-list" id="studioItemsList">
+                <!-- Dynamically rendered items -->
+              </div>
+            </div>
+
+            <!-- Right Main Pane (Editor & Inspector) -->
+            <div class="studio-main">
+              <!-- Toolbar -->
+              <div class="studio-toolbar">
+                <div class="studio-toolbar-actions">
+                  <!-- Mode Toggle: Segmented Preview | Edit -->
+                  <div class="studio-mode-toggle" role="group" aria-label="View mode">
+                    <button class="studio-tool-btn active" id="btnStudioActionPreview" title="Rendered Markdown Preview (P)">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      <span data-i18n="studio.preview">Preview</span>
+                    </button>
+                    <button class="studio-tool-btn" id="btnStudioActionEdit" title="Monospaced Code Editor (E)">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                      <span data-i18n="studio.edit">Edit</span>
+                    </button>
+                  </div>
+                  <span class="studio-toolbar-sep"></span>
+                  <!-- Icon-only action buttons -->
+                  <button class="studio-tool-btn icon-only" id="btnStudioActionNew" title="New Skill / Agent">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                  <button class="studio-tool-btn icon-only" id="btnStudioActionFavorite" title="Star / Favorite">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </button>
+                  <button class="studio-tool-btn icon-only" id="btnStudioActionCollection" title="Assign to Collection">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                  </button>
+                  <button class="studio-tool-btn icon-only" id="btnStudioActionValidate" title="Validate Skills-LAB Compliance (15 Rules)">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </button>
+                  <button class="studio-tool-btn icon-only danger" id="btnStudioActionDelete" title="Delete File">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  </button>
+                </div>
+                <div class="studio-toolbar-actions">
+                  <button class="studio-tool-btn icon-only" id="btnStudioMaximize" title="Expand Workspace">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                  <button class="studio-tool-btn primary icon-only" id="btnStudioActionSave" title="Save File (Ctrl+S)" style="display: none;">
+                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Content Scroll Area -->
+              <div class="studio-content-area" id="studioDetailContentArea">
+                <!-- Skill Info Card (rendered by JS into this slot) -->
+                <div class="studio-skill-card" id="studioSkillCard" style="display:none;"></div>
+
+                <!-- Parsed YAML Frontmatter Card -->
+                <div class="studio-frontmatter-box" id="studioFrontmatterBox" style="display: none;">
+                  <pre><code id="studioFrontmatterCode"></code></pre>
+                </div>
+
+                <!-- Markdown Rendered Preview Body -->
+                <div class="studio-preview-body" id="studioPreviewBody">
+                  <div style="text-align: center; color: var(--text-tertiary); padding: 80px 20px;">
+                    Select a skill or agent from the list to inspect and edit.
+                  </div>
+                </div>
+
+                <!-- Monospaced Code Editor Body -->
+                <div class="studio-editor-body" id="studioEditorBody" style="display: none;">
+                  <textarea id="studioTextEditor" class="studio-textarea" spellcheck="false"></textarea>
+                </div>
+              </div>
+
+              <!-- Bottom Status Bar / Footer -->
+              <div class="studio-status-bar" id="studioStatusBar">
+                <div class="studio-status-left">
+                  <div id="studioStatusToolIcons" class="studio-status-tool-badges"></div>
+                </div>
+                <div class="studio-status-center">
+                  <button class="studio-footer-path-btn" id="btnOpenSkillFolder" title="Open containing folder" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                  </button>
+                  <span class="studio-status-path-text" id="studioStatusPath"></span>
+                </div>
+                <div class="studio-status-right">
+                  <span id="studioStatusSize"></span>
+                  <span class="status-sep">·</span>
+                  <span id="studioStatusTime"></span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="panel subagent-runner-panel">
-            <div class="panel-header">
-              <h3>Direct Subagent Dispatcher & Brief Synthesizer</h3>
+        </section>
+
+        <!-- Tab: Dedicated Agent Runner & Brief Synthesizer -->
+        <section class="tab-pane" id="pane-dispatcher">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleDispatcher" data-i18n="titles.dispatcher">Agent Runner & Context Engine</h1>
+              <p class="subtitle" id="headerSubtitleDispatcher" data-i18n="titles.dispatcherSubtitle">Direct subagent execution and 3-Ring task brief synthesis (Core, Project, Ephemeral)</p>
             </div>
-            <div class="panel-body">
-              <div class="form-row">
-                <div class="form-group flex-1">
-                  <label>Target Subagent / Skill:</label>
-                  <select id="dispatchAgentSelect" class="form-select">
-                    <option value="planner">@planner — Task & Priority Strategist</option>
-                    <option value="coder">@coder — Software Engineer & Code Reviewer</option>
-                    <option value="researcher">@researcher — Research & Knowledge Synthesizer</option>
-                    <option value="scribe">@scribe — Decisions & Documentation Logger</option>
+            <div class="header-actions-inline">
+              <span class="badge badge-primary" id="dispatcherEngineBadge">Autonomous Local Kernel</span>
+            </div>
+          </div>
+
+          <div class="dispatcher-layout">
+            <!-- Left: Controls & Configuration -->
+            <div class="dispatcher-card">
+              <div class="dispatcher-header-card">
+                <div class="dispatcher-header-title">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="12" x2="5" y2="12"/></svg>
+                  <span id="labelDirectDispatcher" data-i18n="dispatcher.title">Direct Subagent Dispatcher</span>
+                </div>
+                <span class="version-pill" id="dispatcherActiveWorkspace">Workspace: Current</span>
+              </div>
+
+              <div class="form-row" style="display: flex; gap: 12px; margin-bottom: 8px;">
+                <div class="form-group flex-1" style="margin-bottom: 0;">
+                  <label id="labelTargetSubagent" data-i18n="dispatcher.targetAgent">Target Subagent / Skill:</label>
+                  <select id="dispatchAgentSelect" class="form-select"></select>
+                </div>
+                <div class="form-group flex-1" style="margin-bottom: 0;">
+                  <label id="labelTargetModel">Engine / Model Provider:</label>
+                  <select id="dispatchModelSelect" class="form-select">
+                    <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
+                    <option value="gpt-4o">GPT-4o (OpenAI)</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
+                    <option value="deepseek-r1">DeepSeek R1 / V3</option>
+                    <option value="llama-3.3-70b">Llama 3.3 (Meta)</option>
+                    <option value="mistral-large">Mistral Large (Mistral AI)</option>
+                    <option value="qwen-2.5-coder">Qwen 2.5 Coder (Alibaba)</option>
+                    <option value="ollama-local">Ollama (Local LLM)</option>
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Task Instruction or Mission:</label>
-                <textarea id="dispatchTaskPrompt" class="form-textarea" rows="3" placeholder="Enter instructions for the agent..."></textarea>
+              <div id="dispatcherActiveBadgesRow" style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;"></div>
+
+              <!-- Context Rings Selector -->
+              <div class="context-rings-selector">
+                <div class="context-rings-title">Context Synthesis Rings (3-Ring Model)</div>
+                <div class="context-rings-pills">
+                  <label class="ring-checkbox-label">
+                    <input type="checkbox" id="ringCoreIdentity" checked disabled />
+                    <span>Ring 1: Core Identity (Sovereign Engine)</span>
+                  </label>
+                  <label class="ring-checkbox-label">
+                    <input type="checkbox" id="ringProjectContext" checked />
+                    <span>Ring 2: Project Rules & Active Domain</span>
+                  </label>
+                  <label class="ring-checkbox-label">
+                    <input type="checkbox" id="ringEphemeralSession" checked />
+                    <span>Ring 3: Ephemeral Tasks & Short-Term Memory</span>
+                  </label>
+                </div>
               </div>
-              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+
+              <div class="form-group">
+                <label id="labelTaskInstruction" data-i18n="dispatcher.instruction">Task Instruction or Mission:</label>
+                <textarea id="dispatchTaskPrompt" class="form-textarea" rows="5" placeholder="Enter detailed mission instructions for the agent..."></textarea>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px;">
                 <button class="btn btn-primary" id="btnDispatchSubagent">
                   <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  <span>Dispatch Subagent</span>
+                  <span id="btnTextDispatch" data-i18n="dispatcher.btnDispatch">Dispatch Subagent</span>
                 </button>
                 <button class="btn btn-secondary" id="btnGenerateBrief">
                   <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                  <span>Generate Task Brief (3-Ring Context)</span>
+                  <span id="btnTextBrief" data-i18n="dispatcher.btnBrief">Generate Task Brief (3-Ring)</span>
                 </button>
+                <button class="btn btn-secondary" id="btnClearPrompt" style="margin-inline-start: auto;">Clear</button>
               </div>
+            </div>
 
-              <div class="subagent-result-box" id="subagentResultBox" style="display: none;">
-                <h4>Execution Output:</h4>
-                <pre id="subagentResultText"></pre>
+            <!-- Right: Live Output Console -->
+            <div class="dispatcher-console">
+              <div class="console-topbar">
+                <div class="console-title">
+                  <span class="console-status-dot" id="consoleStatusDot"></span>
+                  <span id="consoleStatusText">Engine Console [Standby]</span>
+                </div>
+                <div class="console-actions">
+                  <button class="btn-console" id="btnCopyConsole" title="Copy Output to Clipboard">
+                    <svg class="qhr-icon qhr-icon--xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    <span>Copy</span>
+                  </button>
+                  <button class="btn-console" id="btnClearConsole" title="Clear Console">Clear</button>
+                </div>
+              </div>
+              <div class="console-body" id="subagentResultText">
+                <div class="console-empty-prompt" id="consoleEmptyPrompt">
+                  Select an agent, write your mission instructions, and click "Dispatch Subagent" or "Generate Task Brief" to observe live output stream.
+                </div>
               </div>
             </div>
           </div>
@@ -525,78 +1037,6 @@
               </thead>
               <tbody id="vaultTableBody"></tbody>
             </table>
-          </div>
-        </section>
-
-        <!-- Tab 8: Settings & Health -->
-        <section class="tab-pane" id="pane-settings">
-          <div class="section-header">
-            <div>
-              <h1 id="headerTitleSettings">Settings & SQLite Diagnostics</h1>
-              <p class="subtitle" id="headerSubtitleSettings">Database location, performance PRAGMAs, and system identity</p>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-header"><h3>Storage Diagnostics</h3></div>
-            <div class="panel-body">
-              <div class="diagnostic-row">
-                <span class="diag-label">SQLite Database Path</span>
-                <span class="diag-value mono" id="diagDbPath">~/.tidy/tidy.db</span>
-              </div>
-              <div class="diagnostic-row">
-                <span class="diag-label">Journal Mode:</span>
-                <span class="diag-value">WAL (Write-Ahead Logging)</span>
-              </div>
-              <div class="diagnostic-row">
-                <span class="diag-label">FTS5 Tokenizer:</span>
-                <span class="diag-value">unicode61 remove_diacritics 2</span>
-              </div>
-              <div class="diagnostic-row">
-                <span class="diag-label">Cache Size:</span>
-                <span class="diag-value">-64000 (64MB RAM Memory Cache)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel" style="margin-top: 20px;">
-            <div class="panel-header"><h3>Database Operations & Maintenance</h3></div>
-            <div class="panel-body">
-              <p class="subtitle" style="margin-bottom: 16px;">Perform atomic SQLite operations, WAL truncation, and integrity checks.</p>
-              <div class="db-actions-grid">
-                <div class="db-action-card">
-                  <div class="db-action-info">
-                    <h4>Snapshot Backup</h4>
-                    <p>Creates an atomic VACUUM INTO snapshot of the database.</p>
-                  </div>
-                  <button class="btn btn-secondary btn-sm" id="btnDbBackup">
-                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    <span>Create Backup</span>
-                  </button>
-                </div>
-                <div class="db-action-card">
-                  <div class="db-action-info">
-                    <h4>Checkpoint WAL</h4>
-                    <p>Flushes and truncates the WAL journal into the main database file.</p>
-                  </div>
-                  <button class="btn btn-secondary btn-sm" id="btnDbCheckpoint">
-                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    <span>Checkpoint WAL</span>
-                  </button>
-                </div>
-                <div class="db-action-card">
-                  <div class="db-action-info">
-                    <h4>Integrity Check</h4>
-                    <p>Executes PRAGMA integrity_check to verify structural health.</p>
-                  </div>
-                  <button class="btn btn-secondary btn-sm" id="btnDbIntegrity">
-                    <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                    <span>Run Integrity Check</span>
-                  </button>
-                </div>
-              </div>
-              <div id="dbActionResult" class="db-action-result" style="display: none; margin-top: 14px;"></div>
-            </div>
           </div>
         </section>
 
@@ -762,72 +1202,363 @@
           </div>
         </section>
 
-        <!-- Tab 11: Settings & Health -->
+        <!-- Tab 11: Central Settings & Governance Control Panel -->
         <section class="tab-pane" id="pane-settings">
           <div class="section-header">
             <div>
               <div class="section-kicker">
                 <span class="kicker-dot"></span>
-                <span id="kickerSettings">تخصيص المنظومة وتفضيلات أطلس القاهرة</span>
+                <span id="kickerSettings" data-i18n="titles.settingsKicker">لوحة الإعدادات والحوكمة</span>
               </div>
-              <h1 id="headerTitleSettings">الإعدادات وتخصيص المظهر</h1>
-              <p class="subtitle" id="headerSubtitleSettings">التحكم في الهوية البصرية، اختيار ثيمات أحياء القاهرة الـ 12، وإدارة صحة قاعدة بيانات SQLite</p>
+              <h1 id="headerTitleSettings" data-i18n="titles.settings">الإعدادات والتشخيص</h1>
+              <p class="subtitle" id="headerSubtitleSettings" data-i18n="titles.settingsSubtitle">إدارة الهوية، وقواعد الحوكمة، وصيانة قاعدة البيانات</p>
             </div>
-            <button class="btn btn-secondary" id="btnResetThemeSettings" title="إعادة ضبط الهوية الافتراضية">
-              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-              <span id="btnResetThemeText">إعادة ضبط الافتراضي</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-secondary" id="btnResetThemeSettings">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <span id="btnResetThemeText" data-i18n="settings.resetDefault">إعادة ضبط الافتراضي</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sub-Tabs Navigation Bar (Profile First) -->
+          <div class="settings-subtabs-nav" role="tablist">
+            <button class="settings-subtab-btn active" data-settings-tab="profile" role="tab" aria-selected="true" type="button">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="settings.subtabs.profile">الهوية</span>
+            </button>
+            <button class="settings-subtab-btn" data-settings-tab="appearance" role="tab" aria-selected="false" type="button">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              <span data-i18n="settings.subtabs.appearance">المظهر</span>
+            </button>
+            <button class="settings-subtab-btn" data-settings-tab="governance" role="tab" aria-selected="false" type="button">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span data-i18n="settings.subtabs.governance">الحوكمة</span>
+            </button>
+            <button class="settings-subtab-btn" data-settings-tab="storage" role="tab" aria-selected="false" type="button">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              <span data-i18n="settings.subtabs.storage">قاعدة البيانات</span>
+            </button>
+            <button class="settings-subtab-btn" data-settings-tab="connectors" role="tab" aria-selected="false" type="button">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              <span data-i18n="settings.subtabs.connectors">الموصلات</span>
             </button>
           </div>
 
-          <!-- Section 1: Cairo Design Atlas Themes -->
-          <div class="panel" style="margin-bottom: 24px;">
-            <div class="panel-header">
-              <div class="panel-title-wrap">
-                <span class="panel-dot cyan"></span>
-                <h3 id="panelHeaderThemes">أطلس تصميم القاهرة — Cairo Design Atlas (12 ثيماً معمارياً)</h3>
-              </div>
-              <span class="badge lead" id="activeThemePill">الزيتون (zeitoun) نشط</span>
-            </div>
-            <div class="panel-body">
-              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" id="themeGalleryHelp">
-                اختر الحي القاهري المفضل لمنظومتك. تنعكس فلسفة التصميم المعمارية فوراً على كافة البطاقات والألوان وحواف العناصر:
-              </p>
-              <div class="theme-gallery-grid" id="themeGalleryGrid">
-                <!-- Injected dynamically via JS -->
-              </div>
-            </div>
-          </div>
+          <!-- Sub-Tab Content Panes -->
+          <div class="settings-subtab-content">
 
-          <!-- Section 2: Database Health & Maintenance -->
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title-wrap">
-                <span class="panel-dot amber"></span>
-                <h3 id="panelHeaderDbMaintenance">صيانة قاعدة بيانات SQLite السيادية (SSOT)</h3>
+            <!-- Subtab 1: User Profile & Identity -->
+            <div class="settings-subtab-pane active" id="subtab-profile">
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <span class="panel-dot green"></span>
+                    <h3 data-i18n="settings.profile.title">الهوية وإعدادات المساعد</h3>
+                  </div>
+                  <span class="badge" id="profileIdBadge" data-i18n="settings.profile.badge">الملف الرئيسي</span>
+                </div>
+                <div class="panel-body">
+                  <p class="subtitle" style="margin-bottom: 20px;" data-i18n="settings.profile.desc">تخصيص هوية المساعد، أسلوب التخاطب، والخيارات الأساسية المحفوظة محلياً.</p>
+                  
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.userName">اسم المستخدم:</label>
+                      <input type="text" id="inputProfileUserName" class="form-input" data-i18n-placeholder="settings.profile.userNamePlaceholder" placeholder="اسمك أو اللقب المفضل">
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.assistantName">اسم المساعد:</label>
+                      <input type="text" id="inputProfileAssistantName" class="form-input" data-i18n-placeholder="settings.profile.assistantNamePlaceholder" placeholder="Tidy">
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.role">الدور والمسؤولية:</label>
+                      <input type="text" id="inputProfileRole" class="form-input" data-i18n-placeholder="settings.profile.rolePlaceholder" placeholder="مثلاً: كبير المهندسين">
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.tone">الأسلوب:</label>
+                      <select id="inputProfileTone" class="form-select">
+                        <option value="concise_expert" data-i18n="settings.profile.toneConcise">خبير موجز ومركّز</option>
+                        <option value="detailed_mentor" data-i18n="settings.profile.toneDetailed">مرشد تقني تفصيلي</option>
+                        <option value="formal_executive" data-i18n="settings.profile.toneFormal">تنفيذي رسمي</option>
+                        <option value="creative_collaborator" data-i18n="settings.profile.toneCreative">مبتكر ومتعاون</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.locale">لغة الواجهة:</label>
+                      <select id="inputProfileLocale" class="form-select">
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="en">English</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.profile.currency">العملة الافتراضية:</label>
+                      <select id="inputProfileCurrency" class="form-select">
+                        <option value="USD">USD ($)</option>
+                        <option value="EGP">EGP (ج.م)</option>
+                        <option value="SAR">SAR (ر.س)</option>
+                        <option value="AED">AED (د.إ)</option>
+                        <option value="EUR">EUR (€)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                    <span id="profileStatusBanner" style="font-size: 13px; color: var(--text-muted);" data-i18n="settings.profile.statusReady">الهوية محملة بالكامل من قاعدة البيانات.</span>
+                    <button class="btn btn-primary" id="btnSaveProfile">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                      <span data-i18n="settings.profile.saveBtn">حفظ الهوية</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <span class="badge paid">WAL Mode (Active)</span>
             </div>
-            <div class="panel-body">
-              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" id="dbMaintenanceHelp">
-                عمليات إدارة وصيانة محرك البيانات المدمج. جميع الإجراءات فورية ولا تعطل قراءة أو كتابة الذاكرة:
-              </p>
-              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
-                <button class="btn btn-secondary" id="btnDbCheckpoint">
-                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                  <span id="btnTextCheckpoint">تنفيذ WAL Checkpoint</span>
-                </button>
-                <button class="btn btn-secondary" id="btnDbIntegrity">
-                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                  <span id="btnTextIntegrity">فحص السلامة Integrity Check</span>
-                </button>
-                <button class="btn btn-secondary" id="btnDbBackup">
-                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                  <span id="btnTextBackup">إنشاء نسخة احتياطية Backup</span>
-                </button>
-              </div>
-              <div id="dbActionResult" style="display: none; font-family: var(--font-mono); font-size: 12.5px; padding: 12px 14px; background: var(--qhr-surface-muted, #F1F5F9); border: 1px solid var(--qhr-border-subtle, #CBD5E1); border-radius: 6px; color: var(--text-primary);">
+
+            <!-- Subtab 2: Appearance & Cairo Themes -->
+            <div class="settings-subtab-pane" id="subtab-appearance">
+              <div class="panel" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <span class="panel-dot cyan"></span>
+                    <h3 id="panelHeaderThemes" data-i18n="settings.appearance.title">أطلس تصميم القاهرة (12 ثيماً معمارياً)</h3>
+                  </div>
+                  <span class="badge lead" id="activeThemePill">الزيتون (zeitoun) نشط</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" id="themeGalleryHelp" data-i18n="settings.appearance.desc">
+                    اختر الحي القاهري المفضل لمنظومتك. تنعكس فلسفة التصميم المعمارية فوراً على كافة البطاقات والألوان وحواف العناصر:
+                  </p>
+                  <div class="theme-gallery-grid" id="themeGalleryGrid">
+                    <!-- Injected dynamically via JS -->
+                  </div>
+                </div>
               </div>
             </div>
+
+            <!-- Subtab 3: Governance -->
+            <div class="settings-subtab-pane" id="subtab-governance">
+              <div class="settings-grid-2col">
+                <!-- Card 1: Contextual Firewall -->
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title">
+                      <span class="panel-dot amber"></span>
+                      <span data-i18n="settings.governance.firewallTitle">جدار الحماية السياقي</span>
+                    </div>
+                    <span class="badge paid" data-i18n="settings.governance.firewallActive">نشط</span>
+                  </div>
+                  <p class="settings-card-desc" data-i18n="settings.governance.firewallDesc">
+                    عزل سياقات العمل لمنع تداخل البيانات بين بيئات التطوير والتسويق.
+                  </p>
+                  <div class="form-group">
+                    <label data-i18n="settings.governance.firewallPolicy">سياسة الحماية:</label>
+                    <select id="govFirewallPolicy" class="form-select">
+                      <option value="strict" data-i18n="settings.governance.strict">عزل تام وحجب الوصول المتبادل</option>
+                      <option value="permissive" data-i18n="settings.governance.permissive">سماح متقاطع مع وسم المصدر</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                      <input type="checkbox" id="govAutoExtract" value="true">
+                      <span data-i18n="settings.governance.autoExtract">استخراج القرارات تلقائياً عند اكتمال المهام</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Card 2: Cognitive Memory Decay Engine -->
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title">
+                      <span class="panel-dot purple"></span>
+                      <span data-i18n="settings.governance.decayTitle">محرك اضمحلال الذاكرة</span>
+                    </div>
+                    <span class="badge" id="decayStatusBadge" data-i18n="settings.governance.decayBadge">تنظيف ذكي</span>
+                  </div>
+                  <p class="settings-card-desc" data-i18n="settings.governance.decayDesc">
+                    الذكريات الأساسية لا تضمحل، بينما تتراجع أهمية الذكريات المؤقتة تدريجياً مع مرور الوقت.
+                  </p>
+                  <div class="form-group">
+                    <label data-i18n="settings.governance.decayStatus">حالة الاضمحلال:</label>
+                    <select id="govMemoryDecay" class="form-select">
+                      <option value="enabled" data-i18n="settings.governance.enabled">مفعل — حساب تنازلي للأهمية</option>
+                      <option value="disabled" data-i18n="settings.governance.disabled">معطل — الاحتفاظ بكافة العناصر</option>
+                    </select>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                      <label data-i18n="settings.governance.ephemeralRetention">استبقاء المؤقت (أيام):</label>
+                      <input type="number" id="govEphemeralRetention" class="form-input" min="1" max="365" value="7">
+                    </div>
+                    <div class="form-group">
+                      <label data-i18n="settings.governance.sessionRetention">استبقاء الجلسات (أيام):</label>
+                      <input type="number" id="govSessionRetention" class="form-input" min="1" max="365" value="30">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label data-i18n="settings.governance.maxRecall">الحد الأقصى للاسترجاع:</label>
+                    <input type="number" id="govMaxRecall" class="form-input" min="1" max="50" value="5">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Bar for Governance -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface-muted); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <span id="govStatusBanner" style="font-size: 13px; color: var(--text-secondary);" data-i18n="settings.governance.statusReady">قواعد الحوكمة محملة من قاعدة البيانات.</span>
+                <button class="btn btn-primary" id="btnSaveGovernance">
+                  <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span data-i18n="settings.governance.saveBtn">حفظ قواعد الحوكمة</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Subtab 4: Storage -->
+            <div class="settings-subtab-pane" id="subtab-storage">
+              <!-- Engine Diagnostics -->
+              <div class="panel" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <span class="panel-dot green"></span>
+                    <h3 data-i18n="settings.storage.diagTitle">تشخيص محرك البيانات</h3>
+                  </div>
+                  <span class="badge paid" data-i18n="settings.storage.diagBadge">نمط WAL نشط</span>
+                </div>
+                <div class="panel-body">
+                  <div class="diagnostic-row">
+                    <span class="diag-label" data-i18n="settings.storage.dbPath">مسار ملف قاعدة البيانات:</span>
+                    <span class="diag-value mono" id="diagDbPath">~/.tidy/tidy.db</span>
+                  </div>
+                  <div class="diagnostic-row">
+                    <span class="diag-label" data-i18n="settings.storage.journalMode">وضع السجل الموازي:</span>
+                    <span class="diag-value" data-i18n="settings.storage.journalVal">تزامن فوري للقراءة والكتابة (WAL)</span>
+                  </div>
+                  <div class="diagnostic-row">
+                    <span class="diag-label" data-i18n="settings.storage.searchEngine">محرك البحث النصي المعرب:</span>
+                    <span class="diag-value mono" data-i18n="settings.storage.searchVal">unicode61 (ترتيب BM25)</span>
+                  </div>
+                  <div class="diagnostic-row">
+                    <span class="diag-label" data-i18n="settings.storage.cacheSize">حجم الذاكرة السريعة:</span>
+                    <span class="diag-value" data-i18n="settings.storage.cacheVal">ذاكرة مخصصة 64 ميجابايت</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Database Operations -->
+              <div class="panel" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <span class="panel-dot amber"></span>
+                    <h3 data-i18n="settings.storage.actionsTitle">إجراءات الصيانة الفورية</h3>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <p class="subtitle" style="margin-bottom: 16px;" data-i18n="settings.storage.actionsDesc">جميع العمليات ذرية ولا توقف قراءة أو كتابة المنظومة:</p>
+                  <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
+                    <button class="btn btn-secondary" id="btnDbCheckpoint">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                      <span id="btnTextCheckpoint" data-i18n="settings.storage.btnCheckpoint">تفريغ سجل WAL</span>
+                    </button>
+                    <button class="btn btn-secondary" id="btnDbIntegrity">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                      <span id="btnTextIntegrity" data-i18n="settings.storage.btnIntegrity">فحص السلامة</span>
+                    </button>
+                    <button class="btn btn-secondary" id="btnDbBackup">
+                      <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                      <span id="btnTextBackup" data-i18n="settings.storage.btnBackup">إنشاء نسخة احتياطية</span>
+                    </button>
+                  </div>
+                  <div id="dbActionResult" style="display: none; font-family: var(--font-mono); font-size: 12.5px; padding: 12px 14px; background: var(--surface-muted); border: 1px solid var(--border-subtle); border-radius: 6px; color: var(--text-primary);"></div>
+                </div>
+              </div>
+
+              <!-- Data Sovereignty & Portability -->
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <span class="panel-dot cyan"></span>
+                    <h3 data-i18n="settings.storage.portabilityTitle">سيادة البيانات وتصدير الملفات</h3>
+                  </div>
+                  <span class="badge" data-i18n="settings.storage.portabilityBadge">نقل محلي</span>
+                </div>
+                <div class="panel-body">
+                  <p class="subtitle" style="margin-bottom: 16px;" data-i18n="settings.storage.portabilityDesc">تصدير واستيراد بياناتك بالكامل بدون أي اعتماد سحابي خارجي:</p>
+                  <div class="db-actions-grid">
+                    <div class="db-action-card">
+                      <div class="db-action-info">
+                        <h4 data-i18n="settings.storage.exportMarkdownTitle">تصدير لمستودع Obsidian</h4>
+                        <p data-i18n="settings.storage.exportMarkdownDesc">تصدير كافة الذكريات والمشاريع والمهام كملفات Markdown متوافقة مع Obsidian.</p>
+                      </div>
+                      <button class="btn btn-secondary btn-sm" id="btnExportMarkdown">
+                        <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        <span data-i18n="settings.storage.exportMarkdownBtn">تصدير إلى Markdown</span>
+                      </button>
+                    </div>
+                    <div class="db-action-card">
+                      <div class="db-action-info">
+                        <h4 data-i18n="settings.storage.exportJsonTitle">تصدير لقطة ذرية شاملة (JSON)</h4>
+                        <p data-i18n="settings.storage.exportJsonDesc">تصدير كافة الجداول والإعدادات في ملف JSON موحد للنقل السريع بين الأجهزة.</p>
+                      </div>
+                      <button class="btn btn-secondary btn-sm" id="btnExportJson">
+                        <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        <span data-i18n="settings.storage.exportJsonBtn">تصدير JSON</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="portabilityActionResult" style="display: none; margin-top: 14px; font-family: var(--font-mono); font-size: 12.5px; padding: 12px 14px; background: var(--surface-muted); border: 1px solid var(--border-subtle); border-radius: 6px;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subtab 5: Connectors -->
+            <div class="settings-subtab-pane" id="subtab-connectors">
+              <div class="settings-grid-2col">
+                <!-- Card 1: Stdio MCP Server -->
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title">
+                      <span class="panel-dot cyan"></span>
+                      <span data-i18n="settings.connectors.mcpTitle">خادم MCP المحلي</span>
+                    </div>
+                    <span class="badge paid" data-i18n="settings.connectors.mcpBadge">نشط v2.2.0</span>
+                  </div>
+                  <p class="settings-card-desc" data-i18n="settings.connectors.mcpDesc">
+                    خادم Stdio مدمج يمنح عملاء الذكاء الاصطناعي صلاحيات التفاعل المباشر مع الذاكرة والمهام والمهارات.
+                  </p>
+                  <div style="font-size: 12px; font-family: var(--font-mono); color: var(--text-secondary); background: var(--surface-muted); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                    node packages/mcp/src/server.js
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--text-primary);">
+                    <div><strong data-i18n="settings.connectors.toolsLabel">الأدوات المتاحة:</strong> recall_memory, store_memory, list_tasks, add_task, complete_task, list_skills, run_subagent, generate_brief</div>
+                    <div><strong data-i18n="settings.connectors.resourcesLabel">الموارد الديناميكية:</strong> tidy://profile, tidy://context/current, tidy://tasks/pending</div>
+                  </div>
+                </div>
+
+                <!-- Card 2: Web Console & Remote Gateway -->
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title">
+                      <span class="panel-dot purple"></span>
+                      <span data-i18n="settings.connectors.webTitle">بوابة الويب والشبكة المحلية</span>
+                    </div>
+                    <span class="badge lead" data-i18n="settings.connectors.webBadge">منفذ 3840</span>
+                  </div>
+                  <p class="settings-card-desc" data-i18n="settings.connectors.webDesc">
+                    خادم أصيل مبني بدون تبعيات يقدم واجهة التحكم والخدمات البرمجية لكافة الأجهزة.
+                  </p>
+                  <div class="diagnostic-row" style="padding: 4px 0;">
+                    <span class="diag-label" data-i18n="settings.connectors.localUrl">الرابط المحلي:</span>
+                    <span class="diag-value mono">http://127.0.0.1:3840</span>
+                  </div>
+                  <div class="diagnostic-row" style="padding: 4px 0;">
+                    <span class="diag-label" data-i18n="settings.connectors.tokenGuard">حارس الأمان:</span>
+                    <span class="diag-value mono">TIDY_WEB_TOKEN (Protected)</span>
+                  </div>
+                  <div class="diagnostic-row" style="padding: 4px 0;">
+                    <span class="diag-label" data-i18n="settings.connectors.connectedIdes">بيئات التطوير المتصلة:</span>
+                    <span class="diag-value">Antigravity, Claude Code, Cursor, Windsurf</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -835,44 +1566,108 @@
     </main>
   </div>
 
-  <!-- Modal: New Memory -->
+  <!-- Modal: Memory Node (Create & Edit) -->
   <div class="modal-backdrop" id="modalNewMemory">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Store New Memory / Decision</h3>
+        <h3 id="modalMemoryTitle" data-i18n="memory.modal.titleAdd">تسجيل ذاكرة أو قرار جديد</h3>
         <button class="modal-close" data-close="modalNewMemory">×</button>
       </div>
       <div class="modal-body">
+        <input type="hidden" id="inputMemoryEditId" value="" />
         <div class="form-group">
-          <label>Memory Content (Fact, Rule, or Architectural Decision):</label>
-          <textarea id="inputMemoryContent" class="form-textarea" rows="4" placeholder="Enter memory details..."></textarea>
+          <label data-i18n="memory.modal.content">نص الذاكرة أو القرار المعماري:</label>
+          <textarea id="inputMemoryContent" class="form-textarea" rows="4" data-i18n-placeholder="memory.modal.contentPlaceholder" placeholder="اكتب محتوى الذاكرة، القرار المتخذ، أو القاعدة المعمارية..."></textarea>
         </div>
         <div class="form-row">
           <div class="form-group flex-1">
-            <label>Category:</label>
+            <label data-i18n="memory.modal.category">التصنيف:</label>
             <select id="inputMemoryCategory" class="form-select">
-              <option value="fact">Fact</option>
-              <option value="decision" selected>Decision</option>
-              <option value="pattern">Pattern</option>
-              <option value="preference">Preference</option>
-              <option value="rule">Rule</option>
+              <option value="decision" data-i18n="memory.categories.decision" selected>قرار</option>
+              <option value="rule" data-i18n="memory.categories.rule">قاعدة</option>
+              <option value="fact" data-i18n="memory.categories.fact">حقيقة</option>
+              <option value="pattern" data-i18n="memory.categories.pattern">نمط</option>
+              <option value="preference" data-i18n="memory.categories.preference">تفضيل</option>
+              <option value="task" data-i18n="memory.categories.task">مهمة</option>
             </select>
           </div>
           <div class="form-group flex-1">
-            <label>Importance Rating:</label>
+            <label data-i18n="memory.modal.tier">الطبقة المعرفية:</label>
+            <select id="inputMemoryTier" class="form-select">
+              <option value="project" data-i18n="memory.tiers.project" selected>مشروع</option>
+              <option value="core" data-i18n="memory.tiers.core">نواة دائم</option>
+              <option value="session" data-i18n="memory.tiers.session">جلسة</option>
+              <option value="ephemeral" data-i18n="memory.tiers.ephemeral">عابر</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label data-i18n="memory.modal.importance">درجة الأهمية:</label>
             <select id="inputMemoryImportance" class="form-select">
-              <option value="5">★★★★★ 5 - Critical</option>
-              <option value="4">★★★★☆ 4 - High</option>
-              <option value="3" selected>★★★☆☆ 3 - Medium</option>
-              <option value="2">★★☆☆☆ 2 - Low</option>
-              <option value="1">★☆☆☆☆ 1 - Ephemeral</option>
+              <option value="5">★★★★★ 5</option>
+              <option value="4">★★★★☆ 4</option>
+              <option value="3" selected>★★★☆☆ 3</option>
+              <option value="2">★★☆☆☆ 2</option>
+              <option value="1">★☆☆☆☆ 1</option>
             </select>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-close="modalNewMemory">Cancel</button>
-        <button class="btn btn-primary" id="btnSaveMemorySubmit">Save Memory</button>
+        <button class="btn btn-secondary" data-close="modalNewMemory" data-i18n="memory.modal.cancelBtn">إلغاء</button>
+        <button class="btn btn-primary" id="btnSaveMemorySubmit">
+          <span id="btnSaveMemoryText" data-i18n="memory.modal.saveBtn">حفظ الذاكرة</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Harvest Agent Memories (Review & Staging) -->
+  <div class="modal-backdrop" id="modalHarvestMemories">
+    <div class="modal-card" style="max-width: 860px; width: 95%;">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalHarvestTitle" data-i18n="memory.harvest.modalTitle">استخراج الذاكرة من بيئات الوكلاء</h3>
+          <p class="subtitle" style="margin: 4px 0 0 0; font-size: 13px;" data-i18n="memory.harvest.modalSubtitle">فحص واستخلاص المعارف والقرارات من بيئات الوكلاء ومراجعتها قبل الإضافة</p>
+        </div>
+        <button class="modal-close" data-close="modalHarvestMemories">×</button>
+      </div>
+
+      <div class="modal-body" style="max-height: 68vh; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
+        <!-- Telemetry & Source Strip -->
+        <div class="harvest-source-strip" id="harvestSourceStrip" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+          <div style="display: flex; gap: 8px; align-items: center;" id="harvestSourceBadges">
+            <span class="badge cyan" id="badgeHarvestTotal">--</span>
+            <span class="badge green" id="badgeHarvestNew">--</span>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-secondary btn-sm" id="btnHarvestRescan">
+              <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              <span data-i18n="memory.harvest.scanBtn">إعادة الفحص</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls: Select All toggle & Filter -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 4px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; font-weight: 600;">
+            <input type="checkbox" id="chkHarvestSelectAll" checked style="width: 16px; height: 16px; cursor: pointer;" />
+            <span data-i18n="memory.harvest.selectAll">تحديد الكل</span>
+          </label>
+          <span id="harvestSelectionCount" style="font-size: 13px; color: var(--text-secondary); font-family: var(--font-mono);">0 محدد</span>
+        </div>
+
+        <!-- Candidate Items List -->
+        <div id="harvestCandidateList" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="skeleton-loader" data-i18n="memory.harvest.scanning">جاري فحص بيئات الوكلاء...</div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn btn-secondary" data-close="modalHarvestMemories" data-i18n="memory.modal.cancelBtn">إلغاء</button>
+        <button class="btn btn-primary" id="btnSubmitHarvestImport" disabled>
+          <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span data-i18n="memory.harvest.importBtn">استيراد المحدد إلى الذاكرة</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1291,6 +2086,146 @@
     </div>
   </div>
 
-  <script src="app.js" defer></script>
+  <!-- Modal: Create New Studio Item (Skill / Agent / Rule) -->
+  <div class="modal-backdrop" id="modalStudioNewItem">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 id="modalTitleStudioNew">Create New Skill or Agent</h3>
+        <button class="modal-close" data-close="modalStudioNewItem">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label id="labelStudioTool">Target Tool / Environment:</label>
+            <select id="inputStudioTool" class="form-select">
+              <option value="claude">Claude Code (~/.claude)</option>
+              <option value="cursor">Cursor (~/.cursor)</option>
+              <option value="antigravity">Antigravity / Skills-LAB</option>
+              <option value="global">Global (~/.agents)</option>
+              <option value="windsurf">Windsurf (~/.windsurf)</option>
+              <option value="codex">Codex (~/.codex)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label id="labelStudioType">Item Type:</label>
+            <select id="inputStudioType" class="form-select">
+              <option value="skill">Skill (SKILL.md)</option>
+              <option value="agent">Agent Prompt (.md)</option>
+              <option value="rule">Rule (.mdc)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label id="labelStudioName">Item Name / Slug:</label>
+          <input type="text" id="inputStudioName" class="form-input" placeholder="e.g. ad-creative or code-reviewer" />
+        </div>
+        <div class="form-group">
+          <label id="labelStudioDesc">Description & Trigger:</label>
+          <textarea id="inputStudioDesc" class="form-textarea" rows="3" placeholder="When the user wants to..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalStudioNewItem">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitCreateStudioItem">Create Boilerplate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Collection -->
+  <div class="modal-backdrop" id="modalStudioNewCollection">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="modalTitleCollection">New Collection</h3>
+        <button class="modal-close" data-close="modalStudioNewCollection">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label id="labelColName">Collection Name:</label>
+          <input type="text" id="inputColName" class="form-input" placeholder="e.g. Production Tools" />
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group flex-1">
+            <label id="labelColColor">Color Theme:</label>
+            <select id="inputColColor" class="form-select">
+              <option value="#3b82f6">Blue (#3b82f6)</option>
+              <option value="#f59e0b">Amber (#f59e0b)</option>
+              <option value="#ec4899">Pink (#ec4899)</option>
+              <option value="#10b981">Green (#10b981)</option>
+              <option value="#8b5cf6">Purple (#8b5cf6)</option>
+              <option value="#ef4444">Red (#ef4444)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalStudioNewCollection">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitCreateCollection">Create Collection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Skills-LAB Compliance Report -->
+  <div class="modal-backdrop" id="modalStudioValidation">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 id="modalTitleValidation">Skills-LAB 15 Rules Compliance Audit</h3>
+        <button class="modal-close" data-close="modalStudioValidation">×</button>
+      </div>
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 12px 16px; border-radius: 8px; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+          <div>
+            <h4 id="valReportSkillName" style="margin: 0; font-size: 15px;">Skill Audit</h4>
+            <div id="valReportPath" style="font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono); margin-top: 4px;"></div>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 24px; font-weight: 800;" id="valReportScore">--</span><span style="font-size: 12px; color: var(--text-tertiary);">/100</span>
+          </div>
+        </div>
+
+        <div id="valReportChecksList" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Checks rendered dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalStudioValidation">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Assign to Collection -->
+  <div class="modal-backdrop" id="modalStudioAssignCollection">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="modalTitleAssignCollection">Assign to Collection</h3>
+        <button class="modal-close" data-close="modalStudioAssignCollection">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;" id="lblAssignInstruction">Select collections to tag this item without modifying its source file:</p>
+        <div id="assignCollectionsChecklist" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modalStudioAssignCollection">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitAssignCollections">Save Collections</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modular Architecture Scripts (defer ensures sequential execution in browser & electron) -->
+  <script src="js/api.js?v=1.4.4" defer></script>
+  <script src="js/icons.js?v=1.4.4" defer></script>
+  <script src="js/i18n.js?v=1.4.4" defer></script>
+  <script src="js/theme.js?v=1.4.4" defer></script>
+  <script src="js/modals.js?v=1.4.4" defer></script>
+  <script src="js/memory.js?v=1.4.4" defer></script>
+  <script src="js/harvester.js?v=1.4.4" defer></script>
+  <script src="js/tasks.js?v=1.4.4" defer></script>
+  <script src="js/dispatcher.js?v=1.4.4" defer></script>
+  <script src="js/studio.js?v=1.4.4" defer></script>
+  <script src="js/micro-apps.js?v=1.4.4" defer></script>
+  <script src="js/office.js?v=1.4.4" defer></script>
+  <script src="js/settings.js?v=1.4.4" defer></script>
+  <script src="app.js?v=1.4.4" defer></script>
 </body>
 </html>

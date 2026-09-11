@@ -4,7 +4,7 @@
  * High-performance JSON-RPC 2.0 server exposing SQLite memory, context rings, subagents, and micro-apps.
  *
  * @module @tidy/mcp/server
- * @version 1.4.2
+ * @version 1.4.4
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
  * @see https://github.com/TidyFactor/Agent

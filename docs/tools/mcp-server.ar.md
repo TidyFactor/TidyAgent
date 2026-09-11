@@ -13,7 +13,7 @@
   "mcpServers": {
     "tidy": {
       "command": "node",
-      "args": ["c:/wamp64/www/TidyFactor/tidy-agent/packages/mcp/src/server.js"],
+      "args": ["/path/to/tidy-agent/packages/mcp/src/server.js"],
       "env": {
         "NODE_ENV": "production"
       }

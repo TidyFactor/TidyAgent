@@ -1,6 +1,6 @@
 {
   "skill": "tidy",
-  "version": "1.4.2",
+  "version": "1.4.5",
   "ecosystem": "TidyFactor Skills-LAB",
   "author": "TidyFactor Team",
   "license": "Apache-2.0",

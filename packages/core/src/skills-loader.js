@@ -284,17 +284,112 @@ function discoverSkills(customSearchDirs = []) {
 /**
  * List all registered community skills
  */
-function listRegisteredSkills() {
+function listRegisteredSkills(options = {}) {
   const db = getDb();
-  return db.prepare('SELECT * FROM registered_skills WHERE is_enabled = 1 ORDER BY alias ASC').all();
+  const includeDisabled = options.includeDisabled || false;
+  const sql = includeDisabled
+    ? 'SELECT * FROM registered_skills ORDER BY alias ASC'
+    : 'SELECT * FROM registered_skills WHERE is_enabled = 1 ORDER BY alias ASC';
+  return db.prepare(sql).all();
 }
 
 /**
- * Get a registered skill by alias or name
+ * Get a registered skill by alias or name or id
  */
-function getRegisteredSkill(aliasOrName) {
+function getRegisteredSkill(aliasOrNameOrId) {
   const db = getDb();
-  return db.prepare('SELECT * FROM registered_skills WHERE alias = ? OR name = ? LIMIT 1').get(aliasOrName, aliasOrName);
+  return db.prepare('SELECT * FROM registered_skills WHERE id = ? OR alias = ? OR name = ? LIMIT 1').get(aliasOrNameOrId, aliasOrNameOrId, aliasOrNameOrId);
+}
+
+/**
+ * Create a custom skill and register it as an agent
+ */
+function createSkill({ name, alias, description, domain = 'general', skillPath = '', allowedTools = [] }) {
+  if (!name) throw new Error('Skill name is required');
+  const safeAlias = (alias || name.replace(/^tidyfactor-/, '')).toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+  const id = `skill_${safeAlias}`;
+
+  const db = getDb();
+  db.prepare(`
+    INSERT INTO registered_skills (id, name, alias, description, skill_path, domain, manifest_json, is_enabled)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+    ON CONFLICT(name) DO UPDATE SET
+      alias = excluded.alias,
+      description = excluded.description,
+      skill_path = excluded.skill_path,
+      domain = excluded.domain,
+      is_enabled = 1,
+      updated_at = CURRENT_TIMESTAMP
+  `).run(id, name, safeAlias, description || '', skillPath || '', domain, JSON.stringify({ tools: allowedTools }));
+
+  // Register or update linked subagent
+  registerSubagent({
+    name: safeAlias,
+    role: name,
+    description: `[Skill: ${name}] ${description || ''}`,
+    systemPrompt: `You are @${safeAlias}, an autonomous subagent powered by the "${name}" skill in domain ${domain.toUpperCase()}.`,
+    allowedTools
+  });
+
+  return getRegisteredSkill(id);
+}
+
+/**
+ * Update registered skill metadata
+ */
+function updateSkill(idOrNameOrAlias, updates = {}) {
+  const db = getDb();
+  const skill = getRegisteredSkill(idOrNameOrAlias);
+  if (!skill) throw new Error(`Skill "${idOrNameOrAlias}" not found`);
+
+  const description = updates.description !== undefined ? updates.description : skill.description;
+  const domain = updates.domain !== undefined ? updates.domain : skill.domain;
+  const isEnabled = updates.isEnabled !== undefined ? (updates.isEnabled ? 1 : 0) : skill.is_enabled;
+
+  db.prepare(`
+    UPDATE registered_skills
+    SET description = ?, domain = ?, is_enabled = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `).run(description, domain, isEnabled, skill.id);
+
+  // Sync with linked subagent enable state
+  try {
+    const { toggleSubagent } = require('./subagents');
+    toggleSubagent(skill.alias, isEnabled);
+  } catch {}
+
+  return getRegisteredSkill(skill.id);
+}
+
+/**
+ * Toggle skill status
+ */
+function toggleSkill(idOrNameOrAlias, isEnabled = null) {
+  const skill = getRegisteredSkill(idOrNameOrAlias);
+  if (!skill) throw new Error(`Skill "${idOrNameOrAlias}" not found`);
+
+  const nextState = isEnabled !== null ? isEnabled : !skill.is_enabled;
+  return updateSkill(skill.id, { isEnabled: nextState });
+}
+
+/**
+ * Delete a registered skill
+ */
+function deleteSkill(idOrNameOrAlias, deleteLinkedAgent = true) {
+  const db = getDb();
+  const skill = getRegisteredSkill(idOrNameOrAlias);
+  if (!skill) return false;
+
+  const res = db.prepare('DELETE FROM registered_skills WHERE id = ?').run(skill.id);
+
+  if (deleteLinkedAgent) {
+    try {
+      const { deleteSubagent } = require('./subagents');
+      deleteSubagent(skill.alias);
+    } catch {}
+  }
+
+  return res.changes > 0;
 }
 
 module.exports = {
@@ -303,5 +398,9 @@ module.exports = {
   registerSkillFromPath,
   discoverSkills,
   listRegisteredSkills,
-  getRegisteredSkill
+  getRegisteredSkill,
+  createSkill,
+  updateSkill,
+  toggleSkill,
+  deleteSkill
 };

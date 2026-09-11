@@ -1,14 +1,13 @@
 /**
  * Tidy Ecosystem — Sovereign Personal Assistant Kernel Entry
- * Main module exporting Database, Memory, Apps, Subagents, and Portability APIs.
+ * Main module exporting Database, Memory, Apps, Subagents, Studio, and Portability APIs.
  *
  * @module @tidy/core
- * @version 1.4.2
+ * @version 1.4.4
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
  * @see https://github.com/TidyFactor/Agent
  */
-
 
 const db = require('./db');
 const memory = require('./memory');
@@ -18,6 +17,11 @@ const skillsLoader = require('./skills-loader');
 const briefGenerator = require('./brief-generator');
 const portability = require('./portability');
 const governance = require('./governance');
+const multiToolScanner = require('./multi-tool-scanner');
+const skillsValidator = require('./skills-validator');
+const boilerplateGenerator = require('./boilerplate-generator');
+const studio = require('./studio');
+const knowledgeHarvester = require('./knowledge-harvester');
 
 module.exports = {
   // Database & Storage SSOT
@@ -32,6 +36,7 @@ module.exports = {
 
   // Memory & FTS5 BM25 Engine with Mathematical Decay
   saveMemory: memory.saveMemory,
+  updateMemory: memory.updateMemory,
   recallMemory: memory.recallMemory,
   forgetMemory: memory.forgetMemory,
   listMemories: memory.listMemories,
@@ -40,6 +45,12 @@ module.exports = {
   pruneDecayedMemories: memory.pruneDecayedMemories,
   TIER_LAMBDAS: memory.TIER_LAMBDAS,
   CATEGORY_BOOSTS: memory.CATEGORY_BOOSTS,
+
+  // Knowledge Harvester & Agent Memory Extractor
+  scanKnowledgeSources: knowledgeHarvester.scanKnowledgeSources,
+  readHarvestItem: knowledgeHarvester.readHarvestItem,
+  importBatchMemories: knowledgeHarvester.importBatchMemories,
+  getStandardHarvestLocations: knowledgeHarvester.getStandardHarvestLocations,
 
   // Micro-Apps
   addTask: apps.addTask,
@@ -59,20 +70,56 @@ module.exports = {
   deleteSecret: apps.deleteSecret,
   listInstalledApps: apps.listInstalledApps,
 
-  // Subagents
+  // Subagents (Full CRUD & Delegation)
   listSubagents: subagents.listSubagents,
   getSubagent: subagents.getSubagent,
   registerSubagent: subagents.registerSubagent,
+  updateSubagent: subagents.updateSubagent,
+  toggleSubagent: subagents.toggleSubagent,
+  deleteSubagent: subagents.deleteSubagent,
   prepareSubagentContext: subagents.prepareSubagentContext,
   runSubagent: subagents.runSubagent,
 
-  // Community Skills as Managed Agents
+  // Community Skills as Managed Agents (Full CRUD)
   parseSkillMd: skillsLoader.parseSkillMd,
   inferDomain: skillsLoader.inferDomain,
   registerSkillFromPath: skillsLoader.registerSkillFromPath,
   discoverSkills: skillsLoader.discoverSkills,
   listRegisteredSkills: skillsLoader.listRegisteredSkills,
   getRegisteredSkill: skillsLoader.getRegisteredSkill,
+  createSkill: skillsLoader.createSkill,
+  updateSkill: skillsLoader.updateSkill,
+  toggleSkill: skillsLoader.toggleSkill,
+  deleteSkill: skillsLoader.deleteSkill,
+
+  // Universal Studio: Multi-Tool Discovery & File I/O
+  TOOL_DEFINITIONS: multiToolScanner.TOOL_DEFINITIONS,
+  scanAllTools: multiToolScanner.scanAllTools,
+  parseFrontmatter: multiToolScanner.parseFrontmatter,
+  readStudioItem: multiToolScanner.readStudioItem,
+  saveStudioItem: multiToolScanner.saveStudioItem,
+  invalidateScanCache: multiToolScanner.invalidateScanCache,
+
+  // Skills-LAB & 15 Rules Validator
+  validateSkill: skillsValidator.validateSkill,
+
+  // Tool-Specific Boilerplate Generator
+  createBoilerplate: boilerplateGenerator.createBoilerplate,
+  generateSkillMd: boilerplateGenerator.generateSkillMd,
+  generateAgentPrompt: boilerplateGenerator.generateAgentPrompt,
+  generateCursorRule: boilerplateGenerator.generateCursorRule,
+  generateWindsurfMemory: boilerplateGenerator.generateWindsurfMemory,
+
+  // Studio Collections & Favorites SSOT
+  listCollections: studio.listCollections,
+  createCollection: studio.createCollection,
+  deleteCollection: studio.deleteCollection,
+  assignItemToCollection: studio.assignItemToCollection,
+  removeItemFromCollection: studio.removeItemFromCollection,
+  toggleFavorite: studio.toggleFavorite,
+  listFavorites: studio.listFavorites,
+  listDiscoveryCatalog: studio.listDiscoveryCatalog,
+  deleteStudioItem: studio.deleteStudioItem,
 
   // Self-Contained Task Briefs
   generateTaskBrief: briefGenerator.generateTaskBrief,

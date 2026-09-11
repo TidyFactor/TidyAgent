@@ -333,6 +333,55 @@ function forgetMemory(nodeId) {
   return true;
 }
 
+function updateMemory(id, { content, summary = null, tier = null, category = null, importance = null, contextId = null } = {}) {
+  if (!id) throw new Error('Memory ID is required for update.');
+  const db = getDb();
+  const existing = db.prepare('SELECT * FROM memory_nodes WHERE id = ?').get(id);
+  if (!existing) {
+    throw new Error(`Memory node not found: ${id}`);
+  }
+
+  const validCategories = ['fact', 'decision', 'pattern', 'preference', 'task', 'rule'];
+  const validTiers = ['core', 'project', 'session', 'ephemeral'];
+
+  const updatedContent = (content !== undefined && content !== null) ? content.trim() : existing.content;
+  if (!updatedContent) {
+    throw new Error('Memory content cannot be empty.');
+  }
+  const updatedCategory = (category && validCategories.includes(category)) ? category : existing.category;
+  const updatedTier = (tier && validTiers.includes(tier)) ? tier : existing.tier;
+  const updatedSummary = (summary !== null && summary !== undefined) ? summary.trim() : (content ? updatedContent.substring(0, 120) : existing.summary);
+  const updatedImportance = (importance !== null && importance !== undefined) ? Math.max(1, Math.min(5, Number(importance) || 3)) : existing.importance;
+  const updatedContextId = (contextId !== undefined && contextId !== null) ? contextId : existing.context_id;
+
+  const stmt = db.prepare(`
+    UPDATE memory_nodes
+    SET content = ?,
+        summary = ?,
+        category = ?,
+        tier = ?,
+        importance = ?,
+        context_id = ?,
+        last_accessed_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `);
+
+  stmt.run(updatedContent, updatedSummary, updatedCategory, updatedTier, updatedImportance, updatedContextId, id);
+
+  const logStmt = db.prepare('INSERT INTO audit_log (action, component, details_json) VALUES (?, ?, ?)');
+  logStmt.run('UPDATE_MEMORY', 'memory_engine', JSON.stringify({ id, tier: updatedTier, category: updatedCategory, importance: updatedImportance }));
+
+  return {
+    id,
+    context_id: updatedContextId,
+    tier: updatedTier,
+    category: updatedCategory,
+    content: updatedContent,
+    summary: updatedSummary,
+    importance: updatedImportance
+  };
+}
+
 function listMemories({ limit = 20, tier = null, category = null, contextId = null } = {}) {
   const db = getDb();
   let sql = `
@@ -439,6 +488,7 @@ function pruneDecayedMemories({ threshold = 0.25, olderThanHours = 24, dryRun = 
 
 module.exports = {
   saveMemory,
+  updateMemory,
   recallMemory,
   forgetMemory,
   listMemories,

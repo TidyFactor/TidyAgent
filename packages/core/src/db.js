@@ -279,6 +279,46 @@ function initDatabase(customPath) {
       details_json TEXT,
       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    -- Skills & Agents Studio: Collections (Non-destructive tagging)
+    CREATE TABLE IF NOT EXISTS skill_collections (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL UNIQUE,
+      color TEXT DEFAULT '#4a9eff',
+      icon TEXT DEFAULT 'folder',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Skills & Agents Studio: Collection Items
+    CREATE TABLE IF NOT EXISTS skill_collection_items (
+      id TEXT PRIMARY KEY,
+      collection_id TEXT REFERENCES skill_collections(id) ON DELETE CASCADE,
+      item_path TEXT NOT NULL,
+      item_type TEXT NOT NULL CHECK (item_type IN ('skill', 'agent', 'rule')),
+      tool TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(collection_id, item_path)
+    );
+
+    -- Skills & Agents Studio: Starred Favorites
+    CREATE TABLE IF NOT EXISTS skill_favorites (
+      item_path TEXT PRIMARY KEY,
+      item_type TEXT NOT NULL,
+      tool TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Skills & Agents Studio: Tool Sources Registry
+    CREATE TABLE IF NOT EXISTS tool_sources (
+      tool_id TEXT PRIMARY KEY,
+      tool_name TEXT NOT NULL,
+      category TEXT NOT NULL CHECK (category IN ('global', 'claude', 'cursor', 'codex', 'copilot', 'windsurf', 'amp', 'antigravity', 'custom')),
+      skills_path TEXT,
+      agents_path TEXT,
+      rules_path TEXT,
+      is_enabled INTEGER DEFAULT 1,
+      last_scanned_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // Idempotent column migrations for tasks and journal domains
@@ -292,6 +332,17 @@ function initDatabase(customPath) {
   try { db.exec("ALTER TABLE user_profile ADD COLUMN currency TEXT DEFAULT 'USD'"); } catch {}
   try { db.exec("ALTER TABLE user_profile ADD COLUMN time_format TEXT DEFAULT '24h'"); } catch {}
   try { db.exec("ALTER TABLE user_profile ADD COLUMN role TEXT DEFAULT 'Owner & Lead Engineer'"); } catch {}
+
+  // Idempotent seed collections for Studio
+  try {
+    const colCount = db.prepare('SELECT COUNT(*) as count FROM skill_collections').get();
+    if (!colCount || colCount.count === 0) {
+      const insCol = db.prepare('INSERT OR IGNORE INTO skill_collections (id, name, color, icon) VALUES (?, ?, ?, ?)');
+      insCol.run('col_marketing', 'Marketing', '#f59e0b', 'tag');
+      insCol.run('col_design', 'Design', '#ec4899', 'palette');
+      insCol.run('col_development', 'Development', '#3b82f6', 'code');
+    }
+  } catch {}
 
   // Seed default data if system_config is empty
   seedDefaults(db);
@@ -385,6 +436,14 @@ function seedDefaults(db) {
   insertApp.run('app_snippets', 'snippets', '1.0.0', 'scripts/apps.js:snippets', JSON.stringify({ defaultLang: 'javascript' }));
   insertApp.run('app_journal', 'journal', '1.0.0', 'scripts/apps.js:journal', JSON.stringify({}));
   insertApp.run('app_vault', 'vault', '1.0.0', 'scripts/apps.js:vault', JSON.stringify({}));
+
+  // Seed Default Collections if empty
+  try {
+    const insCol = db.prepare('INSERT OR IGNORE INTO skill_collections (id, name, color, icon) VALUES (?, ?, ?, ?)');
+    insCol.run('col_marketing', 'Marketing', '#f59e0b', 'tag');
+    insCol.run('col_design', 'Design', '#ec4899', 'palette');
+    insCol.run('col_development', 'Development', '#3b82f6', 'code');
+  } catch {}
 
   // Log Initial Bootstrap Action
   const logAction = db.prepare(`
