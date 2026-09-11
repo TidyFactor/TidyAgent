@@ -17,6 +17,7 @@
     "mcp": "node scripts/mcp_server.js",
     "init-db": "node bin/tidy.js init",
     "validate": "python packages/skill/tools/validate_skill.py",
+    "audit:skill": "node scripts/skills-validator.js packages/skill",
     "build": "node packages/skill/tools/build-skill.js",
     "check:leaks": "node tools/check-leaks.js",
     "docs:dev": "vitepress dev docs",
