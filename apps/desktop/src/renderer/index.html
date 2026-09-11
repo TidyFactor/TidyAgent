@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/04-apps.css?v=1.4.4">
   <link rel="stylesheet" href="css/05-studio.css?v=1.4.4">
   <link rel="stylesheet" href="css/06-dispatcher.css?v=1.4.4">
+  <link rel="stylesheet" href="css/07-mcp.css?v=1.4.4">
 </head>
 <body data-theme="zeitoun" data-mode="light">
   <div class="app-layout">
@@ -82,6 +83,10 @@
         <!-- 5. Agent Runner / Dispatcher -->
         <button class="nav-item" data-tab="dispatcher" title="Agent Runner">
           <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="12" x2="5" y2="12"/></svg></span> <span class="nav-label" data-i18n="nav.dispatcher">Agent Runner</span>
+        </button>
+        <!-- 6. MCP Studio -->
+        <button class="nav-item" data-tab="mcp" title="MCP Studio">
+          <span class="nav-icon"><svg class="qhr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span> <span class="nav-label" data-i18n="nav.mcp">MCP Studio</span>
         </button>
 
         <!-- Apps Section (Includes Tasks Board) -->
@@ -1113,6 +1118,83 @@
               </div>
             </div>
           </div>
+        </section>
+
+        <!-- Tab: MCP Studio (Multi-IDE Protocol Manager) -->
+        <section class="tab-pane" id="pane-mcp">
+          <div class="section-header">
+            <div>
+              <h1 id="headerTitleMcp" data-i18n="titles.mcp">MCP Studio</h1>
+              <p class="subtitle" id="headerSubtitleMcp" data-i18n="titles.mcpSubtitle">Manage MCP servers across Antigravity, Cursor, VS Code, Claude, and Windsurf</p>
+            </div>
+            <div class="header-actions-inline" style="display:flex; gap:8px; align-items:center;">
+              <button class="btn btn-primary" id="mcpBtnAddServer" onclick="window.mcpOpenAddModal()">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span data-i18n="mcp.addServer">Add Server</span>
+              </button>
+              <button class="btn btn-outline" id="mcpBtnRefresh" title="Refresh">
+                <svg class="qhr-icon qhr-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- MCP Toolbar & Filter Chips -->
+          <div class="mcp-toolbar">
+            <!-- Filter Chips (IDEs) -->
+            <div id="mcpFilterChips" class="filter-chips">
+              <button class="filter-chip active" data-mcp-filter="all">
+                <span class="chip-dot detected"></span>
+                <span data-i18n="mcp.filterAll">All</span>
+                <span class="badge" id="badgeMcpTotal">0</span>
+              </button>
+              <button class="filter-chip" data-mcp-filter="antigravity">
+                <span class="chip-dot" id="mcpDot_antigravity"></span>
+                <span>Antigravity</span>
+                <span class="badge" id="mcpBadge_antigravity">0</span>
+              </button>
+              <button class="filter-chip" data-mcp-filter="cursor">
+                <span class="chip-dot" id="mcpDot_cursor"></span>
+                <span>Cursor</span>
+                <span class="badge" id="mcpBadge_cursor">0</span>
+              </button>
+              <button class="filter-chip" data-mcp-filter="vscode">
+                <span class="chip-dot" id="mcpDot_vscode"></span>
+                <span>VS Code</span>
+                <span class="badge" id="mcpBadge_vscode">0</span>
+              </button>
+              <button class="filter-chip" data-mcp-filter="claude">
+                <span class="chip-dot" id="mcpDot_claude"></span>
+                <span>Claude</span>
+                <span class="badge" id="mcpBadge_claude">0</span>
+              </button>
+              <button class="filter-chip" data-mcp-filter="windsurf">
+                <span class="chip-dot" id="mcpDot_windsurf"></span>
+                <span>Windsurf</span>
+                <span class="badge" id="mcpBadge_windsurf">0</span>
+              </button>
+            </div>
+
+            <!-- View Toggle & Search -->
+            <div style="display:flex; align-items:center; gap:10px; flex-grow:1; justify-content:flex-end; max-width:480px;">
+              <div class="mcp-search-wrap">
+                <input type="text" id="mcpSearchInput" class="form-input" placeholder="Search servers..." data-i18n-placeholder="mcp.searchPlaceholder">
+                <svg class="mcp-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+              <div class="btn-group" style="display:flex;">
+                <button class="btn btn-sm btn-outline active" id="mcpBtnViewServers" data-i18n="mcp.viewServers">Servers</button>
+                <button class="btn btn-sm btn-outline" id="mcpBtnViewCatalog">
+                  <span data-i18n="mcp.viewCatalog">Catalog</span>
+                  <span class="badge badge-primary" id="badgeMcpCatalog" style="margin-inline-start:4px; font-size:10px;">9</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MCP Cards Grid -->
+          <div class="mcp-grid" id="mcpServersGrid"></div>
         </section>
 
         <!-- Tab 5: Snippets -->
@@ -2380,6 +2462,102 @@
     </div>
   </div>
 
+  <!-- Modal: MCP Server Add / Edit -->
+  <div class="modal-backdrop" id="mcpServerModal">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 id="mcpModalTitle">Add MCP Server</h3>
+        <button class="modal-close" data-close="mcpServerModal">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="mcpModalIsEdit" value="0" />
+        <input type="hidden" id="mcpModalOriginalName" value="" />
+
+        <div class="form-row" style="display:flex; gap:12px;">
+          <div class="form-group flex-1">
+            <label id="lblMcpTargetIde">Target IDE:</label>
+            <select id="mcpModalIdeSelect" class="form-select">
+              <option value="antigravity">Google Antigravity</option>
+              <option value="cursor">Cursor</option>
+              <option value="vscode">VS Code</option>
+              <option value="claude">Claude Desktop / Code</option>
+              <option value="windsurf">Windsurf</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label id="lblMcpTransport">Transport:</label>
+            <select id="mcpModalTransportSelect" class="form-select">
+              <option value="stdio">stdio (Local Command)</option>
+              <option value="sse">sse (Remote URL)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label id="lblMcpServerName">Server Name:</label>
+          <input type="text" id="mcpModalServerName" class="form-input" placeholder="e.g. sqlite-server" />
+        </div>
+
+        <!-- stdio fields -->
+        <div id="mcpStdioFieldsGroup">
+          <div class="form-group">
+            <label id="lblMcpCommand">Command / Executable:</label>
+            <input type="text" id="mcpModalCommand" class="form-input" placeholder="e.g. npx or python or node" />
+          </div>
+          <div class="form-group">
+            <label id="lblMcpArgs">Arguments:</label>
+            <input type="text" id="mcpModalArgs" class="form-input" placeholder="e.g. -y @modelcontextprotocol/server-sqlite" />
+          </div>
+          <div class="form-group">
+            <label id="lblMcpEnv">Environment Variables (KEY=VALUE per line):</label>
+            <textarea id="mcpModalEnv" class="form-textarea" rows="2" placeholder="API_KEY=your_key&#10;DEBUG=1"></textarea>
+          </div>
+        </div>
+
+        <!-- sse fields -->
+        <div id="mcpSseFieldsGroup" style="display:none;">
+          <div class="form-group">
+            <label id="lblMcpUrl">SSE Endpoint URL:</label>
+            <input type="text" id="mcpModalUrl" class="form-input" placeholder="http://localhost:8000/sse" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="mcpServerModal" onclick="window.mcpCloseModal('mcpServerModal')">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitMcpServer" onclick="window.mcpSaveServerModal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: MCP Clone Server -->
+  <div class="modal-backdrop" id="mcpCloneModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="mcpCloneModalTitle">Clone MCP Server</h3>
+        <button class="modal-close" data-close="mcpCloneModal">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="mcpCloneSourceIde" value="" />
+        <div class="form-group">
+          <label>Source IDE:</label>
+          <div id="mcpCloneSourceLabel" style="font-weight:600; padding:6px 10px; background:var(--bg-tertiary); border-radius:4px;"></div>
+        </div>
+        <div class="form-group">
+          <label id="lblMcpCloneTarget">Target IDE:</label>
+          <select id="mcpCloneTargetIdeSelect" class="form-select"></select>
+        </div>
+        <div class="form-group">
+          <label id="lblMcpCloneName">Server Name:</label>
+          <input type="text" id="mcpCloneServerName" class="form-input" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="mcpCloneModal" onclick="window.mcpCloseModal('mcpCloneModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="window.mcpSubmitClone()">Clone</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modular Architecture Scripts (defer ensures sequential execution in browser & electron) -->
   <script src="js/api.js?v=1.4.4" defer></script>
   <script src="js/icons.js?v=1.4.4" defer></script>
@@ -2391,6 +2569,7 @@
   <script src="js/tasks.js?v=1.4.4" defer></script>
   <script src="js/dispatcher.js?v=1.4.4" defer></script>
   <script src="js/studio.js?v=1.4.4" defer></script>
+  <script src="js/mcp-studio.js?v=1.4.4" defer></script>
   <script src="js/micro-apps.js?v=1.4.4" defer></script>
   <script src="js/office.js?v=1.4.4" defer></script>
   <script src="js/settings.js?v=1.4.4" defer></script>

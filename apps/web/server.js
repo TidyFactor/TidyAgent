@@ -533,6 +533,174 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ok: true, data: brief });
     }
 
+    // ---------------- Sovereign Brain Engine APIs ----------------
+    if (pathname === '/api/brain/doctor' && req.method === 'GET') {
+      try {
+        const data = core.runSystemDoctor();
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/brain/search' && req.method === 'POST') {
+      try {
+        const body = await parseBody(req);
+        const data = core.searchHybridKnowledge(body);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/brain/extract' && req.method === 'POST') {
+      try {
+        const body = await parseBody(req);
+        const data = core.extractAndPersistKi(body);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/brain/transcripts' && req.method === 'GET') {
+      try {
+        const data = core.recallSessionTranscripts({
+          query: query.query || '',
+          days: query.days ? parseInt(query.days, 10) : 7,
+          limit: query.limit ? parseInt(query.limit, 10) : 10,
+          conversationId: query.conversationId || null
+        });
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/brain/hygiene' && req.method === 'POST') {
+      try {
+        const body = await parseBody(req);
+        const data = core.auditStorageHygiene(body);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/brain/firewall' && req.method === 'POST') {
+      try {
+        const body = await parseBody(req);
+        const data = core.checkContextualFirewall(body);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname.startsWith('/api/brain/manifest/') && req.method === 'GET') {
+      try {
+        const skillId = pathname.split('/')[4];
+        const data = core.getSkillManifest(skillId);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    // ---------------- MCP Studio: Multi-IDE Server Management ----------------
+    if (pathname === '/api/mcp/scan' && req.method === 'GET') {
+      try {
+        const data = core.scanAllMcpServers();
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/catalog' && req.method === 'GET') {
+      try {
+        const catalog = core.listMcpCatalog();
+        return sendJson(res, 200, { ok: true, data: catalog });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/config' && req.method === 'GET') {
+      try {
+        const ideId = query.ide;
+        if (!ideId) return sendJson(res, 400, { ok: false, error: 'Missing ide parameter' });
+        const data = core.getMcpConfig(ideId);
+        return sendJson(res, 200, { ok: true, data });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/config' && req.method === 'POST') {
+      const body = await parseBody(req);
+      try {
+        const result = core.saveMcpConfig(body.ideId, body.config);
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/servers' && req.method === 'POST') {
+      const body = await parseBody(req);
+      try {
+        const result = core.addMcpServer(body.ideId, body.name, body.config);
+        return sendJson(res, 201, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/servers' && req.method === 'PUT') {
+      const body = await parseBody(req);
+      try {
+        const result = core.updateMcpServer(body.ideId, body.name, body.config);
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/servers' && req.method === 'DELETE') {
+      try {
+        const ideId = query.ide;
+        const name = query.name;
+        if (!ideId || !name) return sendJson(res, 400, { ok: false, error: 'Missing ide or name parameter' });
+        const result = core.removeMcpServer(ideId, name);
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/clone' && req.method === 'POST') {
+      const body = await parseBody(req);
+      try {
+        const result = core.cloneMcpServer(body.sourceIdeId, body.targetIdeId, body.name, body.targetName);
+        return sendJson(res, 201, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/test' && req.method === 'GET') {
+      try {
+        const ideId = query.ide;
+        const name = query.name;
+        if (!ideId || !name) return sendJson(res, 400, { ok: false, error: 'Missing ide or name parameter' });
+        const result = core.testMcpServer(ideId, name);
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
     // ---------------- Database Maintenance Operations ----------------
     if (pathname === '/api/db/backup' && req.method === 'POST') {
       const body = await parseBody(req);

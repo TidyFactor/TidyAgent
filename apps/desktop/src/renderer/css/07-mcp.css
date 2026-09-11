@@ -1,0 +1,440 @@
+/**
+ * Tidy Ecosystem — MCP Studio Stylesheet (07-mcp.css)
+ * Luxury Qahera UI Kit aesthetic (Apple x Cartier precision).
+ * High-DPI, dark/light theme aware styles for MCP server cards,
+ * terminal command snippets, filter chips, search input, and action triggers.
+ *
+ * Pre-emit critique: P5 H5 E5 S5 R5 V5 D5
+ */
+
+/* ----------------- MCP Toolbar & Controls ----------------- */
+.mcp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  background: var(--bg-secondary);
+  padding: 10px 14px;
+  border-radius: var(--qhr-radius-box, 10px);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Filter Chips with Integrated Status Indicators */
+#mcpFilterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+#mcpFilterChips .filter-chip {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+#mcpFilterChips .filter-chip:hover {
+  border-color: var(--qhr-color-primary, #1D4ED8);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+#mcpFilterChips .filter-chip.active {
+  background: var(--qhr-color-primary, #1D4ED8);
+  color: #ffffff;
+  border-color: var(--qhr-color-primary, #1D4ED8);
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.28);
+}
+
+#mcpFilterChips .filter-chip .chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  display: inline-block;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+#mcpFilterChips .filter-chip .chip-dot.detected {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+#mcpFilterChips .filter-chip.active .chip-dot.detected {
+  background: #6ee7b7;
+  box-shadow: 0 0 6px rgba(110, 231, 183, 0.8);
+}
+
+#mcpFilterChips .filter-chip .badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--bg-surface, rgba(0, 0, 0, 0.06));
+  color: var(--text-secondary);
+  margin-inline-start: 2px;
+  transition: all 0.18s ease;
+}
+
+#mcpFilterChips .filter-chip.active .badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* MCP Search Input Wrapper */
+.mcp-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 200px;
+}
+
+.mcp-search-wrap .mcp-search-icon {
+  position: absolute;
+  inset-inline-start: 11px;
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  transition: color 0.18s ease;
+}
+
+.mcp-search-wrap .form-input {
+  width: 100%;
+  height: 34px;
+  font-size: 12.5px;
+  padding-inline-start: 32px;
+  padding-inline-end: 12px;
+  border-radius: 6px;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.mcp-search-wrap .form-input:focus {
+  border-color: var(--qhr-color-primary, #1D4ED8);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.mcp-search-wrap .form-input:focus + .mcp-search-icon {
+  color: var(--qhr-color-primary, #1D4ED8);
+}
+
+/* ----------------- MCP Server Card (Luxury Grid) ----------------- */
+.mcp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  animation: mcpFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mcp-server-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--qhr-radius-box, 10px);
+  padding: 16px 18px;
+  min-height: 200px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mcp-server-card:hover {
+  border-color: var(--qhr-color-primary, #1D4ED8);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+[data-mode="dark"] .mcp-server-card {
+  background: rgba(18, 26, 46, 0.65);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+[data-mode="dark"] .mcp-server-card:hover {
+  border-color: rgba(96, 165, 250, 0.6);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* Card Header */
+.mcp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.mcp-ide-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.mcp-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mcp-transport-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mcp-transport-pill.stdio {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.mcp-transport-pill.sse {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.mcp-env-pill {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+/* Card Title */
+.mcp-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mcp-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono, "JetBrains Mono", Consolas, monospace);
+  letter-spacing: -0.2px;
+  word-break: break-all;
+}
+
+.mcp-disabled-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 4px;
+}
+
+/* Terminal Command Box */
+.mcp-command-box {
+  position: relative;
+  margin-bottom: 14px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 34px 8px 10px;
+  font-family: var(--font-mono, "JetBrains Mono", Consolas, monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  word-break: break-all;
+  max-height: 60px;
+  overflow-y: auto;
+  transition: border-color 0.18s ease;
+}
+
+[dir="rtl"] .mcp-command-box {
+  padding: 8px 10px 8px 34px;
+}
+
+.mcp-command-box:hover {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.mcp-copy-btn {
+  position: absolute;
+  inset-inline-end: 6px;
+  top: 6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.mcp-copy-btn:hover {
+  color: var(--qhr-color-primary, #1D4ED8);
+  background: var(--bg-surface);
+}
+
+.mcp-copy-btn.copied {
+  color: #10b981;
+}
+
+/* Card Action Footer */
+.mcp-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mcp-btn-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Refined MCP Action Buttons */
+.btn-mcp-action {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.btn-mcp-action svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.btn-mcp-action:hover {
+  border-color: var(--qhr-color-primary, #1D4ED8);
+  color: var(--qhr-color-primary, #1D4ED8);
+  background: rgba(29, 78, 216, 0.05);
+}
+
+/* Refined Outline Danger Button (No solid red block!) */
+.btn-mcp-action.btn-mcp-danger {
+  border-color: rgba(239, 68, 68, 0.28);
+  color: #ef4444;
+  background: transparent;
+}
+
+.btn-mcp-action.btn-mcp-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+/* ----------------- Catalog Card Specifics ----------------- */
+.mcp-catalog-badge {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+.mcp-catalog-vendor {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.mcp-catalog-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0 0 12px 0;
+  min-height: 34px;
+}
+
+.mcp-catalog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ----------------- Animations ----------------- */
+@keyframes mcpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------- Responsive Breakpoints ----------------- */
+@media (max-width: 768px) {
+  .mcp-toolbar {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .mcp-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mcp-search-wrap {
+    min-width: 100%;
+  }
+}

@@ -484,6 +484,73 @@ window.api = {
     }
   },
 
+  // MCP Studio: Multi-IDE Server Management
+  mcp: {
+    scan: async () => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.scan) return eApi.mcp.scan();
+      return fetch('/api/mcp/scan').then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    get: async (ideId) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.get) return eApi.mcp.get(ideId);
+      return fetch(`/api/mcp/config?ide=${encodeURIComponent(ideId)}`).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    save: async (ideId, config) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.save) return eApi.mcp.save(ideId, config);
+      return fetch('/api/mcp/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideId, config })
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    add: async (ideId, name, config) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.add) return eApi.mcp.add(ideId, name, config);
+      return fetch('/api/mcp/servers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideId, name, config })
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    update: async (ideId, name, config) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.update) return eApi.mcp.update(ideId, name, config);
+      return fetch('/api/mcp/servers', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideId, name, config })
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    remove: async (ideId, name) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.remove) return eApi.mcp.remove(ideId, name);
+      return fetch(`/api/mcp/servers?ide=${encodeURIComponent(ideId)}&name=${encodeURIComponent(name)}`, {
+        method: 'DELETE'
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    clone: async (sourceIdeId, targetIdeId, name, targetName) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.clone) return eApi.mcp.clone(sourceIdeId, targetIdeId, name, targetName);
+      return fetch('/api/mcp/clone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceIdeId, targetIdeId, name, targetName })
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    catalog: async () => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.catalog) return eApi.mcp.catalog();
+      return fetch('/api/mcp/catalog').then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    test: async (ideId, name) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.test) return eApi.mcp.test(ideId, name);
+      return fetch(`/api/mcp/test?ide=${encodeURIComponent(ideId)}&name=${encodeURIComponent(name)}`).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    }
+  },
+
   // Native OS Shell / File Manager Bridge
   shell: {
     openPath: async (dirPath) => {

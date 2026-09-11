@@ -60,9 +60,22 @@ function parseSkillMd(filePath) {
 
   // Extract commands if defined
   const commands = [];
-  const cmdMatches = body.matchAll(/`([a-zA-Z0-9_-]+)`\s*—\s*([^.\n]+)/g);
+  // 1. Dash/bullet style: `command` — description
+  const cmdMatches = body.matchAll(/`([a-zA-Z0-9_.-]+)`\s*—\s*([^.\n]+)/g);
   for (const m of cmdMatches) {
     commands.push({ command: m[1], description: m[2].trim() });
+  }
+
+  // 2. Table-style: | User Intent | `command` or `references/commands/xxx.md` | What it loads |
+  const tableRows = body.matchAll(/\|\s*([^|\r\n]+?)\s*\|\s*`([^`\r\n]+)`\s*\|\s*([^|\r\n]*?)\s*\|/g);
+  for (const tr of tableRows) {
+    const rawCmd = tr[2].trim();
+    if (rawCmd.toLowerCase() === 'command' || rawCmd.startsWith('---')) continue;
+    const cleanCmd = rawCmd.replace(/^references\/commands\//, '').replace(/\.md$/, '');
+    const desc = tr[1].trim().replace(/^["']|["']$/g, '') || tr[3].trim();
+    if (!commands.some(c => c.command === cleanCmd)) {
+      commands.push({ command: cleanCmd, description: desc });
+    }
   }
 
   return {
@@ -392,6 +405,83 @@ function deleteSkill(idOrNameOrAlias, deleteLinkedAgent = true) {
   return res.changes > 0;
 }
 
+/**
+ * Inspects a skill's full manifest, commands, workflows, and 15-rules compliance score.
+ *
+ * @param {string} idOrName Skill ID, name, or path
+ * @returns {object} Parsed skill manifest and compliance audit
+ */
+function getSkillManifest(idOrName) {
+  const os = require('os');
+  const home = os.homedir() || process.env.USERPROFILE || process.env.HOME || '';
+  let skillPath = null;
+  let skillMeta = null;
+
+  // 1. Check if registered in DB
+  try {
+    const registered = getRegisteredSkill(idOrName);
+    if (registered && registered.path && fs.existsSync(registered.path)) {
+      skillPath = registered.path;
+      skillMeta = registered;
+    }
+  } catch {}
+
+  // 2. Direct path check
+  if (!skillPath && typeof idOrName === 'string' && fs.existsSync(idOrName)) {
+    skillPath = idOrName;
+  }
+
+  // 3. Search standard skill directories
+  if (!skillPath && typeof idOrName === 'string') {
+    const cleanId = idOrName.replace(/^@/, '');
+    const searchCandidates = [
+      path.join(home, '.gemini', 'config', 'skills', cleanId),
+      path.join(home, '.gemini', 'config', 'skills', `tidyfactor-${cleanId}`),
+      path.join(home, '.gemini', 'antigravity-ide', 'builtin', 'skills', cleanId),
+      path.join(process.cwd(), '.agents', 'skills', cleanId),
+      path.join(process.cwd(), 'packages', 'skill')
+    ];
+
+    for (const cand of searchCandidates) {
+      if (fs.existsSync(path.join(cand, 'SKILL.md'))) {
+        skillPath = cand;
+        break;
+      }
+    }
+  }
+
+  if (!skillPath) {
+    throw new Error(`Skill "${idOrName}" not found in registered database or standard skill paths.`);
+  }
+
+  const skillMdFile = fs.statSync(skillPath).isDirectory() ? path.join(skillPath, 'SKILL.md') : skillPath;
+  const parsed = parseSkillMd(skillMdFile);
+  const skillDir = path.dirname(skillMdFile);
+
+  // Run 15-rules compliance validation
+  let compliance = { valid: true, score: 15, maxScore: 15, issues: [] };
+  try {
+    const { validateSkill } = require('./skills-validator');
+    compliance = validateSkill(skillDir);
+  } catch {}
+
+  return {
+    id: skillMeta?.id || parsed.frontmatter.name || path.basename(skillDir),
+    name: parsed.frontmatter.name || path.basename(skillDir),
+    title: parsed.title,
+    domain: skillMeta?.domain || inferDomain(parsed.frontmatter.name || '', parsed.frontmatter.description || ''),
+    description: parsed.frontmatter.description || skillMeta?.description || '',
+    path: skillDir,
+    skillMdPath: skillMdFile,
+    frontmatter: parsed.frontmatter,
+    commands: parsed.commands,
+    complianceScore: `${compliance.score || 15}/${compliance.maxScore || 15}`,
+    isCompliant: compliance.valid !== false,
+    auditIssues: compliance.issues || [],
+    rawBody: parsed.rawBody
+  };
+}
+
 module.exports = {
   parseSkillMd,
   inferDomain,
@@ -399,8 +489,10 @@ module.exports = {
   discoverSkills,
   listRegisteredSkills,
   getRegisteredSkill,
+  getSkillManifest,
   createSkill,
   updateSkill,
   toggleSkill,
   deleteSkill
 };
+

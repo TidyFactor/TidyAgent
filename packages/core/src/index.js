@@ -22,6 +22,13 @@ const skillsValidator = require('./skills-validator');
 const boilerplateGenerator = require('./boilerplate-generator');
 const studio = require('./studio');
 const knowledgeHarvester = require('./knowledge-harvester');
+const mcpStudio = require('./mcp-studio');
+const brainDoctor = require('./brain-doctor');
+const hybridSearch = require('./hybrid-search');
+const atomicKi = require('./atomic-ki');
+const transcriptForensics = require('./transcript-forensics');
+const storageHygiene = require('./storage-hygiene');
+const firewallChecker = require('./firewall-checker');
 
 module.exports = {
   // Database & Storage SSOT
@@ -139,5 +146,31 @@ module.exports = {
   updateUserProfile: governance.updateUserProfile,
   getGovernanceRules: governance.getGovernanceRules,
   setGovernanceRule: governance.setGovernanceRule,
-  DEFAULT_GOVERNANCE_RULES: governance.DEFAULT_GOVERNANCE_RULES
+  DEFAULT_GOVERNANCE_RULES: governance.DEFAULT_GOVERNANCE_RULES,
+
+  // MCP Studio: Multi-IDE Model Context Protocol Hub
+  getIdeProfiles: mcpStudio.getIdeProfiles,
+  resolveIdeConfigPath: mcpStudio.resolveIdeConfigPath,
+  setConfigPathOverride: mcpStudio.setConfigPathOverride,
+  clearConfigPathOverrides: mcpStudio.clearConfigPathOverrides,
+  getMcpConfig: mcpStudio.getMcpConfig,
+  saveMcpConfig: mcpStudio.saveMcpConfig,
+  scanAllMcpServers: mcpStudio.scanAllMcpServers,
+  addMcpServer: mcpStudio.addMcpServer,
+  updateMcpServer: mcpStudio.updateMcpServer,
+  removeMcpServer: mcpStudio.removeMcpServer,
+  cloneMcpServer: mcpStudio.cloneMcpServer,
+  listMcpCatalog: mcpStudio.listMcpCatalog,
+  testMcpServer: mcpStudio.testMcpServer,
+  MCP_CATALOG: mcpStudio.MCP_CATALOG,
+
+  // Tidy Sovereign Brain MCP Engine Services
+  runSystemDoctor: brainDoctor.runSystemDoctor,
+  searchHybridKnowledge: hybridSearch.searchHybridKnowledge,
+  extractAndPersistKi: atomicKi.extractAndPersistKi,
+  recallSessionTranscripts: transcriptForensics.recallSessionTranscripts,
+  auditStorageHygiene: storageHygiene.auditStorageHygiene,
+  checkContextualFirewall: firewallChecker.checkContextualFirewall,
+  getSkillManifest: skillsLoader.getSkillManifest
 };
+

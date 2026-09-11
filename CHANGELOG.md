@@ -4,6 +4,38 @@ All notable changes to the `tidy` skill and CLI engine are documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-09-11
+
+### Added
+- **Tidy Sovereign Brain MCP Engine (`@tidy/mcp`, `@tidy/core`)**:
+  - Full sovereign replacement for legacy external brain MCP with zero legacy dependency and pure SQLite SSOT architecture.
+  - **Sovereign Brain Tools Fleet**:
+    - `tidy_doctor`: Comprehensive health audit of SQLite SSOT (`tidy.db`), WAL mode, integrity check, 4-tier knowledge base count (`~/.gemini/knowledge/`), and storage footprint.
+    - `tidy_search`: Hybrid search unifying SQLite FTS5 BM25 decay recall with 4-tier disk markdown knowledge files (`global`, `tech`, `projects`, `session`).
+    - `tidy_extract`: Atomic Knowledge Item (KI) creator enforcing mandatory negative constraints, YAML frontmatter on disk, and instant dual-write SQLite SSOT index.
+    - `tidy_transcripts`: Forensic scanner searching past agent conversation transcripts (`transcript.jsonl`) on-demand without context window bloat.
+    - `tidy_hygiene`: Safe storage audit with `--dry-run` default for session recordings (`.webp`), scratch dirs, and ephemeral memory decay purge.
+    - `tidy_firewall`: Contextual domain firewall enforcing zero context bleed between `[Dev Mode]` and `[Marketing Mode]`.
+    - `tidy_manifest`: Deep skill manifest inspector with 15-rules compliance scoring and command table parsing.
+    - `tidy_whoami`: Sovereign identity inspector reporting persona, assistant role, active context, firewall mode, and SQLite DB path.
+  - **Model Context Protocol (MCP) Prompts Protocol**:
+    - Native `prompts/list` and `prompts/get` implementation.
+    - Prompts: `tidy_prompt_task_brief` (context-rich Task Brief synthesis), `tidy_prompt_extract_ki` (atomic KI formulation guide), `tidy_prompt_firewall_audit` (contextual firewall audit guide).
+  - **Dynamic Live MCP Resources**:
+    - `tidy://brain/doctor`: Live system diagnostic health report.
+    - `tidy://brain/taxonomy`: 4-tier knowledge base taxonomy and index.
+    - `tidy://brain/hygiene`: Disk storage breakdown and cleanup candidates.
+  - **Developer CLI One-Liners (`bin/tidy.js`)**:
+    - `tidy doc` / `tidy doctor`: Fast terminal health diagnostics.
+    - `tidy find <query>` / `tidy search <query>`: Fast hybrid recall across DB & disk.
+    - `tidy clean` / `tidy hygiene`: Fast storage hygiene inspection and pruning.
+    - `tidy firewall <text>`: Instant context bleed verification.
+  - **Desktop & Web Parity**:
+    - REST endpoints in `apps/web/server.js`: `/api/brain/doctor`, `/api/brain/search`, `/api/brain/extract`, `/api/brain/transcripts`, `/api/brain/hygiene`, `/api/brain/firewall`, `/api/brain/manifest/:id`.
+    - Electron IPC in `apps/desktop`: `tidy:brain:*` handlers and typed `window.tidyApi.brain` bridge.
+  - **Automated Test Suite (Suite 14)**:
+    - Expanded test suite in `tests/run.js` achieving **56 passed, 0 failed** (100% pass rate).
+
 ## [1.4.5] - 2026-09-11
 
 ### Added

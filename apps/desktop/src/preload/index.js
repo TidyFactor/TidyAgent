@@ -111,9 +111,33 @@ const api = {
     listDiscovery: () => ipcRenderer.invoke('tidy:studio:discovery')
   },
 
+  // MCP Studio: Multi-IDE Server Management
+  mcp: {
+    scan: () => ipcRenderer.invoke('tidy:mcp:scan'),
+    get: (ideId) => ipcRenderer.invoke('tidy:mcp:get', ideId),
+    save: (ideId, config) => ipcRenderer.invoke('tidy:mcp:save', ideId, config),
+    add: (ideId, name, config) => ipcRenderer.invoke('tidy:mcp:add', ideId, name, config),
+    update: (ideId, name, config) => ipcRenderer.invoke('tidy:mcp:update', ideId, name, config),
+    remove: (ideId, name) => ipcRenderer.invoke('tidy:mcp:remove', ideId, name),
+    clone: (sourceIdeId, targetIdeId, name, targetName) => ipcRenderer.invoke('tidy:mcp:clone', sourceIdeId, targetIdeId, name, targetName),
+    catalog: () => ipcRenderer.invoke('tidy:mcp:catalog'),
+    test: (ideId, name) => ipcRenderer.invoke('tidy:mcp:test', ideId, name)
+  },
+
   // Shell / OS Operations
   shell: {
     openPath: (targetPath) => ipcRenderer.invoke('tidy:shell:openPath', targetPath)
+  },
+
+  // Sovereign Brain Engine Operations
+  brain: {
+    doctor: () => ipcRenderer.invoke('tidy:brain:doctor'),
+    search: (params) => ipcRenderer.invoke('tidy:brain:search', params),
+    extract: (params) => ipcRenderer.invoke('tidy:brain:extract', params),
+    transcripts: (params) => ipcRenderer.invoke('tidy:brain:transcripts', params),
+    hygiene: (params) => ipcRenderer.invoke('tidy:brain:hygiene', params),
+    firewall: (params) => ipcRenderer.invoke('tidy:brain:firewall', params),
+    manifest: (skillId) => ipcRenderer.invoke('tidy:brain:manifest', skillId)
   }
 };
 

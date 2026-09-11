@@ -727,6 +727,152 @@ function registerIpcHandlers() {
     }
   });
 
+  // MCP Studio: Multi-IDE Server Management
+  handle('mcp:scan', async () => {
+    try {
+      const data = core.scanAllMcpServers();
+      return { ok: true, data };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:get', async (_, ideId) => {
+    try {
+      const data = core.getMcpConfig(ideId);
+      return { ok: true, data };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:save', async (_, ideId, config) => {
+    try {
+      const res = core.saveMcpConfig(ideId, config);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:add', async (_, ideId, name, config) => {
+    try {
+      const res = core.addMcpServer(ideId, name, config);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:update', async (_, ideId, name, config) => {
+    try {
+      const res = core.updateMcpServer(ideId, name, config);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:remove', async (_, ideId, name) => {
+    try {
+      const res = core.removeMcpServer(ideId, name);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:clone', async (_, sourceIdeId, targetIdeId, name, targetName) => {
+    try {
+      const res = core.cloneMcpServer(sourceIdeId, targetIdeId, name, targetName);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:catalog', async () => {
+    try {
+      const catalog = core.listMcpCatalog();
+      return { ok: true, data: catalog };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:test', async (_, ideId, name) => {
+    try {
+      const res = core.testMcpServer(ideId, name);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  // ---------------- Sovereign Brain Engine IPCs ----------------
+  handle('brain:doctor', async () => {
+    try {
+      const res = core.runSystemDoctor();
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:search', async (_, params) => {
+    try {
+      const res = core.searchHybridKnowledge(params);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:extract', async (_, params) => {
+    try {
+      const res = core.extractAndPersistKi(params);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:transcripts', async (_, params) => {
+    try {
+      const res = core.recallSessionTranscripts(params);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:hygiene', async (_, params) => {
+    try {
+      const res = core.auditStorageHygiene(params);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:firewall', async (_, params) => {
+    try {
+      const res = core.checkContextualFirewall(params);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('brain:manifest', async (_, skillId) => {
+    try {
+      const res = core.getSkillManifest(skillId);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
   // Native OS Shell operations
   handle('shell:openPath', async (_, targetPath) => {
     try {

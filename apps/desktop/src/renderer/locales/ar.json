@@ -18,6 +18,7 @@
     "memory": "مستكشف الذاكرة",
     "harvester": "حصاد المعرفة",
     "dispatcher": "منفذ الوكلاء والمهام",
+    "mcp": "استوديو MCP",
     "microApps": "التطبيقات الإنتاجية",
     "snippets": "مكتبة الأكواد",
     "journal": "سجل اليوميات",
@@ -59,6 +60,8 @@
     "subagentsSubtitle": "اكتشاف المهارات والوكلاء عبر كافة الأدوات، محرر مونو، مجموعات وفحص معايير Skills-LAB",
     "dispatcher": "منفذ الوكلاء ومحرك سياق المهام",
     "dispatcherSubtitle": "تشغيل الوكلاء المتخصصين وتوليد موجز المهام بسياق الحلقات الثلاث (Core, Project, Ephemeral)",
+    "mcp": "استوديو MCP",
+    "mcpSubtitle": "إدارة بروتوكولات MCP عبر محررات Antigravity وCursor وVS Code وClaude وWindsurf",
     "snippets": "مكتبة الأكواد والقوالب",
     "snippetsSubtitle": "حفظ وإعادة استخدام القصاصات البرمجية ونماذج التعليمات والتكوينات",
     "journal": "سجل اليوميات وملاحظات العمل",
@@ -355,5 +358,24 @@
     "importFailed": "تعذر الاستيراد: {err}",
     "batchImportFailed": "تعذر الاستيراد الجماعي: {err}",
     "titleRequired": "يرجى إدخال عنوان للذاكرة"
+  },
+  "mcp": {
+    "title": "استوديو MCP",
+    "subtitle": "إدارة بروتوكولات MCP عبر كافة المحررات",
+    "addServer": "إضافة خادم",
+    "filterAll": "الكل",
+    "searchPlaceholder": "بحث في خوادم MCP...",
+    "viewServers": "الخوادم",
+    "viewCatalog": "الكتالوج",
+    "test": "فحص",
+    "clone": "نسخ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "install": "تثبيت سريع",
+    "installed": "مثبت",
+    "available": "متاح"
   }
 }
+

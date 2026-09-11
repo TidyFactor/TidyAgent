@@ -34,6 +34,10 @@ const { exportToMarkdown, exportToJson, importFromJson, importFromMarkdown } = r
 const { getConfig, setConfig, listConfig, deleteConfig, getUserProfile, updateUserProfile, getGovernanceRules, setGovernanceRule } = require('../scripts/governance');
 const { startServer } = require('../scripts/mcp_server');
 const { runWizard } = require('../scripts/wizard');
+const { runSystemDoctor } = require('../scripts/brain-doctor');
+const { searchHybridKnowledge } = require('../scripts/hybrid-search');
+const { auditStorageHygiene } = require('../scripts/storage-hygiene');
+const { checkContextualFirewall } = require('../scripts/firewall-checker');
 
 // Dynamically resolve @tidy/office domain pack if present
 let office = null;
@@ -332,6 +336,76 @@ async function main() {
           console.log(`  ------------------------------------------------------------`);
           console.log(`  Usage: tidy cfg get <key> | tidy cfg set <key> <value> | tidy cfg del <key>`);
         }
+        break;
+      }
+
+      case 'doc':
+      case 'doctor': {
+        const doc = runSystemDoctor();
+        console.log(`\n${doc.markdownReport}`);
+        break;
+      }
+
+      case 'find':
+      case 'search': {
+        const { flags, positional } = parseFlags(args.slice(1));
+        const query = positional.join(' ');
+        if (!query) {
+          console.error('Error: specify search query (e.g. tidy find "Next.js architecture")');
+          process.exit(1);
+        }
+        const limit = flags.limit ? parseInt(flags.limit, 10) : 5;
+        const scope = flags.scope || 'all';
+        const res = searchHybridKnowledge({ query, scope, limit });
+        console.log(`\n  🔎 Hybrid Knowledge Matches for "${query}" (${res.matches.length} found):`);
+        if (res.matches.length === 0) {
+          console.log('     No matching memories or knowledge items found.');
+        } else {
+          res.matches.forEach((m, idx) => {
+            const badge = `[${m.source.toUpperCase()} | ${m.tier.toUpperCase()}]`;
+            console.log(`\n  ${idx + 1}. ${badge} ${m.title}`);
+            console.log(`     ${m.snippet.slice(0, 160)}...`);
+            console.log(`     Location: ${m.location}`);
+          });
+        }
+        break;
+      }
+
+      case 'clean':
+      case 'hygiene': {
+        const { flags } = parseFlags(args.slice(1));
+        const days = flags.days ? parseInt(flags.days, 10) : 7;
+        const prune = Boolean(flags.prune);
+        const res = auditStorageHygiene({ daysThreshold: days, prune });
+        console.log(`\n  🧹 Storage Hygiene & Safe Pruning:`);
+        console.log(`     Mode         : ${res.dryRun ? 'Dry-Run (Audit Only)' : 'Pruned (Files Deleted)'}`);
+        console.log(`     Age Window   : > ${res.daysThreshold} days`);
+        console.log(`     Candidates   : ${res.candidateCount} files (${res.candidateMb} MB)`);
+        if (!res.dryRun) {
+          console.log(`     Freed Space  : ${res.freedMb} MB (${res.deletedFilesCount} files removed)`);
+          console.log(`     Decayed Mems : ${res.memoryRecordsPruned} records pruned`);
+        } else {
+          console.log(`\n  💡 Run "tidy clean --prune" to execute permanent cleanup.`);
+        }
+        break;
+      }
+
+      case 'firewall': {
+        const { flags, positional } = parseFlags(args.slice(1));
+        const text = positional.join(' ');
+        if (!text) {
+          console.error('Error: specify text to inspect (e.g. tidy firewall "Our AIDA sales funnel")');
+          process.exit(1);
+        }
+        const mode = flags.mode || 'dev';
+        const res = checkContextualFirewall({ text, activeMode: mode });
+        console.log(`\n  🛡️ Contextual Firewall Inspection [${mode.toUpperCase()} MODE]:`);
+        console.log(`     Status        : ${res.compliant ? '🟢 COMPLIANT (Zero Bleed)' : '🔴 CONTAMINATED'}`);
+        console.log(`     Score         : ${res.score}/100`);
+        if (res.violations.length > 0) {
+          console.log(`     Violations    : ${res.violations.join(', ')}`);
+        }
+        console.log(`     Recommendation: ${res.recommendation}`);
         break;
       }
 

@@ -17,6 +17,7 @@
     "tasks": "Tableau des Tâches",
     "subagents": "Studio Compétences & Agents",
     "dispatcher": "Exécuteur d'Agents",
+    "mcp": "Studio MCP",
     "microApps": "MICRO-APPLICATIONS",
     "snippets": "Extraits de Code",
     "journal": "Journal Quotidien",
@@ -58,6 +59,8 @@
     "subagentsSubtitle": "Découverte multi-outils, éditeur monospace et collections",
     "dispatcher": "Exécuteur d'Agents & Synthèse de Contexte",
     "dispatcherSubtitle": "Exécution directe de sous-agents et synthèse de contexte à 3 anneaux",
+    "mcp": "Studio MCP",
+    "mcpSubtitle": "Gérer les serveurs MCP sur Antigravity, Cursor, VS Code, Claude et Windsurf",
     "snippets": "Bibliothèque de Snippets",
     "snippetsSubtitle": "Modèles de prompts, configurations et patrons réutilisables",
     "journal": "Journal de Travail",
@@ -401,5 +404,24 @@
       "tokenGuard": "Jeton de sécurité :",
       "connectedIdes": "IDE connectés :"
     }
+  },
+  "mcp": {
+    "title": "Studio MCP",
+    "subtitle": "Gérer les serveurs MCP sur tous les IDE",
+    "addServer": "Ajouter",
+    "filterAll": "Tous",
+    "searchPlaceholder": "Rechercher des serveurs...",
+    "viewServers": "Serveurs",
+    "viewCatalog": "Catalogue",
+    "test": "Tester",
+    "clone": "Cloner",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "install": "Installer",
+    "installed": "Installé",
+    "available": "Disponible"
   }
 }
+

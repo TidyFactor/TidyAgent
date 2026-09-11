@@ -15,9 +15,14 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
   Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
   Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
   Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2)
+  Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
+  Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
+  Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2)
   Phase 3: Cognitive OS Services & Platform Hubs (v1.4.3-v1.5) 🚀 In Progress
     ├── v1.4.3 Core Governance & Settings Engine               ✅ Done (v1.4.3)
-    └── v1.4.4 Universal Skills & Agents Studio                ✅ Done (v1.4.4 - Current)
+    ├── v1.4.4 Universal Skills & Agents Studio                ✅ Done (v1.4.4)
+    ├── v1.4.5 Knowledge Harvester & Agent Brain Extractor     ✅ Done (v1.4.5)
+    └── v1.5.0 Tidy Sovereign Brain MCP Engine (Brain Replace) 🎯 Next Milestone
   Phase 4: Sovereign Office & Commerce Suite (v1.6.0)          ⏳ Planned
   Phase 5: Multi-Device Sync & Cross-Platform (v2.0.0)         🔮 Vision
 ```
@@ -88,10 +93,24 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 - [x] **FTS5 BM25 Full-Text Search**: Instant search across skill/agent name, description, tags, and full Markdown body content.
 - [x] **Remote Servers & Skills Discovery Hub**: Connect to remote registries (OpenClaw, Hermes, TidyFactor Skills-LAB) to browse, inspect, and install skills in 1 click.
 
-#### 📦 `v1.4.5` — Professional Task Board v2 (Kanban & Subagent Delegation) 🎯 [Next Immediate Release]
-- [ ] Comprehensive Kanban and list views with fluid drag-and-drop state transitions.
-- [ ] Deep integration with Subagent delegation (`@planner`, `@coder`, `@researcher`, `@scribe`).
-- [ ] Autonomous task-to-memory auto-synthesis loop on task completion.
+#### 📦 `v1.4.5` — Knowledge Harvester & Agent Brain Extractor Studio ✅ (Completed — v1.4.5)
+- [x] **Autonomous Knowledge Scanner (`knowledge-harvester.js`)**: Deep discovery across `~/.gemini/knowledge/**`, Antigravity `brain/**/implementation_plan.md` & `walkthrough.md`, `.cursor/rules`, and `GEMINI.md`.
+- [x] **Standalone 2-Pane Master-Detail Studio**: Live search, multi-selection chips, atomic selection, full Markdown streaming inspector, and inline metadata tuning.
+- [x] **Atomic Batch Memory Ingestion (`importBatchMemories`)**: Safe SQLite transactional import with FTS5 BM25 index synchronization and audit logging.
+- [x] **Cross-Studio Interoperability**: Direct 1-click bridge routing items to Universal Skills & Agents Studio editor.
+- [x] **Full MCP, IPC and REST Parity**: Added `tidy_harvest_scan`, `tidy_harvest_read`, `tidy_harvest_import` tools to MCP and endpoints across Desktop IPC and Web REST.
+
+#### 📦 `v1.5.0` — Tidy Sovereign Brain MCP Engine (Full Replacement for tidyfactor-brain) 🎯 [Next Immediate Release]
+- [ ] **System Health Doctor (`tidy_doctor` / `doctor`)**: Diagnostic audit across SQLite SSOT, WAL mode, 4-tier knowledge count, storage footprint, and registered skills.
+- [ ] **Hybrid 4-Tier Knowledge Search (`tidy_search_knowledge_base` / `search_knowledge_base`)**: Dual search querying both SQLite SSOT memory (BM25 FTS5) AND 4-tier disk knowledge (`~/.gemini/knowledge/**`) with taxonomy filtering (`global`, `tech`, `projects`, `session`).
+- [ ] **Atomic Knowledge Extraction (`tidy_extract_knowledge_item` / `extract_knowledge_item`)**: Creates and persists compliant atomic KIs into 4-tier storage with mandatory negative constraints, writing to disk and dual-indexing into SQLite memory.
+- [ ] **Forensic Transcript Scanner (`tidy_recall_transcripts` / `recall_transcripts`)**: On-demand search through session transcripts (`brain/**/transcript.jsonl`) without active context bloat.
+- [ ] **Storage Hygiene & Cache Purge (`tidy_storage_hygiene` / `audit_storage_hygiene`)**: Audits disk consumption of recordings, sessions, and temp artifacts in `.gemini/antigravity-ide` with dry-run safety and pruning.
+- [ ] **Contextual Firewall Checker (`tidy_check_firewall` / `check_contextual_firewall`)**: Inspects prompts and text for domain contamination between Dev, Marketing, and Ops modes.
+- [ ] **Skill Manifest Deep Inspector (`tidy_get_skill_manifest` / `get_skill_manifest`)**: Deep manifest inspection returning parsed commands, workflows, subsystems, and 15-rule audit score.
+- [ ] **Conversational Audio Overview Synthesizer (`tidy_audio_overview` / `generate_audio_overview`)**: Generates 2-host conversational podcast script (NotebookLM style).
+- [ ] **Zero-Breaking Backward-Compatibility Aliases Layer**: Supports both `tidy_*` and legacy `tidyfactor-brain` tool names transparently.
+- [ ] **Full Desktop IPC & Web REST Parity**: Exposes all new brain services to Desktop Management GUI and Web Console.
 
 #### 📦 `v1.4.6` — Cognitive Memory, Advanced Search & Rich Text Editor
 - [ ] Full-featured Markdown/Text editor with syntax highlighting, live preview, auto-save, and tag extraction.

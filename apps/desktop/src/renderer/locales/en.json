@@ -18,6 +18,7 @@
     "memory": "Memory Explorer",
     "harvester": "Knowledge Harvester",
     "dispatcher": "Agent Runner",
+    "mcp": "MCP Studio",
     "microApps": "MICRO-APPS",
     "snippets": "Code Snippets",
     "journal": "Daily Journal",
@@ -59,6 +60,8 @@
     "subagentsSubtitle": "Multi-tool discovery (Claude, Cursor, Codex, Windsurf, Antigravity), monospaced editor, collections & compliance",
     "dispatcher": "Agent Runner & Context Engine",
     "dispatcherSubtitle": "Direct subagent execution and 3-Ring task brief synthesis (Core, Project, Ephemeral)",
+    "mcp": "MCP Studio",
+    "mcpSubtitle": "Manage MCP servers across Antigravity, Cursor, VS Code, Claude, and Windsurf",
     "snippets": "Code Snippets Library",
     "snippetsSubtitle": "Reusable prompt templates, configurations, and code patterns",
     "journal": "Daily Worklog & Journal",
@@ -355,5 +358,24 @@
     "importFailed": "Failed to import: {err}",
     "batchImportFailed": "Batch import failed: {err}",
     "titleRequired": "Please enter a title for the candidate"
+  },
+  "mcp": {
+    "title": "MCP Studio",
+    "subtitle": "Manage MCP servers across all agentic IDEs",
+    "addServer": "Add Server",
+    "filterAll": "All",
+    "searchPlaceholder": "Search servers...",
+    "viewServers": "Servers",
+    "viewCatalog": "Catalog",
+    "test": "Test",
+    "clone": "Clone",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "install": "Install",
+    "installed": "Installed",
+    "available": "Available"
   }
 }
+

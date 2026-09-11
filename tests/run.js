@@ -39,7 +39,21 @@ const { addTask, listTasks, completeTask, addSnippet, listSnippets, deleteSnippe
 const { listSubagents, runSubagent } = require('../scripts/subagents');
 const { exportToMarkdown, exportToJson, importFromJson, importFromMarkdown } = require('../scripts/portability');
 const { getConfig, setConfig, listConfig, deleteConfig, getUserProfile, updateUserProfile, getGovernanceRules, setGovernanceRule } = require('../scripts/governance');
-const { scanKnowledgeSources, importBatchMemories } = require('../packages/core/src');
+const {
+  scanKnowledgeSources,
+  importBatchMemories,
+  getIdeProfiles,
+  listMcpCatalog,
+  addMcpServer,
+  getMcpConfig,
+  updateMcpServer,
+  removeMcpServer,
+  cloneMcpServer,
+  testMcpServer,
+  scanAllMcpServers,
+  setConfigPathOverride,
+  clearConfigPathOverrides
+} = require('../packages/core/src');
 
 console.log('\n[1] Database Bootstrap & Schema Tests');
 test('Database initializes with tables and WAL mode', () => {
@@ -273,6 +287,9 @@ test('Office Pack: @tidy/office loads and registers schema into active SQLite in
 
 test('MCP Server: dynamically exposes Office Suite tools and cashflow resource', () => {
   const { TOOLS, RESOURCES } = require('../packages/mcp/src/server');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_harvest_scan'), 'tidy_harvest_scan tool should be registered');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_harvest_read'), 'tidy_harvest_read tool should be registered');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_harvest_import'), 'tidy_harvest_import tool should be registered');
   assert.ok(TOOLS.find(t => t.name === 'tidy_crm_list'), 'tidy_crm_list tool should be registered');
   assert.ok(TOOLS.find(t => t.name === 'tidy_invoice_create'), 'tidy_invoice_create tool should be registered');
   assert.ok(TOOLS.find(t => t.name === 'tidy_cashflow_summary'), 'tidy_cashflow_summary tool should be registered');
@@ -708,6 +725,264 @@ test('Knowledge Harvester: batch imports candidate memories into SQLite SSOT', (
   const checkStmt = db.prepare('SELECT id FROM memory_nodes WHERE summary = ?');
   const found = checkStmt.get('Prevents dev context bleed into marketing workflows');
   assert.ok(found, 'Memory should be stored in memory_nodes table');
+});
+
+console.log('\n[14] MCP Studio (Multi-IDE Server Management) Tests');
+test('MCP Studio: Registry exposes all 5 IDE profiles with schema awareness', () => {
+  const profiles = getIdeProfiles();
+  assert.ok(profiles.antigravity, 'Should include Antigravity profile');
+  assert.ok(profiles.cursor, 'Should include Cursor profile');
+  assert.ok(profiles.vscode, 'Should include VS Code profile');
+  assert.ok(profiles.claude, 'Should include Claude profile');
+  assert.ok(profiles.windsurf, 'Should include Windsurf profile');
+
+  assert.strictEqual(profiles.vscode.rootKey, 'servers', 'VS Code must use "servers" rootKey');
+  assert.strictEqual(profiles.antigravity.rootKey, 'mcpServers', 'Antigravity must use "mcpServers" rootKey');
+  assert.strictEqual(profiles.cursor.rootKey, 'mcpServers', 'Cursor must use "mcpServers" rootKey');
+});
+
+test('MCP Studio: Verified catalog lists pre-seeded servers', () => {
+  const catalog = listMcpCatalog();
+  assert.ok(catalog.length >= 7, 'Catalog should contain at least 7 verified servers');
+  const sqlite = catalog.find(c => c.id === 'sqlite');
+  assert.ok(sqlite, 'Catalog should have sqlite server');
+  assert.strictEqual(sqlite.category, 'database');
+  const brain = catalog.find(c => c.id === 'tidy-brain');
+  assert.ok(brain, 'Catalog should have Tidy Sovereign MCP server');
+});
+
+test('MCP Studio: Server CRUD, atomic file safety, and cross-IDE cloning', () => {
+  const testHome = path.join(TEST_DIR, 'mock-home');
+  const antigravityConfigPath = path.join(testHome, '.gemini', 'config', 'mcp_config.json');
+  const vscodeConfigPath = path.join(testHome, '.vscode', 'mcp.json');
+
+  fs.mkdirSync(path.dirname(antigravityConfigPath), { recursive: true });
+  fs.mkdirSync(path.dirname(vscodeConfigPath), { recursive: true });
+
+  fs.writeFileSync(antigravityConfigPath, JSON.stringify({ mcpServers: {} }), 'utf8');
+  fs.writeFileSync(vscodeConfigPath, JSON.stringify({ servers: {} }), 'utf8');
+
+  // Override paths cleanly for isolated testing
+  setConfigPathOverride('antigravity', antigravityConfigPath);
+  setConfigPathOverride('vscode', vscodeConfigPath);
+
+  // 1. Add server to Antigravity
+  const addRes = addMcpServer('antigravity', 'test-sqlite', {
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-sqlite'],
+    env: { TEST_ENV: '1' }
+  });
+  assert.strictEqual(addRes.ok, true);
+
+  // Verify file on disk
+  const cfg = getMcpConfig('antigravity');
+  assert.strictEqual(cfg.exists, true);
+  assert.strictEqual(cfg.serverCount, 1);
+  assert.ok(cfg.servers['test-sqlite']);
+  assert.strictEqual(cfg.servers['test-sqlite'].command, 'npx');
+
+  // 2. Update server in Antigravity
+  const updateRes = updateMcpServer('antigravity', 'test-sqlite', {
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-sqlite', '--readonly'],
+    env: { TEST_ENV: '2' }
+  });
+  assert.strictEqual(updateRes.ok, true);
+  const updatedCfg = getMcpConfig('antigravity');
+  assert.deepStrictEqual(updatedCfg.servers['test-sqlite'].args, ['-y', '@modelcontextprotocol/server-sqlite', '--readonly']);
+
+  // 3. Clone server from Antigravity (rootKey: mcpServers) to VS Code (rootKey: servers)
+  const cloneRes = cloneMcpServer('antigravity', 'vscode', 'test-sqlite', 'cloned-sqlite');
+  assert.strictEqual(cloneRes.ok, true);
+
+  const vscodeCfg = getMcpConfig('vscode');
+  assert.strictEqual(vscodeCfg.exists, true);
+  assert.ok(vscodeCfg.servers['cloned-sqlite'], 'Server should be cloned to VS Code');
+  assert.strictEqual(vscodeCfg.servers['cloned-sqlite'].command, 'npx');
+
+  // Verify raw VS Code config has "servers" rootKey, not "mcpServers"
+  assert.ok(vscodeCfg.raw.servers);
+  assert.strictEqual(vscodeCfg.raw.mcpServers, undefined);
+
+  // 4. Test server command diagnostic
+  const testRes = testMcpServer('antigravity', 'test-sqlite');
+  assert.strictEqual(typeof testRes.ok, 'boolean');
+
+  // 5. Remove server from Antigravity
+  const remRes = removeMcpServer('antigravity', 'test-sqlite');
+  assert.strictEqual(remRes.ok, true);
+  const afterRem = getMcpConfig('antigravity');
+  assert.strictEqual(afterRem.serverCount, 0);
+  assert.strictEqual(afterRem.servers['test-sqlite'], undefined);
+
+  // Clean up overrides
+  clearConfigPathOverrides();
+});
+
+console.log('\n[14] Tidy Sovereign Brain MCP Engine (v1.5.0) Tests');
+const {
+  runSystemDoctor,
+  searchHybridKnowledge,
+  extractAndPersistKi,
+  recallSessionTranscripts,
+  auditStorageHygiene,
+  checkContextualFirewall,
+  getSkillManifest: inspectSkillManifest
+} = require('../packages/core/src');
+const {
+  TOOLS: mcpTools,
+  RESOURCES: mcpResources,
+  PROMPTS: mcpPrompts,
+  handleToolCall,
+  handleResourceRead,
+  handlePromptGet
+} = require('../packages/mcp/src/server');
+
+test('Brain Doctor: SQLite SSOT, WAL mode, taxonomy, and storage diagnostics', () => {
+  const doc = runSystemDoctor();
+  assert.ok(doc.status === 'HEALTHY' || doc.status === 'WARNING', `Doctor status was ${doc.status}`);
+  assert.strictEqual(doc.db.walMode, 'wal');
+  assert.strictEqual(doc.db.integrityOk, true);
+  assert.ok(typeof doc.db.memoryCount === 'number');
+  assert.ok(doc.taxonomy.tiers.global);
+  assert.ok(doc.taxonomy.tiers.tech);
+  assert.ok(doc.markdownReport.includes('Tidy Brain Doctor Report'));
+});
+
+test('Atomic KI Extractor: Mandatory negative constraint & dual-write SQLite sync', () => {
+  const ki = extractAndPersistKi({
+    id: 'KI-Test-WAL-Performance',
+    title: 'Test SQLite WAL Concurrency Tuning',
+    rule: 'Always set PRAGMA journal_mode = WAL and synchronous = NORMAL.',
+    triggerContext: 'When initializing local-first databases.',
+    negativeConstraint: 'Never use DELETE journal mode in multi-process setups.',
+    scope: 'tech',
+    domain: 'Database',
+    importance: 5
+  });
+
+  assert.strictEqual(ki.ok, true);
+  assert.strictEqual(ki.id, 'KI-Test-WAL-Performance');
+  assert.strictEqual(ki.dualIndexed, true);
+  assert.ok(fs.existsSync(ki.filePath));
+
+  // Verify file content has frontmatter
+  const content = fs.readFileSync(ki.filePath, 'utf8');
+  assert.ok(content.includes('negative_constraint:'));
+  assert.ok(content.includes('Never use DELETE journal mode in multi-process setups.'));
+
+  // Test Non-negotiable Cognitive Invariant: Mandatory Negative Constraint
+  assert.throws(() => {
+    extractAndPersistKi({
+      id: 'KI-Invalid-Test',
+      title: 'Invalid KI without negative boundary',
+      rule: 'Some rule',
+      negativeConstraint: '' // Missing!
+    });
+  }, /Mandatory negative constraint is missing/);
+
+  // Clean up test KI file
+  try { fs.unlinkSync(ki.filePath); } catch {}
+});
+
+test('Hybrid Knowledge Search: Unified recall across SQLite and 4-tier disk files', () => {
+  const res = searchHybridKnowledge({
+    query: 'WAL mode',
+    scope: 'all',
+    limit: 5
+  });
+
+  assert.strictEqual(res.query, 'WAL mode');
+  assert.ok(Array.isArray(res.matches));
+  assert.ok(res.matches.length > 0, 'Should find WAL mode in memory or knowledge files');
+  assert.ok(res.matches.some(m => m.source === 'sqlite' || m.source === 'disk'));
+});
+
+test('Contextual Domain Firewall: Strict isolation and zero context bleed', () => {
+  // 1. Clean engineering text in Dev mode -> Compliant
+  const cleanDev = checkContextualFirewall({
+    text: 'Refactor database indexing to use composite FTS5 keys.',
+    activeMode: 'dev'
+  });
+  assert.strictEqual(cleanDev.compliant, true);
+  assert.strictEqual(cleanDev.score, 100);
+
+  // 2. Marketing bleed in Dev mode -> Contaminated
+  const contaminatedDev = checkContextualFirewall({
+    text: 'Use the AIDA framework to craft a high conversion landing page hook with FOMO.',
+    activeMode: 'dev'
+  });
+  assert.strictEqual(contaminatedDev.compliant, false);
+  assert.ok(contaminatedDev.violations.includes('aida framework'));
+  assert.ok(contaminatedDev.violations.includes('fomo'));
+  assert.ok(contaminatedDev.score < 100);
+
+  // 3. Low-level dev bleed in Marketing mode -> Contaminated
+  const contaminatedMarketing = checkContextualFirewall({
+    text: 'Our product helps clients run SELECT * FROM users and check PRAGMA journal_mode.',
+    activeMode: 'marketing'
+  });
+  assert.strictEqual(contaminatedMarketing.compliant, false);
+  assert.ok(contaminatedMarketing.violations.includes('select * from'));
+  assert.ok(contaminatedMarketing.violations.includes('pragma journal_mode'));
+});
+
+test('Storage Hygiene: Safe dry-run inspection of recordings and cache artifacts', () => {
+  const hygiene = auditStorageHygiene({ daysThreshold: 30, dryRun: true });
+  assert.strictEqual(hygiene.dryRun, true);
+  assert.strictEqual(hygiene.action, 'audit_only');
+  assert.strictEqual(typeof hygiene.candidateCount, 'number');
+  assert.strictEqual(typeof hygiene.candidateMb, 'number');
+  assert.strictEqual(hygiene.deletedFilesCount, 0, 'Dry-run must never delete files');
+});
+
+test('Skill Manifest Inspector: 15-rules compliance scoring', () => {
+  const manifest = inspectSkillManifest('tidy');
+  assert.ok(manifest.id.includes('tidy'));
+  assert.ok(manifest.commands.length > 0);
+  assert.ok(manifest.complianceScore.includes('/15'));
+  assert.strictEqual(manifest.isCompliant, true);
+});
+
+test('Stdio MCP Server: Tools fleet, dynamic resources, and Prompts protocol', () => {
+  // 1. Verify 8 brain tools registered
+  const toolNames = mcpTools.map(t => t.name);
+  const requiredTools = [
+    'tidy_doctor',
+    'tidy_search',
+    'tidy_extract',
+    'tidy_transcripts',
+    'tidy_hygiene',
+    'tidy_firewall',
+    'tidy_manifest',
+    'tidy_whoami'
+  ];
+  for (const name of requiredTools) {
+    assert.ok(toolNames.includes(name), `Missing required MCP tool: ${name}`);
+  }
+
+  // 2. Test handleToolCall for tidy_doctor
+  const docResult = handleToolCall('tidy_doctor', {});
+  assert.ok(docResult.content[0].text.includes('Tidy Brain Doctor Report'));
+
+  // 3. Test handleToolCall for tidy_whoami
+  const whoResult = handleToolCall('tidy_whoami', {});
+  const whoData = JSON.parse(whoResult.content[0].text);
+  assert.strictEqual(whoData.version, '1.5.0');
+  assert.ok(whoData.sqlite_db);
+
+  // 4. Test live dynamic resources
+  const resDoc = handleResourceRead('tidy://brain/doctor');
+  assert.strictEqual(resDoc.contents[0].mimeType, 'application/json');
+  const resTaxonomy = handleResourceRead('tidy://brain/taxonomy');
+  assert.ok(resTaxonomy.contents[0].text.includes('global'));
+
+  // 5. Test MCP Prompts protocol
+  assert.ok(mcpPrompts.length >= 3);
+  const promptResult = handlePromptGet('tidy_prompt_task_brief', { title: 'Implement Auth' });
+  assert.ok(promptResult.messages[0].content.text.includes('Implement Auth'));
+  const shortPrompt = handlePromptGet('brief', { title: 'Implement Auth' });
+  assert.ok(shortPrompt.messages[0].content.text.includes('Implement Auth'));
 });
 
 // Cleanup test DB

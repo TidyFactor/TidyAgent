@@ -24,14 +24,19 @@ const { getRegisteredSkill } = require('./skills-loader');
 function generateTaskBrief({
   taskId = null,
   taskTitle = '',
+  title = '',
   taskDescription = '',
+  description = '',
   agentName = 'coder',
   domain = 'general',
   verificationGates = [],
   outputPath = null
-}) {
+} = {}) {
   const db = getDb();
   let task = null;
+
+  taskTitle = taskTitle || title || '';
+  taskDescription = taskDescription || description || '';
 
   if (taskId) {
     task = getTask(taskId);

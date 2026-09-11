@@ -61,6 +61,8 @@ function switchTab(tabId) {
     if (window.loadCashflow) window.loadCashflow();
   } else if (tabId === 'harvester') {
     if (window.loadHarvesterIndex) window.loadHarvesterIndex();
+  } else if (tabId === 'mcp') {
+    if (window.loadMcpStudio) window.loadMcpStudio();
   } else if (tabId === 'settings') {
     loadStats();
     if (window.renderThemeGallery) window.renderThemeGallery();

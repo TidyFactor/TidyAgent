@@ -17,6 +17,7 @@
     "tasks": "Aufgaben-Board",
     "subagents": "Skills & Agents Studio",
     "dispatcher": "Agent Runner",
+    "mcp": "MCP Studio",
     "microApps": "MIKRO-APPS",
     "snippets": "Code-Snippets",
     "journal": "Tagebuch & Protokoll",
@@ -58,6 +59,8 @@
     "subagentsSubtitle": "Multi-Tool-Erkennung, Code-Editor und Sammlungen",
     "dispatcher": "Agent Runner & Kontext-Synthese",
     "dispatcherSubtitle": "Direkte Ausführung von Subagenten und 3-Ring-Kontext-Zusammenfassung",
+    "mcp": "MCP Studio",
+    "mcpSubtitle": "MCP-Server für Antigravity, Cursor, VS Code, Claude und Windsurf verwalten",
     "snippets": "Snippet-Bibliothek",
     "snippetsSubtitle": "Wiederverwendbare Prompts, Konfigurationen und Vorlagen",
     "journal": "Arbeitsprotokoll & Journal",
@@ -401,5 +404,24 @@
       "tokenGuard": "Sicherheits-Token:",
       "connectedIdes": "Verbundene IDEs:"
     }
+  },
+  "mcp": {
+    "title": "MCP Studio",
+    "subtitle": "MCP-Server über alle IDEs verwalten",
+    "addServer": "Hinzufügen",
+    "filterAll": "Alle",
+    "searchPlaceholder": "Server durchsuchen...",
+    "viewServers": "Server",
+    "viewCatalog": "Katalog",
+    "test": "Testen",
+    "clone": "Klonen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "install": "Installieren",
+    "installed": "Installiert",
+    "available": "Verfügbar"
   }
 }
+

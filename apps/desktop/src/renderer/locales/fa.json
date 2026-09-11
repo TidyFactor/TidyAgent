@@ -17,6 +17,7 @@
     "tasks": "تابلوی وظایف",
     "subagents": "استودیوی مهارت‌ها و عامل‌ها",
     "dispatcher": "مجری عامل‌ها و وظایف",
+    "mcp": "استودیو MCP",
     "microApps": "برنامه‌های کاربردی",
     "snippets": "قطعه‌کدها",
     "journal": "یادداشت‌های روزانه",
@@ -58,6 +59,8 @@
     "subagentsSubtitle": "کشف مهارت‌ها در ابزارهای گوناگون، ویرایشگر مونو و مجموعه‌ها",
     "dispatcher": "مجری عامل‌ها و موتور زمینه وظایف",
     "dispatcherSubtitle": "اجرای مستقیم عامل‌ها و تولید خلاصه‌زمینه وظیفه (مدل ۳ حلقه)",
+    "mcp": "استودیو MCP",
+    "mcpSubtitle": "مدیریت سرورهای MCP در Antigravity، Cursor، VS Code، Claude و Windsurf",
     "snippets": "کتابخانه قطعه‌کدها",
     "snippetsSubtitle": "قالب‌های پرامپت، پیکربندی‌ها و الگوهای قابل استفاده مجدد",
     "journal": "دفتر یادداشت کاری روزانه",
@@ -401,5 +404,24 @@
       "tokenGuard": "توکن امنیتی:",
       "connectedIdes": "محیط‌های IDE متصل:"
     }
+  },
+  "mcp": {
+    "title": "استودیو MCP",
+    "subtitle": "مدیریت سرورهای MCP در تمامی محیط‌های توسعه",
+    "addServer": "افزودن سرور",
+    "filterAll": "همه",
+    "searchPlaceholder": "جستجوی سرورها...",
+    "viewServers": "سرورها",
+    "viewCatalog": "کاتالوگ",
+    "test": "آزمایش",
+    "clone": "شبیه‌سازی",
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "save": "ذخیره",
+    "cancel": "انصراف",
+    "install": "نصب سریع",
+    "installed": "نصب‌شده",
+    "available": "موجود"
   }
 }
+
