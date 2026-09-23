@@ -21,7 +21,7 @@ function getStandardHarvestLocations() {
   const home = os.homedir() || process.env.USERPROFILE || process.env.HOME;
   const geminiRoot = path.join(home, '.gemini');
 
-  return [
+  const locations = [
     {
       id: 'gemini_knowledge',
       name: 'Gemini Knowledge Base',
@@ -65,6 +65,18 @@ function getStandardHarvestLocations() {
       dir: path.join(process.cwd(), '.agents', 'skills')
     }
   ];
+
+  const ideKnowledgeDir = path.join(geminiRoot, 'antigravity-ide', 'knowledge');
+  if (fs.existsSync(ideKnowledgeDir)) {
+    locations.push({
+      id: 'antigravity_knowledge',
+      name: 'Antigravity IDE Knowledge',
+      type: 'ki',
+      dir: ideKnowledgeDir
+    });
+  }
+
+  return locations;
 }
 
 /**
@@ -139,6 +151,46 @@ function parseMarkdownDocument(raw) {
   }
 
   return result;
+}
+
+/**
+ * Parse an Antigravity conversation transcript to extract session intent and user directives
+ */
+function parseSessionTranscript(filePath) {
+  if (!filePath || !fs.existsSync(filePath)) return null;
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    const lines = content.split(/\r?\n/).filter(Boolean);
+    const userPrompts = [];
+    let firstUserPrompt = '';
+
+    for (const line of lines) {
+      try {
+        const entry = JSON.parse(line);
+        if (entry.type === 'USER_INPUT' && entry.content) {
+          let text = String(entry.content)
+            .replace(/<USER_REQUEST>[\r\n]*/gi, '')
+            .replace(/<\/USER_REQUEST>[\s\S]*/gi, '')
+            .replace(/<ADDITIONAL_METADATA>[\s\S]*<\/ADDITIONAL_METADATA>/gi, '')
+            .trim();
+          if (text && !userPrompts.includes(text)) {
+            userPrompts.push(text);
+            if (!firstUserPrompt) firstUserPrompt = text;
+          }
+        }
+      } catch {}
+    }
+
+    if (userPrompts.length === 0) return null;
+
+    const firstLine = firstUserPrompt.split('\n')[0].replace(/[@\/]/g, '').trim();
+    const title = firstLine.length > 70 ? firstLine.slice(0, 70) + '...' : firstLine || 'Session Directives';
+    const summary = userPrompts.slice(0, 3).map(p => p.split('\n')[0]).join(' | ').slice(0, 200);
+    const body = '### Session User Directives\n' + userPrompts.map(p => `- ${p.replace(/\r?\n+/g, ' ')}`).join('\n');
+    return { title, summary, body, promptCount: userPrompts.length };
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -249,59 +301,104 @@ function scanKnowledgeSources(options = {}) {
       try {
         const sessions = fs.readdirSync(loc.dir, { withFileTypes: true });
         for (const sess of sessions) {
-          if (!sess.isDirectory()) continue;
+          if (!sess.isDirectory() || sess.name.startsWith('.') || sess.name === 'tempmediaStorage') continue;
           const sessDir = path.join(loc.dir, sess.name);
 
-          // Check for implementation_plan.md
-          const planPath = path.join(sessDir, 'implementation_plan.md');
-          if (fs.existsSync(planPath)) {
-            try {
-              const stats = fs.statSync(planPath);
-              const raw = fs.readFileSync(planPath, 'utf8');
-              const parsed = parseMarkdownDocument(raw);
-              const title = parsed.title || `Implementation Plan (${sess.name.slice(0, 8)})`;
-              const summary = cleanSummaryText(parsed.body, 160) || title;
-              registerCandidate({
-                id: `harvest_${crypto.createHash('md5').update(planPath).digest('hex').slice(0, 10)}`,
-                title,
-                summary,
-                content: parsed.body.trim(),
-                category: 'decision',
-                tier: 'project',
-                importance: 4,
-                source: loc.id,
-                sourceLabel: loc.name,
-                sourcePath: planPath,
-                mtime: stats.mtimeMs,
-                sizeFormatted: `${(stats.size / 1024).toFixed(1)} KB`
-              });
-            } catch { }
-          }
+          // Find all markdown deliverables directly in session folder
+          let sessionMdFiles = [];
+          try {
+            sessionMdFiles = fs.readdirSync(sessDir, { withFileTypes: true })
+              .filter(e => e.isFile() && e.name.endsWith('.md'))
+              .map(e => e.name);
+          } catch { }
 
-          // Check for walkthrough.md
-          const walkPath = path.join(sessDir, 'walkthrough.md');
-          if (fs.existsSync(walkPath)) {
-            try {
-              const stats = fs.statSync(walkPath);
-              const raw = fs.readFileSync(walkPath, 'utf8');
-              const parsed = parseMarkdownDocument(raw);
-              const title = parsed.title || `Walkthrough (${sess.name.slice(0, 8)})`;
-              const summary = cleanSummaryText(parsed.body, 160) || title;
-              registerCandidate({
-                id: `harvest_${crypto.createHash('md5').update(walkPath).digest('hex').slice(0, 10)}`,
-                title,
-                summary,
-                content: parsed.body.trim(),
-                category: 'pattern',
-                tier: 'session',
-                importance: 3,
-                source: loc.id,
-                sourceLabel: loc.name,
-                sourcePath: walkPath,
-                mtime: stats.mtimeMs,
-                sizeFormatted: `${(stats.size / 1024).toFixed(1)} KB`
-              });
-            } catch { }
+          if (sessionMdFiles.length > 0) {
+            for (const mdFile of sessionMdFiles) {
+              const fullMdPath = path.join(sessDir, mdFile);
+              try {
+                const stats = fs.statSync(fullMdPath);
+                const raw = fs.readFileSync(fullMdPath, 'utf8');
+                const parsed = parseMarkdownDocument(raw);
+
+                let category = 'pattern';
+                let tier = 'project';
+                let importance = 3;
+                let defaultTitle = `${path.basename(mdFile, '.md')} (${sess.name.slice(0, 8)})`;
+
+                if (mdFile === 'implementation_plan.md') {
+                  category = 'decision';
+                  tier = 'project';
+                  importance = 4;
+                  defaultTitle = `Implementation Plan (${sess.name.slice(0, 8)})`;
+                } else if (mdFile === 'walkthrough.md') {
+                  category = 'pattern';
+                  tier = 'session';
+                  importance = 3;
+                  defaultTitle = `Walkthrough (${sess.name.slice(0, 8)})`;
+                } else if (mdFile === 'task.md') {
+                  category = 'task';
+                  tier = 'session';
+                  importance = 3;
+                  defaultTitle = `Session Task (${sess.name.slice(0, 8)})`;
+                } else if (mdFile === 'learning_proposal.md') {
+                  category = 'rule';
+                  tier = 'project';
+                  importance = 4;
+                  defaultTitle = `Learning Proposal (${sess.name.slice(0, 8)})`;
+                } else if (mdFile.includes('audit')) {
+                  category = 'decision';
+                  tier = 'project';
+                  importance = 4;
+                  defaultTitle = `Audit Report (${sess.name.slice(0, 8)})`;
+                } else {
+                  category = inferCategoryFromText(parsed.title || parsed.body, 'fact');
+                }
+
+                const title = parsed.title || defaultTitle;
+                const summary = cleanSummaryText(parsed.body, 160) || title;
+
+                registerCandidate({
+                  id: `harvest_${crypto.createHash('md5').update(fullMdPath).digest('hex').slice(0, 10)}`,
+                  title,
+                  summary,
+                  content: parsed.body.trim(),
+                  category,
+                  tier,
+                  importance,
+                  source: loc.id,
+                  sourceLabel: loc.name,
+                  sourcePath: fullMdPath,
+                  mtime: stats.mtimeMs,
+                  sizeFormatted: `${(stats.size / 1024).toFixed(1)} KB`
+                });
+              } catch { }
+            }
+          } else {
+            // No markdown files in this session — inspect conversation transcript!
+            const logPath = path.join(sessDir, '.system_generated', 'logs', 'transcript.jsonl');
+            if (fs.existsSync(logPath)) {
+              try {
+                const stats = fs.statSync(logPath);
+                const parsedTranscript = parseSessionTranscript(logPath);
+                if (parsedTranscript && parsedTranscript.promptCount > 0) {
+                  const title = `Session: ${parsedTranscript.title} (${sess.name.slice(0, 8)})`;
+                  registerCandidate({
+                    id: `harvest_${crypto.createHash('md5').update(logPath).digest('hex').slice(0, 10)}`,
+                    title,
+                    summary: parsedTranscript.summary,
+                    content: parsedTranscript.body,
+                    category: 'task',
+                    tier: 'session',
+                    importance: 3,
+                    source: loc.id,
+                    sourceLabel: loc.name,
+                    sourcePath: logPath,
+                    mtime: stats.mtimeMs,
+                    sizeFormatted: `${(stats.size / 1024).toFixed(1)} KB`
+                  });
+                }
+              } catch { }
+            }
           }
         }
       } catch { }
@@ -467,6 +564,17 @@ function readHarvestItem(sourcePath) {
         frontmatter: meta
       };
     } catch {
+      parsed = { title: path.basename(resolved), body: raw, frontmatter: {} };
+    }
+  } else if (resolved.endsWith('.jsonl')) {
+    const parsedTranscript = parseSessionTranscript(resolved);
+    if (parsedTranscript) {
+      parsed = {
+        title: `Session: ${parsedTranscript.title}`,
+        body: parsedTranscript.body,
+        frontmatter: { type: 'transcript', prompts: parsedTranscript.promptCount }
+      };
+    } else {
       parsed = { title: path.basename(resolved), body: raw, frontmatter: {} };
     }
   } else {

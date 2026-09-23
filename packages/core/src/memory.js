@@ -84,14 +84,22 @@ function calculateCognitiveScore(node, referenceDate = new Date()) {
   };
 }
 
-function saveMemory({
-  content,
-  summary = null,
-  tier = 'project',
-  category = 'fact',
-  importance = 3,
-  contextId = null
-}) {
+function saveMemory(optionsOrContent, maybeOptions = {}) {
+  let opts = {};
+  if (typeof optionsOrContent === 'string') {
+    opts = { ...maybeOptions, content: optionsOrContent };
+  } else if (optionsOrContent && typeof optionsOrContent === 'object') {
+    opts = { ...optionsOrContent };
+  }
+
+  const {
+    content,
+    summary = null,
+    tier = 'project',
+    category = 'fact',
+    importance = 3,
+    contextId = null
+  } = opts;
   if (!content || typeof content !== 'string' || content.trim().length === 0) {
     throw new Error('Memory content cannot be empty.');
   }

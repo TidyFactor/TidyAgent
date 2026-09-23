@@ -26,10 +26,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `tidy://brain/taxonomy`: 4-tier knowledge base taxonomy and index.
     - `tidy://brain/hygiene`: Disk storage breakdown and cleanup candidates.
   - **Developer CLI One-Liners (`bin/tidy.js`)**:
+    - `tidy run <agent> <task>` / `tidy agent` / `tidy exec`: Autonomous subagent & skill execution with 3-Ring Cognitive Context injection and automatic memory outcome archiving.
     - `tidy doc` / `tidy doctor`: Fast terminal health diagnostics.
     - `tidy find <query>` / `tidy search <query>`: Fast hybrid recall across DB & disk.
     - `tidy clean` / `tidy hygiene`: Fast storage hygiene inspection and pruning.
     - `tidy firewall <text>`: Instant context bleed verification.
+  - **Remote Web MCP Endpoint (`apps/web/server.js`)**:
+    - High-performance `/mcp` JSON-RPC 2.0 HTTP endpoint enabling remote IDE agents to communicate seamlessly.
+    - Full protocol support for `initialize`, `ping`, `tools/list`, `tools/call`, `resources/list`, `resources/read`, `prompts/list`, and `prompts/get`.
+  - **Legacy Tool Aliases & Compatibility Layer (`packages/mcp/src/registry.js`)**:
+    - Built-in `LEGACY_ALIASES` mapping (`doctor`, `probe_server_health`, `recall_memory`, `search_knowledge_base`, `extract_knowledge_item`, `contextual_firewall`, `get_skill_manifest`, `whoami`, etc.) for zero-breakage backward compatibility.
+    - Argument normalizer (`normalizeArgs`) bridging schema variance (e.g. `top_k` -> `limit`, `skill_id` -> `id`).
+    - Added `agent` and `run` MCP prompt templates for instant agent dispatch.
   - **Desktop & Web Parity**:
     - REST endpoints in `apps/web/server.js`: `/api/brain/doctor`, `/api/brain/search`, `/api/brain/extract`, `/api/brain/transcripts`, `/api/brain/hygiene`, `/api/brain/firewall`, `/api/brain/manifest/:id`.
     - Electron IPC in `apps/desktop`: `tidy:brain:*` handlers and typed `window.tidyApi.brain` bridge.

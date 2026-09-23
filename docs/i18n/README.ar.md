@@ -75,20 +75,19 @@ tidy task "تأمين بوابة المصادقة OAuth2" --priority urgent --do
 tidy tasks --pending
 tidy done tsk_xxx --result "تم الربط وتأكيد التشفير"  # يؤرشف القرار في الذاكرة آلياً!
 
+# تشغيل الوكلاء المستقلين مع حقن سياق الحلقات الثلاث
+tidy run coder "مراجعة فهارس وقواعد SQLite"
+tidy run marketing "إعداد منشور إطلاق المنتج على وسائل التواصل"
+tidy run doc "توليد توثيق واجهات MCP البرمجية"
+
+# أوامر التشخيص والفحص السريع (Doctor, Search, Clean, Firewall)
+tidy doc                    # فحص شامل لصحة قاعدة البيانات ونمط WAL وحجم التخزين
+tidy search "FTS5 BM25"     # بحث هجين موحد عبر قاعدة البيانات وملفات الماركداون
+tidy clean                  # تدقيق آمن لمساحات التخزين والملفات المؤقتة
+tidy firewall "نص تسويقي"   # التحقق الفوري من عدم تسرب سياق التسويق إلى سياق البرمجة
+
 # فحص فوري للحالة وجدار الحماية السياقي
 tidy who
-
-# تصدير الخزينة السيادية بصيغة أوبسيديان (Obsidian PARA) أو JSON
-tidy export --out ./my_vault
-tidy export --format json --out ./snapshot.json
-
-# استيراد ملاحظات Markdown خارجية وفهرستها فوراً
-tidy import ./notes
-```
-
-### 3. الفحص والتهيئة وحالة المساعد
-```bash
-tidy init
 tidy whoami
 ```
 
@@ -172,8 +171,11 @@ node bin/tidy.js brief "بناء واجهة لوحة تحكم للتدفقات �
 }
 ```
 
-### الأدوات المتاحة (16 أداة ذكية):
-- **الذاكرة والسياق**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`.
+### الأدوات المتاحة (29 أداة ذكية متخصصة):
+- **الذاكرة المعرفية والعمليات**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`, `tidy_whoami`.
+- **محرك العقل السيادي والفحص الجنائي**: `tidy_doctor`, `tidy_search`, `tidy_extract`, `tidy_transcripts`, `tidy_hygiene`, `tidy_firewall`, `tidy_manifest`.
+- **استخراج الذاكرة وحصاد المعارف**: `tidy_harvest_scan`, `tidy_harvest_read`, `tidy_harvest_import`.
+- **الحوكمة والإعدادات**: `tidy_config_get`, `tidy_config_set`, `tidy_profile_update`, `tidy_govern_rules`.
 - **المهام والوكلاء**: `tidy_task_add`, `tidy_task_list`, `tidy_exec_subagent`, `tidy_list_skills`, `tidy_synthesize_brief`.
 - **صيانة النظام**: `tidy_db_stats`.
 - **الأعمال والمكتب (`@tidy/office`)**:
@@ -184,11 +186,28 @@ node bin/tidy.js brief "بناء واجهة لوحة تحكم للتدفقات �
   - `tidy_cashflow_summary`: استدعاء كشف السيولة وصافي الأرباح لحظياً.
   - `tidy_client_dossier`: تجميع ملف تنفيذي استخباراتي فوري للعميل بالذكاء الاصطناعي.
 
-### الموارد الديناميكية الحية (Live Resources):
+### الموارد الديناميكية الحية (9 موارد حية):
 - `tidy://profile`: بروفايل المستخدم ونبرة التخاطب المعتمدة.
 - `tidy://context/current`: سياق العمل النشط وحدود العزل.
 - `tidy://tasks/pending`: قائمة المهام المعلقة بالترتيب الزمني.
+- `tidy://brain/doctor`: تقرير الفحص التشخيصي المباشر لصحة النظام.
+- `tidy://brain/taxonomy`: فهرس تصنيف المعارف للطبقات الأربع.
+- `tidy://brain/hygiene`: تفصيل استهلاك مساحات التخزين والملفات المؤقتة.
 - `tidy://office/cashflow`: كشف التدفق المالي اللحظي (P&L Telemetry).
+- `tidy://config`: لقطة فورية من إعدادات النظام الحاكمة.
+- `tidy://govern`: سياسات وقواعد الجدار الناري وحوكمة البيانات.
+
+### قوالب البرومبت لبروتوكول MCP (Prompts Protocol):
+- `task_brief`: توليد موجز مهام ثلاثي الحلقات ومكتمل الأركان.
+- `extract_ki`: صياغة عناصر معرفة ذرية من نتائج الجلسات.
+- `firewall_audit`: مراجعة وتدقيق عزل مجالات العمل لمنع تسرب السياق.
+- `agent` / `run`: تشغيل الوكلاء الفرعيين فورياً مع حقن السياق الكامل.
+
+### مواءمة أسماء الأدوات السابقة (Zero-Breakage Legacy Aliases):
+يدعم الخادم تلقائياً كافة الأسماء القديمة للأدوات السابقة (مثل `doctor`, `recall_memory`, `search_knowledge_base`, `extract_knowledge_item`, `contextual_firewall`, `whoami`) مع تطبيع تلقائي للمعاملات لضمان عمل إعدادات بيئات التطوير القديمة دون أي انقطاع.
+
+### خادم MCP للويب عبر HTTP (JSON-RPC 2.0):
+يمكن للوكلاء الاتصال عن بُعد عبر نقطة النهاية `POST http://localhost:3840/mcp` لتنفيذ كافة الأدوات والموارد وقوالب البرومبت عبر بروتوكول HTTP القياسي.
 
 ---
 

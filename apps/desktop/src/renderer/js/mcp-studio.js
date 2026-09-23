@@ -268,7 +268,7 @@
 
           <div class="mcp-card-footer">
             <div class="mcp-btn-group">
-              <button type="button" class="btn-mcp-action" onclick="window.mcpTestServer('${escapeHtml(s.ideId)}', '${escapeHtml(s.name)}')" title="${isAr() ? 'فحص جاهزية الخادم' : 'Test server connection'}">
+              <button type="button" class="btn-mcp-action" onclick="window.mcpTestServer('${escapeHtml(s.ideId)}', '${escapeHtml(s.name)}', this)" title="${isAr() ? 'فحص جاهزية الخادم' : 'Test server connection'}">
                 <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 <span>${lblTest}</span>
               </button>
@@ -401,26 +401,45 @@
   };
 
   /**
-   * Test server executable or endpoint
+   * Test server executable, target script, or endpoint
    */
-  window.mcpTestServer = async function (ideId, serverName) {
+  window.mcpTestServer = async function (ideId, serverName, btn) {
+    const origHtml = btn ? btn.innerHTML : null;
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<span style="display:inline-block; width:11px; height:11px; border:2px solid currentColor; border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-right:4px;"></span> <span>${isAr() ? 'جاري الفحص...' : 'Testing...'}</span>`;
+    }
+
     try {
       const res = await window.api?.mcp?.test(ideId, serverName);
-      if (res?.ok) {
+      const data = res?.data || res;
+      const isSuccess = data?.ok === true;
+      const msg = data?.message || data?.error || (isSuccess ? (isAr() ? 'الخادم يعمل وجاهز' : 'Server is available and ready') : (isAr() ? 'فشل فحص الخادم' : 'Server test failed'));
+
+      if (isSuccess) {
         if (window.showToast) {
-          window.showToast(`[${serverName}] ${res.message || (isAr() ? 'الخادم يعمل وجاهز' : 'Server is available')}`, 'success');
+          window.showToast(`[${serverName}] ${msg}`, 'success');
         } else {
-          alert(`[${serverName}]: ${res.message}`);
+          alert(`[${serverName}]: ${msg}`);
         }
       } else {
         if (window.showToast) {
-          window.showToast(`[${serverName}] ${res?.message || res?.error || (isAr() ? 'فشل فحص الخادم' : 'Server test failed')}`, 'error');
+          window.showToast(`[${serverName}] ${msg}`, 'error');
         } else {
-          alert(`[${serverName}] Error: ${res?.message || res?.error}`);
+          alert(`[${serverName}] Error: ${msg}`);
         }
       }
     } catch (err) {
-      if (window.showToast) window.showToast(err.message, 'error');
+      if (window.showToast) {
+        window.showToast(`[${serverName}] ${err.message}`, 'error');
+      } else {
+        alert(err.message);
+      }
+    } finally {
+      if (btn && origHtml) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
     }
   };
 

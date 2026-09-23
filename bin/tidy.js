@@ -6,7 +6,7 @@
  * @module bin/tidy
  * @version 1.4.2
  * @license Apache-2.0
- * @copyright 2026 TidyFactor Team
+ * @copyright 2026 TidyFactor 
  * @see https://github.com/TidyFactor/Agent
  */
 
@@ -26,7 +26,7 @@ const path = require('path');
 const pkg = require('../package.json');
 const { getDb, getStats, resolveDbPath } = require('../scripts/db');
 const { saveMemory, recallMemory, listMemories, forgetMemory, pruneMemories, pruneDecayedMemories } = require('../scripts/memory');
-const { listSubagents, getSubagent, registerSubagent, prepareSubagentContext } = require('../scripts/subagents');
+const { listSubagents, getSubagent, registerSubagent, prepareSubagentContext, runSubagent } = require('../scripts/subagents');
 const { addTask, listTasks, getTask, completeTask, addSnippet, listSnippets, addJournalEntry, listJournal, setSecret, getSecret, listVaultKeys, listInstalledApps } = require('../scripts/apps');
 const { discoverSkills, listRegisteredSkills, registerSkillFromPath, getRegisteredSkill } = require('../scripts/skills-loader');
 const { generateTaskBrief } = require('../scripts/brief-generator');
@@ -230,7 +230,7 @@ async function main() {
       case 'profile': {
         const { flags, positional } = parseFlags(args.slice(1));
         const hasUpdates = Boolean(flags.update || flags.user || flags.assistant || flags.name || flags.locale || flags.theme || flags.currency || flags.role);
-        
+
         if (hasUpdates) {
           const updated = updateUserProfile({
             userName: flags.user || flags.name,
@@ -336,6 +336,53 @@ async function main() {
           console.log(`  ------------------------------------------------------------`);
           console.log(`  Usage: tidy cfg get <key> | tidy cfg set <key> <value> | tidy cfg del <key>`);
         }
+        break;
+      }
+
+      case 'run':
+      case 'agent':
+      case 'exec': {
+        const { positional } = parseFlags(args.slice(1));
+        const agentName = positional[0];
+        const task = positional.slice(1).join(' ');
+
+        if (!agentName) {
+          const agents = listSubagents();
+          console.log(`\n  🤖 Available Autonomous Agents & Skills (${agents.length}):`);
+          console.log(`  ------------------------------------------------------------`);
+          agents.forEach(a => {
+            const namePad = `@${a.name}`.padEnd(16);
+            console.log(`  • ${namePad} [${a.domain || 'general'}] ${a.role}`);
+          });
+          console.log(`  ------------------------------------------------------------`);
+          console.log(`  Usage: tidy run <agent> <task> (e.g. tidy run coder "Review database indexing")`);
+          break;
+        }
+
+        if (!task) {
+          const agent = getSubagent(agentName);
+          if (!agent) {
+            console.error(`Error: Subagent "@${agentName}" not found.`);
+            process.exit(1);
+          }
+          console.log(`\n  🤖 Agent Profile: @${agent.name}`);
+          console.log(`     Role       : ${agent.role}`);
+          console.log(`     Description: ${agent.description}`);
+          console.log(`     System     : ${agent.system_prompt}`);
+          console.log(`     Tools      : ${agent.allowed_tools.join(', ') || 'none'}`);
+          console.log(`\n  To run this agent: tidy run ${agent.name} "<task description>"`);
+          break;
+        }
+
+        const execution = runSubagent(agentName, task);
+        console.log(`\n  🤖 Agent Runner Execution: @${execution.subagent}`);
+        console.log(`  ------------------------------------------------------------`);
+        console.log(`  Role       : ${execution.context.agent.role}`);
+        console.log(`  Workspace  : ${execution.context.ring1_workspace.context_name} [${execution.context.ring1_workspace.domain}]`);
+        console.log(`  Task       : ${execution.task}`);
+        console.log(`  Memory SSOT: Created node [${execution.memoryNodeId}] (session tier)`);
+        console.log(`  ------------------------------------------------------------`);
+        console.log(`  ${execution.output}`);
         break;
       }
 

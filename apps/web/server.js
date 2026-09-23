@@ -31,6 +31,29 @@ try {
   }
 }
 
+let mcpRegistry = null;
+try {
+  mcpRegistry = require('@tidy/mcp/registry');
+} catch {
+  try {
+    mcpRegistry = require('../../packages/mcp/src/registry');
+  } catch {
+    mcpRegistry = null;
+  }
+}
+
+const sseClients = new Map();
+const sseKeepAliveTimer = setInterval(() => {
+  for (const [sid, clientRes] of sseClients.entries()) {
+    try {
+      clientRes.write(': keepalive\n\n');
+    } catch {
+      sseClients.delete(sid);
+    }
+  }
+}, 25000);
+sseKeepAliveTimer.unref();
+
 const PORT = process.env.PORT || 3840;
 const HOST = process.env.HOST || '127.0.0.1';
 const WEB_TOKEN = process.env.TIDY_WEB_TOKEN || null;
@@ -43,6 +66,7 @@ const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
+
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
@@ -118,10 +142,178 @@ const server = http.createServer(async (req, res) => {
 
   // REST API Router
   try {
+    // ---------------- Model Context Protocol (MCP) Remote SSE & Messages ----------------
+    if (pathname === '/api/mcp/sse' || pathname === '/mcp/sse') {
+      if (req.method === 'HEAD') {
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream; charset=utf-8',
+          'Cache-Control': 'no-cache, no-transform',
+          'Access-Control-Allow-Origin': '*'
+        });
+        return res.end();
+      }
+
+      if (req.method === 'GET') {
+        const sessionId = 'mcp_sess_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache, no-transform',
+          'Connection': 'keep-alive',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, Origin, X-Requested-With, mcp-session-id',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, HEAD',
+          'X-Accel-Buffering': 'no'
+        });
+
+        const proto = (req.headers['x-forwarded-proto'] || (req.socket.encrypted ? 'https' : 'http'));
+        const host = req.headers['x-forwarded-host'] || req.headers.host || `${HOST}:${PORT}`;
+        let endpointUrl = `${proto}://${host}/api/mcp/messages?session_id=${sessionId}`;
+        if (query.token) {
+          endpointUrl += `&token=${encodeURIComponent(query.token)}`;
+        }
+
+        res.write(`event: endpoint\ndata: ${endpointUrl}\n\n`);
+        res.write(': keepalive\n\n');
+
+        sseClients.set(sessionId, res);
+        req.on('close', () => {
+          sseClients.delete(sessionId);
+        });
+        return;
+      }
+    }
+
+    if ((pathname === '/mcp' || pathname === '/api/mcp' || pathname === '/api/mcp/messages' || pathname === '/api/mcp/sse') && req.method === 'POST') {
+      if (!mcpRegistry) {
+        return sendJson(res, 500, { jsonrpc: '2.0', id: null, error: { code: -32603, message: 'MCP Registry not loaded' } });
+      }
+
+      const rpc = await parseBody(req);
+      const id = rpc.id !== undefined ? rpc.id : null;
+      const method = rpc.method || '';
+      const params = rpc.params || {};
+
+      if (rpc.jsonrpc !== '2.0') {
+        return sendJson(res, 400, { jsonrpc: '2.0', id, error: { code: -32600, message: 'Invalid Request: jsonrpc must be "2.0"' } });
+      }
+
+      if (method === 'initialize') {
+        return sendJson(res, 200, {
+          jsonrpc: '2.0',
+          id,
+          result: {
+            protocolVersion: params.protocolVersion || '2024-11-05',
+            capabilities: {
+              tools: { listChanged: false },
+              resources: { subscribe: false, listChanged: false },
+              prompts: { listChanged: false }
+            },
+            serverInfo: {
+              name: 'tidy-mcp-remote',
+              version: '1.5.0'
+            }
+          }
+        });
+      }
+
+      if (method === 'notifications/initialized' || method === 'notifications/cancelled' || method.startsWith('notifications/') || id === null) {
+        return sendJson(res, 200, { jsonrpc: '2.0', id, result: {} });
+      }
+
+      if (method === 'ping') {
+        return sendJson(res, 200, { jsonrpc: '2.0', id, result: { status: 'pong' } });
+      }
+
+      if (method === 'tools/list') {
+        return sendJson(res, 200, {
+          jsonrpc: '2.0',
+          id,
+          result: { tools: mcpRegistry.TOOLS }
+        });
+      }
+
+      if (method === 'tools/call') {
+        try {
+          const toolResult = await mcpRegistry.executeTool(params.name, params.arguments || {});
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            result: toolResult
+          });
+        } catch (err) {
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            error: {
+              code: -32000,
+              message: err.message
+            }
+          });
+        }
+      }
+
+      if (method === 'resources/list') {
+        return sendJson(res, 200, {
+          jsonrpc: '2.0',
+          id,
+          result: { resources: mcpRegistry.RESOURCES }
+        });
+      }
+
+      if (method === 'resources/read') {
+        try {
+          const resResult = await mcpRegistry.handleResourceRead(params.uri);
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            result: resResult
+          });
+        } catch (err) {
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            error: { code: -32002, message: err.message }
+          });
+        }
+      }
+
+      if (method === 'prompts/list') {
+        return sendJson(res, 200, {
+          jsonrpc: '2.0',
+          id,
+          result: { prompts: mcpRegistry.PROMPTS }
+        });
+      }
+
+      if (method === 'prompts/get') {
+        try {
+          const promptResult = await mcpRegistry.handlePromptGet(params.name, params.arguments || {});
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            result: promptResult
+          });
+        } catch (err) {
+          return sendJson(res, 200, {
+            jsonrpc: '2.0',
+            id,
+            error: { code: -32002, message: err.message }
+          });
+        }
+      }
+
+      return sendJson(res, 404, {
+        jsonrpc: '2.0',
+        id,
+        error: { code: -32601, message: `Method not found: ${method}` }
+      });
+    }
+
     // ---------------- System & Telemetry ----------------
     if (pathname === '/api/stats' && req.method === 'GET') {
       return sendJson(res, 200, { ok: true, data: core.getStats() });
     }
+
 
     // ---------------- Profile & Settings ----------------
     if (pathname === '/api/profile' && req.method === 'GET') {

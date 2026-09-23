@@ -10,7 +10,7 @@ const {
   saveMemory,
   listTasks,
   addTask,
-  delegateTask,
+  runSubagent,
   listSubagents,
   listRegisteredSkills,
   generateTaskBrief,
@@ -69,11 +69,10 @@ const coreTools = [
       }
     },
     handler: (args) => {
-      const saved = saveMemory(args.content, {
+      const saved = saveMemory({
+        content: args.content,
         tier: args.tier || 'project',
         contextId: args.context_id,
-        tags: args.tags || [],
-        ring: args.ring !== undefined ? args.ring : 2,
         importance: args.importance || 3
       });
       return {
@@ -118,12 +117,15 @@ const coreTools = [
     },
     handler: (args) => {
       const db = getDb();
-      db.prepare('UPDATE contexts SET is_active = 0').run();
-      const res = db.prepare('UPDATE contexts SET is_active = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(args.context_id);
-      if (res.changes === 0) {
-        throw new Error(`Context "${args.context_id}" not found.`);
+      const targetParam = (args.context_id || args.context || args.domain || args.name || 'general').trim();
+      const targetCtx = db.prepare('SELECT * FROM contexts WHERE id = ? OR domain = ? OR name LIKE ? LIMIT 1')
+        .get(targetParam, targetParam, `%${targetParam}%`);
+      if (!targetCtx) {
+        throw new Error(`Context "${targetParam}" not found.`);
       }
-      const newCtx = db.prepare('SELECT * FROM contexts WHERE id = ?').get(args.context_id);
+      db.prepare('UPDATE contexts SET is_active = 0').run();
+      db.prepare('UPDATE contexts SET is_active = 1, last_accessed_at = CURRENT_TIMESTAMP WHERE id = ?').run(targetCtx.id);
+      const newCtx = db.prepare('SELECT * FROM contexts WHERE id = ?').get(targetCtx.id);
       return {
         content: [{
           type: 'text',
@@ -194,28 +196,26 @@ const coreTools = [
   {
     definition: {
       name: 'tidy_exec_subagent',
-      description: 'Delegate a task to a specialized subagent and synthesize a self-contained Markdown Brief blending Ring 0, Ring 1, and Ring 2 context.',
+      description: 'Delegate and execute a task with an autonomous subagent or registered skill, injecting Ring 0 (Profile), Ring 1 (Workspace), and Ring 2 (Memory) context.',
       inputSchema: {
         type: 'object',
         properties: {
-          agent_name: { type: 'string', description: 'Subagent alias (e.g. coder, reviewer, designer, marketing)' },
+          agent_name: { type: 'string', description: 'Subagent or skill alias (e.g. coder, designer, marketing, doc, php, next)' },
           task_id: { type: 'string', description: 'Optional existing task ID' },
-          task_title: { type: 'string', description: 'Task title if new' },
-          instructions: { type: 'string', description: 'Specific delegation instructions' }
+          task_title: { type: 'string', description: 'Task title or brief instruction' },
+          instructions: { type: 'string', description: 'Detailed execution instructions' }
         },
         required: ['agent_name']
       }
     },
     handler: (args) => {
-      const delegation = delegateTask(args.agent_name, {
-        taskId: args.task_id,
-        taskTitle: args.task_title,
-        instructions: args.instructions
-      });
+      const agent = args.agent_name || args.agent || 'coder';
+      const task = args.instructions || args.task_title || args.task || 'Execute delegated instructions';
+      const execution = runSubagent(agent, task);
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify(delegation, null, 2)
+          text: JSON.stringify(execution, null, 2)
         }]
       };
     }

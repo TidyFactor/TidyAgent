@@ -11,7 +11,8 @@ const {
   runSystemDoctor,
   searchHybridKnowledge,
   checkContextualFirewall,
-  auditStorageHygiene
+  auditStorageHygiene,
+  prepareSubagentContext
 } = core;
 
 const promptsList = [
@@ -60,6 +61,22 @@ const promptsList = [
     description: 'Inspect disk storage consumption of recordings, sessions, and temp artifacts with safe dry-run.',
     arguments: [
       { name: 'days', description: 'Minimum age threshold in days', required: false }
+    ]
+  },
+  {
+    name: 'agent',
+    description: 'Dispatch an autonomous subagent or community skill with 3-Ring Cognitive Context injection.',
+    arguments: [
+      { name: 'name', description: 'Subagent alias (e.g. coder, designer, marketing, doc, php, next, reviewer)', required: true },
+      { name: 'task', description: 'Goal, requirement, or instruction for the subagent to execute', required: true }
+    ]
+  },
+  {
+    name: 'run',
+    description: 'Run an autonomous subagent or community skill with 3-Ring Cognitive Context injection.',
+    arguments: [
+      { name: 'name', description: 'Subagent alias (e.g. coder, designer, marketing, doc, php, next, reviewer)', required: true },
+      { name: 'task', description: 'Goal, requirement, or instruction for the subagent to execute', required: true }
     ]
   }
 ];
@@ -175,6 +192,47 @@ promptHandlers.set('hygiene', (args = {}) => {
     ]
   };
 });
+
+// 7. Autonomous Subagent Runner (/agent, /run)
+const handleAgentRunPrompt = (args = {}) => {
+  const agentName = args.name || args.agent || 'coder';
+  const task = args.task || args.instructions || 'Execute domain task';
+  const ctx = prepareSubagentContext({ name: agentName, task });
+
+  const text = [
+    `# 🤖 Autonomous Subagent Runner: @${ctx.agent.name}`,
+    `**Role**: ${ctx.agent.role}`,
+    `**Domain**: ${ctx.ring1_workspace.domain.toUpperCase()} (Workspace: ${ctx.ring1_workspace.context_name})`,
+    '',
+    '## 📜 Scoped System Directive',
+    ctx.agent.system_prompt,
+    '',
+    '## 🎯 Assigned Task',
+    task,
+    '',
+    '## 🧠 Ring 2: Recalled Working Memory',
+    ctx.ring2_recalled_memory.length > 0
+      ? ctx.ring2_recalled_memory.map(m => `- [${m.category.toUpperCase()}] ${m.content}`).join('\n')
+      : '- (No conflicting memory constraints in active domain)',
+    '',
+    '## ⚡ Allowed Tools & Capabilities',
+    ctx.agent.allowed_tools.length > 0
+      ? ctx.agent.allowed_tools.map(t => `- \`${t}\``).join('\n')
+      : '- General workspace tools and commands',
+    '',
+    '---',
+    `*Execute with 100% fidelity to @${ctx.agent.name} protocol. Zero robotic preamble.*`
+  ].join('\n');
+
+  return {
+    description: `Subagent Runner Dispatch for @${ctx.agent.name}`,
+    messages: [
+      { role: 'user', content: { type: 'text', text } }
+    ]
+  };
+};
+promptHandlers.set('agent', handleAgentRunPrompt);
+promptHandlers.set('run', handleAgentRunPrompt);
 
 function handlePromptGet(name, args = {}) {
   const handler = promptHandlers.get(name);

@@ -76,20 +76,19 @@ tidy task "Implement OAuth2" --priority urgent --domain dev --agent coder
 tidy tasks --pending
 tidy done tsk_xxx --result "Implemented with JWT verification"  # Auto-archives decision to memory!
 
+# Autonomous Subagent & Skill Runner (3-Ring Context Injection)
+tidy run coder "Audit SQLite indexes and foreign keys"
+tidy run marketing "Draft product launch post for Twitter"
+tidy run doc "Generate API references for MCP endpoints"
+
+# Instant diagnostics, search, and storage hygiene
+tidy doc                    # Full SQLite, WAL & knowledge base health check
+tidy search "FTS5 BM25"     # Hybrid recall across SQLite DB & disk markdown files
+tidy clean                  # Storage audit with dry-run inspection of recordings & caches
+tidy firewall "New ad copy" # Instant check against domain bleed
+
 # Quick status & firewall inspection
 tidy who
-
-# Obsidian PARA Markdown Vault Export & JSON SSOT
-tidy export --out ./my_vault
-tidy export --format json --out ./snapshot.json
-
-# External Markdown notes ingestion
-tidy import ./notes
-```
-
-### 3. Status Inspection
-```bash
-tidy init
 tidy whoami
 ```
 
@@ -173,10 +172,12 @@ Add to your IDE MCP configuration (`mcp_config.json`):
 }
 ```
 
-### Registered Tools (20 Tools)
-- **Cognitive & Memory**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`.
+### Registered Tools (29 Tools)
+- **Cognitive & Working Memory**: `tidy_recall`, `tidy_memorize`, `tidy_get_context`, `tidy_switch_context`, `tidy_whoami`.
+- **Sovereign Brain & Forensic Diagnostics**: `tidy_doctor`, `tidy_search`, `tidy_extract`, `tidy_transcripts`, `tidy_hygiene`, `tidy_firewall`, `tidy_manifest`.
+- **Knowledge Harvester & Brain Extraction**: `tidy_harvest_scan`, `tidy_harvest_read`, `tidy_harvest_import`.
 - **Governance & Configuration**: `tidy_config_get`, `tidy_config_set`, `tidy_profile_update`, `tidy_govern_rules`.
-- **Tasks & Agents**: `tidy_task_add`, `tidy_task_list`, `tidy_exec_subagent`, `tidy_list_skills`, `tidy_synthesize_brief`.
+- **Tasks & Autonomous Subagents**: `tidy_task_add`, `tidy_task_list`, `tidy_exec_subagent`, `tidy_list_skills`, `tidy_synthesize_brief`.
 - **Database Telemetry**: `tidy_db_stats`.
 - **Office Suite (`@tidy/office`)**:
   - `tidy_crm_list`: List CRM clients, deal pipelines, and budgets.
@@ -186,13 +187,28 @@ Add to your IDE MCP configuration (`mcp_config.json`):
   - `tidy_cashflow_summary`: Live P&L financial statement.
   - `tidy_client_dossier`: Comprehensive AI client dossier fusing financial ledger and institutional memory.
 
-### Dynamic Live Resources (6 Resources)
+### Dynamic Live Resources (9 Resources)
 - `tidy://profile`: Sovereign user profile and operating tone.
 - `tidy://context/current`: Active project context and domain firewall constraints.
 - `tidy://tasks/pending`: Pending tasks queue.
+- `tidy://brain/doctor`: Live system diagnostic health report.
+- `tidy://brain/taxonomy`: 4-tier knowledge base taxonomy and index.
+- `tidy://brain/hygiene`: Disk storage breakdown and cleanup candidates.
 - `tidy://office/cashflow`: Real-time financial cashflow statement.
 - `tidy://config`: System configuration provider snapshot.
 - `tidy://govern`: Active contextual governance and firewall policies.
+
+### Model Context Protocol (MCP) Prompts
+- `task_brief`: Synthesize autonomous 3-Ring Task Briefs with operational guidelines.
+- `extract_ki`: Atomic Knowledge Item (KI) creator enforcing negative constraints.
+- `firewall_audit`: Contextual domain firewall audit guide.
+- `agent` / `run`: Instant autonomous subagent runner with 3-Ring context injection.
+
+### Zero-Breakage Legacy Aliases
+Seamless backward compatibility for legacy IDE configs with automatic argument normalization (`doctor`, `probe_server_health`, `recall_memory`, `search_knowledge_base`, `extract_knowledge_item`, `contextual_firewall`, `get_skill_manifest`, `whoami`).
+
+### Remote Web MCP Server (HTTP JSON-RPC 2.0)
+Connect IDE agents remotely via `POST http://localhost:3840/mcp` with complete tool execution, resource subscriptions, and prompts support without local CLI overhead.
 
 ---
 

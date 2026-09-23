@@ -518,9 +518,10 @@ function listMcpCatalog() {
 }
 
 /**
- * Quick diagnostic test of an MCP server command existence.
+ * Diagnostic test of an MCP server executable, script, or endpoint availability.
  */
 function testMcpServer(ideId, serverName) {
+  const startTime = Date.now();
   const current = getMcpConfig(ideId);
   if (!current.servers || !current.servers[serverName]) {
     return { ok: false, message: `Server "${serverName}" not found in ${current.ideName}` };
@@ -528,7 +529,8 @@ function testMcpServer(ideId, serverName) {
 
   const sCfg = current.servers[serverName];
   if (sCfg.url) {
-    return { ok: true, message: `Remote SSE Endpoint: ${sCfg.url}`, transport: 'sse' };
+    const latencyMs = Date.now() - startTime;
+    return { ok: true, message: `Remote SSE Endpoint: ${sCfg.url}`, transport: 'sse', latencyMs };
   }
 
   if (!sCfg.command) {
@@ -540,7 +542,8 @@ function testMcpServer(ideId, serverName) {
   // If command is absolute or relative path, check existence directly
   if (cmd.includes('/') || cmd.includes('\\')) {
     if (fs.existsSync(cmd)) {
-      return { ok: true, message: `Executable exists: ${cmd}`, path: cmd, transport: 'stdio' };
+      const latencyMs = Date.now() - startTime;
+      return { ok: true, message: `Executable exists: ${cmd} [${latencyMs}ms]`, path: cmd, transport: 'stdio', latencyMs };
     }
     return { ok: false, message: `Executable path not found: ${cmd}`, transport: 'stdio' };
   }
@@ -548,10 +551,34 @@ function testMcpServer(ideId, serverName) {
   // Check PATH availability
   try {
     const isWin = process.platform === 'win32';
-    const checkCmd = isWin ? `where ${cmd}` : `which ${cmd}`;
+    const checkCmd = isWin ? `where "${cmd}"` : `which "${cmd}"`;
     const output = execSync(checkCmd, { encoding: 'utf8', timeout: 3000 });
     const firstPath = output.split('\n')[0].trim();
-    return { ok: true, message: `Command found in system PATH: ${firstPath}`, path: firstPath, transport: 'stdio' };
+
+    // Verify script argument if present
+    let extraDetails = '';
+    if (Array.isArray(sCfg.args)) {
+      for (const arg of sCfg.args) {
+        if (typeof arg === 'string' && (arg.endsWith('.js') || arg.endsWith('.py') || arg.endsWith('.ts') || arg.endsWith('.mjs') || arg.includes('/') || arg.includes('\\'))) {
+          const resolved = path.resolve(arg);
+          if (fs.existsSync(resolved)) {
+            extraDetails = ` (${path.basename(resolved)} verified)`;
+          } else {
+            return { ok: false, message: `Command "${cmd}" exists, but script file not found: ${arg}`, transport: 'stdio' };
+          }
+          break;
+        }
+      }
+    }
+
+    const latencyMs = Date.now() - startTime;
+    return {
+      ok: true,
+      message: `Command verified: ${cmd}${extraDetails} [${latencyMs}ms]`,
+      path: firstPath,
+      transport: 'stdio',
+      latencyMs
+    };
   } catch {
     return { ok: false, message: `Command "${cmd}" not found in system PATH`, transport: 'stdio' };
   }
