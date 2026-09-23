@@ -8,10 +8,10 @@ Thank you for building with **Tidy**. Whether you are integrating `@tidy/core`, 
 
 | Need / Query | Best Channel | Response Time |
 |---|---|---|
-| **Bug Reports & Glitches** | [GitHub Issues](https://github.com/TidyFactor/Agent/issues/new/choose) | 24–48 hours |
-| **Feature Requests & Ideas** | [GitHub Issues (Feature Request)](https://github.com/TidyFactor/Agent/issues/new?template=feature_request.yml) | 48–72 hours |
-| **Security & Vulnerabilities** | [Private Vulnerability Reporting](https://github.com/TidyFactor/Agent/security/advisories/new) or `security@tidyfactor.com` | Within 24 hours |
-| **Architecture & Integrations** | [TidyFactor Documentation](https://github.com/TidyFactor/Agent/blob/main/ARCHITECTURE.md) | Self-serve |
+| **Bug Reports & Glitches** | [GitHub Issues](https://github.com/TidyFactor/TidyAgent/issues/new/choose) | 24–48 hours |
+| **Feature Requests & Ideas** | [GitHub Issues (Feature Request)](https://github.com/TidyFactor/TidyAgent/issues/new?template=feature_request.yml) | 48–72 hours |
+| **Security & Vulnerabilities** | [Private Vulnerability Reporting](https://github.com/TidyFactor/TidyAgent/security/advisories/new) or `security@tidyfactor.com` | Within 24 hours |
+| **Architecture & Integrations** | [TidyFactor Documentation](https://github.com/TidyFactor/TidyAgent/blob/main/ARCHITECTURE.md) | Self-serve |
 
 ---
 

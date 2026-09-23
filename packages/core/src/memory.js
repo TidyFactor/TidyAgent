@@ -3,10 +3,10 @@
  * Full-Text Search (FTS5 BM25), Tiered Storage, Mathematical Decay Scoring & Cognitive Recall.
  *
  * @module @tidy/core/memory
- * @version 1.4.2
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 

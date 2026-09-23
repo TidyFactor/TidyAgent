@@ -4,6 +4,16 @@ All notable changes to the `tidy` skill and CLI engine are documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- **GitHub Repository Governance & Health Optimization (`tidyfactor-github`)**:
+  - Migrated repository canonical URLs across package manifests, CLI headers, and documentation to `https://github.com/TidyFactor/TidyAgent`.
+  - Added `@tidy/office` package ownership to `.github/CODEOWNERS`, `.github/github-brief.md`, `.github/PULL_REQUEST_TEMPLATE.md`, and issue template choices.
+  - Created root developer experience proxy `tools/validate_skill.py` delegating to `packages/skill/tools/validate_skill.py`.
+  - Enabled active branch governance ruleset (`.github/rulesets/main-ruleset.json`) with enforced linear history, status check verification, and deletion/force-push prevention.
+  - Converted repository scope to Public OSS with curated discoverability topics and metadata description.
+
 ## [1.5.0] - 2026-09-11
 
 ### Added

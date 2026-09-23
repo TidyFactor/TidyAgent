@@ -5,11 +5,11 @@
 
 امنح وكلاء الذكاء الاصطناعي (**Google Antigravity, Claude Code, Cursor, OpenAI Codex, Windsurf**) طبقة مساعد شخصي سيادي يعمل باستقلالية تامة، مع ذاكرة دائمة عبر SQLite، واستوديو المهارات والوكلاء الشامل (Universal Skills & Agents Studio)، واستوديو استخراج الذاكرة وحصاد معارف الوكلاء (Knowledge Harvester Studio)، واكتشاف المهارات المجتمعية وتحويلها إلى وكلاء متخصصين، وتوليد مهام ذاتية الاكتفاء (Self-Contained Task Briefs)، وإدارة كاملة لخط أنابيب العملاء (CRM) والفواتير والتدفقات المالية، وبحث فوري سريع بنصوص FTS5.
 
-[![npm version](https://img.shields.io/badge/version-1.4.5-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent/blob/main/LICENSE)
+[![npm version](https://img.shields.io/badge/version-1.4.5-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/TidyAgent)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=for-the-badge)](https://github.com/TidyFactor/TidyAgent/blob/main/LICENSE)
 [![Ecosystem](https://img.shields.io/badge/ecosystem-TidyFactor--Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
-[![Compatibility](https://img.shields.io/badge/agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent)
-[![Architect Score](https://img.shields.io/badge/architect%20score-15%2F15%20(100%25)-green.svg?style=for-the-badge)](https://github.com/TidyFactor/Agent)
+[![Compatibility](https://img.shields.io/badge/agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](https://github.com/TidyFactor/TidyAgent)
+[![Architect Score](https://img.shields.io/badge/architect%20score-15%2F15%20(100%25)-green.svg?style=for-the-badge)](https://github.com/TidyFactor/TidyAgent)
 
 [ English ](/en/) • [ العربية ](/) • [ دليل الاستخدام الشامل ](/user_manual.ar) • [ مواصفات المعمارية ](/specs/architecture_spec.ar)
 

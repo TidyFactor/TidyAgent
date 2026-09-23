@@ -43,11 +43,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TidyFactor/Agent.git"
+    "url": "https://github.com/TidyFactor/TidyAgent.git"
   },
-  "homepage": "https://github.com/TidyFactor/Agent#readme",
+  "homepage": "https://github.com/TidyFactor/TidyAgent#readme",
   "bugs": {
-    "url": "https://github.com/TidyFactor/Agent/issues"
+    "url": "https://github.com/TidyFactor/TidyAgent/issues"
   },
   "engines": {
     "node": ">=22.0.0"

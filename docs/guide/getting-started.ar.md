@@ -21,7 +21,7 @@
 
 ### 1. استنساخ المستودع والدخول للمجلد
 ```bash
-git clone https://github.com/TidyFactor/Agent.git tidy-agent
+git clone https://github.com/TidyFactor/TidyAgent.git tidy-agent
 cd tidy-agent
 ```
 

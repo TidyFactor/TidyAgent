@@ -3,10 +3,10 @@
  * Centralized configuration provider, granular profile management, and domain governance rules.
  *
  * @module @tidy/core/governance
- * @version 1.4.3
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 const { getDb } = require('./db');

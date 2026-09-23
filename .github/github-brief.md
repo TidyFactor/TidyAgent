@@ -1,10 +1,10 @@
 # TidyFactor GitHub Baseline Brief — Tidy Ecosystem
 
-<!-- last-verified: 2026-09-08 -->
+<!-- last-verified: 2026-09-23 -->
 
 ## 1. Project Topology & Architecture
 - **Project Type**: monorepo
-- **Scope Tier**: repo-private
+- **Scope Tier**: repo-public
 - **Governance Level**: standard
 - **Primary Language**: javascript / polyglot (Node.js >= 22.0.0, native `node:sqlite`, Python 3.11 validator)
 - **Bilingual Mode**: bilingual-ar-en (Native Arabic RTL & English)
@@ -15,6 +15,7 @@
 
 ## 2. Monorepo Package Registry
 - **Engine Kernel**: `@tidy/core` (`packages/core`)
+- **Business Suite**: `@tidy/office` (`packages/office`)
 - **Terminal CLI**: `@tidy/cli` (`packages/cli`)
 - **Protocol Server**: `@tidy/mcp` (`packages/mcp`)
 - **Certified Skill**: `@tidy/skill` (`packages/skill`)
@@ -25,4 +26,4 @@
 - **Supply Chain Security**: All GitHub Actions references MUST be pinned to full commit SHAs (`@sha256`).
 - **Permissions Baseline**: `permissions: contents: read` minimum privilege by default.
 - **Dependency Hygiene**: Dependabot weekly updates for npm and github-actions.
-- **Verification Gates**: Automated execution of 20 unit tests (`npm test`) and 100% compliance with `tools/validate_skill.py`.
+- **Verification Gates**: Automated execution of 56 unit & integration tests (`npm test`) and 100% compliance with `tools/validate_skill.py`.

@@ -7,7 +7,7 @@
  * @version 1.5.0
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 const readline = require('readline');

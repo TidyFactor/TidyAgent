@@ -5,9 +5,10 @@
 * @TidyFactor/core-team
 
 # Core Engine Kernel & Protocol Server
-packages/core/ @TidyFactor/core-team @TidyFactor/engineers
-packages/mcp/  @TidyFactor/core-team @TidyFactor/engineers
-packages/cli/  @TidyFactor/core-team @TidyFactor/engineers
+packages/core/   @TidyFactor/core-team @TidyFactor/engineers
+packages/office/ @TidyFactor/core-team @TidyFactor/engineers
+packages/mcp/    @TidyFactor/core-team @TidyFactor/engineers
+packages/cli/    @TidyFactor/core-team @TidyFactor/engineers
 
 # TidyFactor Certified Skill
 packages/skill/ @TidyFactor/core-team @TidyFactor/skill-architects

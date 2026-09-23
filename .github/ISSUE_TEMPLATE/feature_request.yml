@@ -16,6 +16,9 @@ body:
       options:
         - "Cognitive Memory & FTS5 Recall"
         - "Sub-Agents & Skills Orchestration"
+        - "Universal Skills & Agents Studio"
+        - "Knowledge Harvester & Agent Brain Extractor"
+        - "Sovereign Business Suite (@tidy/office: CRM, Invoices, Cashflow)"
         - "Micro-Apps (Tasks, Snippets, Journal, Vault)"
         - "CLI & Terminal Experience"
         - "MCP Protocol & IDE Agent Tools"

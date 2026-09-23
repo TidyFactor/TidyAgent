@@ -3,10 +3,10 @@
  * Manages specialized assistant roles, scoped system prompts, and tool delegation.
  *
  * @module @tidy/core/subagents
- * @version 1.4.2
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 

@@ -4,10 +4,10 @@
  * Interactive navigation wizard, one-liner commands, and subagent dispatcher.
  *
  * @module bin/tidy
- * @version 1.4.2
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor 
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 

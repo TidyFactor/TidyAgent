@@ -3,10 +3,10 @@
  * Zero-Vendor-Lockin: Obsidian PARA Markdown Export/Import & Full JSON SSOT Migration.
  *
  * @module @tidy/core/portability
- * @version 1.4.2
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 

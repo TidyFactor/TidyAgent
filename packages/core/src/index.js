@@ -3,10 +3,10 @@
  * Main module exporting Database, Memory, Apps, Subagents, Studio, and Portability APIs.
  *
  * @module @tidy/core
- * @version 1.4.4
+ * @version 1.4.5
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
- * @see https://github.com/TidyFactor/Agent
+ * @see https://github.com/TidyFactor/TidyAgent
  */
 
 const db = require('./db');

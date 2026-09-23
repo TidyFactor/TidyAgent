@@ -26,8 +26,8 @@ When contributing code, you MUST respect these core invariants:
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/TidyFactor/tidy.git
-cd tidy
+git clone https://github.com/TidyFactor/TidyAgent.git
+cd TidyAgent
 
 # Install dependencies across all workspaces
 npm install
@@ -40,7 +40,7 @@ npm install
 Before submitting any Pull Request, you must verify that all automated suites pass:
 
 ```bash
-# 1. Run full 20-test unit & integration suite
+# 1. Run full 56-test unit & integration suite
 npm test
 # (or directly: node tests/run.js)
 

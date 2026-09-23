@@ -16,6 +16,7 @@ body:
       description: "Which part of the Tidy ecosystem is experiencing the bug?"
       options:
         - "@tidy/core (SQLite Engine, Memory, Micro-Apps)"
+        - "@tidy/office (Business Suite, CRM, Invoices, Cashflow)"
         - "@tidy/cli (Terminal Interface, Clack Wizard)"
         - "@tidy/mcp (Stdio Model Context Protocol Server)"
         - "@tidy/skill (Agent Skill, Dispatcher, References)"
@@ -62,6 +63,6 @@ body:
       value: |
         - OS: [e.g. Windows 11 / macOS Sonoma / Ubuntu 24.04]
         - Node.js Version: [e.g. v22.12.0]
-        - Tidy Version: [e.g. 1.3.0]
+        - Tidy Version: [e.g. 1.4.5]
     validations:
       required: true

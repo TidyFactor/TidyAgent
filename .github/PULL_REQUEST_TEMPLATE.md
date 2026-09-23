@@ -8,6 +8,7 @@
 ## 📦 Affected Components / المكونات المتأثرة
 
 - [ ] `@tidy/core` (Kernel, SQLite SSOT, Memory, Subagents, Micro-Apps)
+- [ ] `@tidy/office` (Business Suite, CRM, Invoicing, Cashflow Telemetry)
 - [ ] `@tidy/cli` (Terminal Wizard, Commands, Picocolors)
 - [ ] `@tidy/mcp` (Stdio JSON-RPC 2.0 Server, Tools, Live Resources)
 - [ ] `@tidy/skill` (TidyFactor Certified Skill, References, Workflows)
