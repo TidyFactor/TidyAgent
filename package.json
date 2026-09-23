@@ -1,11 +1,14 @@
 {
-  "name": "tidy",
+  "name": "tidy-agent",
   "version": "1.4.5",
-  "private": true,
   "description": "Sovereign Personal Assistant Agent with persistent SQLite Memory, CLI engine, and local Stdio MCP Server",
   "main": "index.js",
   "bin": {
-    "tidy": "./bin/tidy.js"
+    "tidy": "./bin/tidy.js",
+    "tidy-agent": "./bin/tidy.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "type": "commonjs",
   "scripts": {
