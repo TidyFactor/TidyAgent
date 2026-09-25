@@ -531,8 +531,43 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/subagents/run' && req.method === 'POST') {
       const body = await parseBody(req);
-      const result = core.runSubagent(body.name, body.task);
+      const result = core.executeSubagent
+        ? await core.executeSubagent(body)
+        : core.runSubagent(body.name, body.task);
       return sendJson(res, 200, { ok: true, data: result });
+    }
+
+    if (pathname === '/api/subagents/parallel' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const result = await core.dispatchParallelTasks(body);
+      return sendJson(res, 200, { ok: true, data: result });
+    }
+
+    // Dynamic Model Discovery API
+    if (pathname === '/api/models' && req.method === 'GET') {
+      const endpoint = query.endpoint || null;
+      const models = await core.discoverAvailableModels({ endpoint });
+      return sendJson(res, 200, { ok: true, data: models });
+    }
+
+    // Local Model Server Status & Diagnostics
+    if (pathname === '/api/local-llm/status' && req.method === 'GET') {
+      const endpoint = query.endpoint || null;
+      const status = await core.testLocalLlmConnection({ endpoint });
+      return sendJson(res, 200, status);
+    }
+
+    // System Config API
+    if (pathname === '/api/config' && req.method === 'GET') {
+      const { listConfig } = require('../packages/core/src/governance');
+      return sendJson(res, 200, { ok: true, data: listConfig() });
+    }
+
+    if (pathname === '/api/config' && req.method === 'POST') {
+      const body = await parseBody(req);
+      const { setConfig } = require('../packages/core/src/governance');
+      setConfig(body.key, body.value);
+      return sendJson(res, 200, { ok: true, key: body.key, value: body.value });
     }
 
     if (pathname === '/api/skills' && req.method === 'GET') {
@@ -888,6 +923,35 @@ const server = http.createServer(async (req, res) => {
         if (!ideId || !name) return sendJson(res, 400, { ok: false, error: 'Missing ide or name parameter' });
         const result = core.testMcpServer(ideId, name);
         return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/prompts' && req.method === 'GET') {
+      try {
+        const prompts = mcpRegistry ? mcpRegistry.PROMPTS : [];
+        return sendJson(res, 200, { ok: true, data: prompts });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/prompts/test' && req.method === 'POST') {
+      try {
+        const body = await parseBody(req);
+        if (!mcpRegistry) return sendJson(res, 503, { ok: false, error: 'MCP Registry unavailable' });
+        const result = mcpRegistry.handlePromptGet(body.name, body.arguments || {});
+        return sendJson(res, 200, { ok: true, data: result });
+      } catch (err) {
+        return sendJson(res, 500, { ok: false, error: err.message });
+      }
+    }
+
+    if (pathname === '/api/mcp/tools' && req.method === 'GET') {
+      try {
+        const tools = mcpRegistry ? mcpRegistry.TOOLS : [];
+        return sendJson(res, 200, { ok: true, data: tools });
       } catch (err) {
         return sendJson(res, 500, { ok: false, error: err.message });
       }

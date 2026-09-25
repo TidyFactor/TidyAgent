@@ -4,7 +4,7 @@
  * High-performance JSON-RPC 2.0 sovereign brain and assistant engine.
  *
  * @module @tidy/mcp/server
- * @version 1.5.0
+ * @version 1.7.0
  * @license Apache-2.0
  * @copyright 2026 TidyFactor Team
  * @see https://github.com/TidyFactor/TidyAgent
@@ -24,7 +24,7 @@ const {
 
 const SERVER_INFO = {
   name: 'tidy-mcp',
-  version: '1.5.0'
+  version: '1.7.0'
 };
 
 function startServer() {

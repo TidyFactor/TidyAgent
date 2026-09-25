@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Skill Lifecycle Engine & Dynamic MCP Router (`@tidy/core`)**:
+  - Implemented **Skill Lifecycle Engine** (`packages/core/src/skill-lifecycle.js`): Complete lifecycle governance (`discover`, `install`, `enable`, `disable`, `load`, `validate`, and semantic capability matching) capping loaded skills strictly to the top 2-3 matches without context bloat.
+  - Implemented **Dynamic MCP Router** (`packages/core/src/mcp-router.js`): Decoupled procedural "How" (Skills) from executable "Tools" (MCP servers), with automated intent-based tool resolution, safe execution envelopes, and ephemeral working context population.
+- **Suite 17 Automated Test Expansion (`tests/run.js`)**:
+  - Added Section [17] testing skill discovery, 3-skill capability matching invariant, action pattern routing, and working context population.
+  - Expanded total automated tests from 69 to 73 tests (73 passed, 0 failed, 100% pass rate).
+- **MCP Prompts Fleet Expansion & Slash Commands Engine (`@tidy/mcp`)**:
+  - Expanded Stdio MCP Prompts from 8 to 15 canonical prompts covering the complete v1.7.0 capability fleet: `/parallel`, `/context`, `/intent`, `/memorize`, `/recall`, `/plan`, `/brief`, `/extract`, `/firewall`, `/doctor`, `/search`, `/hygiene`, `/agent`, `/cashflow`, `/dossier`.
+  - Added full IDE slash command integration compatible with Google Antigravity, Cursor, and Claude Desktop with explicit argument declarations and inline syntax guidance.
+- **MCP Tool Catalog Hygiene & Clean Namespace (`@tidy/mcp`)**:
+  - Eliminated 24 duplicate shadow entries in `tools/list` that cluttered Antigravity and external IDE palettes from 58 to 34 canonical, high-value `tidy_*` tools.
+  - Preserved 100% backward execution compatibility by routing all legacy tool names through internal aliases (`LEGACY_ALIASES` & `toolHandlers`) with zero breaking changes.
+- **MCP Studio Prompts & Tools Visual Management Console (`apps/desktop`, `apps/web`)**:
+  - Added dedicated `⚡ Prompts` (15 prompts) and `🛠️ Tools` (34 tools) interactive inspection panels to MCP Studio in Desktop and Web dashboards.
+  - Implemented 1-click Slash Command copying (`/cmd` and `/mcp:tidy-brain:cmd`).
+  - Added Interactive Prompt Compiler & Tester Modal (`mcpPromptTestModal`) for live validation, argument input, and payload inspection before execution.
+  - Added Web API routes (`GET /api/mcp/prompts`, `POST /api/mcp/prompts/test`, `GET /api/mcp/tools`) and Electron IPC handlers (`tidy:mcp:prompts`, `tidy:mcp:tools`, `tidy:mcp:testPrompt`).
 - **TidyAgent Sovereign Control Plane Implementation (`@tidy/core`)**:
   - Implemented **Structured 8-Taxonomy Memory Engine** (`packages/core/src/memory-taxonomy.js` & `scripts/memory-taxonomy.js`): Standardized 8 node taxonomies (`facts`, `decisions`, `preferences`, `assets`, `references`, `previous_outputs`, `lessons`, `relationships`), heuristic intent/constraint classifier (`classifyMemoryTaxonomy`), alias normalizer (`normalizeTaxonomy`), and cognitive boost multipliers (`CATEGORY_BOOSTS` in `packages/core/src/memory.js`).
   - Implemented **5-Tier Context Compiler Engine** (`packages/core/src/context-compiler.js` & `scripts/context-compiler.js`): Deterministic zero-slop context assembly across 5 tiers (Global, Project, Task, Session, Working) with token budget allocation (`estimateTokenCount`), budget truncation, and output renderers (`markdown`, `system_prompt`, `json`).
@@ -20,6 +37,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Hardened packaging metadata with npm `"files"` whitelist, modern subpath `"exports"` map (`.`, `./openapi`, `./plugin.json`), and automated `"test"` script.
   - Added **Parameter Normalization Layer** across `BaseHostAdapter.compile` and `@tidy/core` `compileContext`: automatically folding flat parameters (`task`, `project`, `domain`, `working`) into the canonical 5-Tier context hierarchy with zero token leakage.
   - Added `classifyDetails` method to host adapters providing confidence scoring and metadata rationale, with fortified MCP tool resilience (`tidy_taxonomy_classify`).
+- **TidyAgent Sovereign Parallel Multi-Agent & Conflict Adjudication Engine (`@tidy/core`, `@tidy/mcp`, `@tidy/plugin`)**:
+  - Implemented **Parallel Subagent Orchestrator** (`packages/core/src/parallel-orchestrator.js` & `scripts/parallel-orchestrator.js`): Concurrent Fork & Join multi-agent dispatcher with ephemeral sandboxed context compilation (`runIsolatedSubAgent`), strict token budget capping, output schema enforcement, and fault-isolated batch execution.
+  - Implemented **Conflict Detection & Adjudication Engine** (`packages/core/src/conflict-resolver.js` & `scripts/conflict-resolver.js`): Multi-tier conflict detection engine detecting file mutation collisions (`FILE_MUTATION_COLLISION`), binary verdict discords (`BINARY_VERDICT_DISCORD`), and strategy divergence, with domain priority hierarchy (`DOMAIN_PRIORITIES`), semantic LLM adjudication pass, and auditable concessions logging (`compromises_made`).
+  - Added MCP Tool `tidy_parallel_dispatch` (`packages/mcp/src/modules/parallel-tools.js` & `packages/mcp/src/registry.js`): Concurrently dispatches multiple specialized subagents with isolated context sandboxes, reconciles deliverables, and returns a unified report without context bloat.
+  - Added `dispatchParallel` method to `BaseHostAdapter` in `@tidy/plugin` exposing parallel multi-agent orchestration across all 5 AI host platforms.
+  - Added CLI Subcommand `tidy parallel "<objective>"` (`bin/tidy.js`): Execute multi-agent swarms with concurrent execution telemetry, proposal extraction, conflict adjudication, and atomic memory commitment.
+- **Local Model Server, LM Studio & Antigravity Direct Execution Runtime (`@tidy/core`, `apps/web`, `apps/desktop`)**:
+  - Added native **Local llama-server & LM Studio Engine** (`packages/core/src/subagents.js`): OpenAI-compatible local execution tailored for CUDA GPU offloaded instances (e.g. LM Studio on port 1234, `llama-server.exe` on port 8080) with zero external API fees.
+  - Implemented **OpenAI-Compatible Endpoint Normalization Layer** (`resolveOpenAiEndpoint`): Automatically detects and ensures `/v1/chat/completions` and `/v1/models` paths across LM Studio, llama-server, vLLM, and Ollama, with non-v1 fallback.
+  - Added **Reasoning Models Protocol & Extraction Layer**: Natively handles reasoning models (Qwen 3.5, DeepSeek R1, Phi-4 Reasoning) that output thinking inside `reasoning_content` without failing on empty `content`, formatting thought processes into structured Markdown details blocks.
+  - Added **Antigravity & Claude Code Direct Dispatch Bridge**: Automatically compiles 3-ring context into self-contained actionable IDE directives ready for direct execution via Antigravity or Claude Code.
+  - Added **Local Model Diagnostics & Testing Engine** (`testLocalLlmConnection`): Real-time ping testing, active model enumeration, and auto-population into the UI model selector.
+  - Added **Web & Desktop Local Model Settings Panel** (`apps/desktop/src/renderer/index.html` & `dispatcher.js`): Real-time endpoint and model configuration with instant connectivity indicators, dynamic model auto-population, and auto-save.
+  - Upgraded model provider fleet to current **2026 Generation**: Google Gemini 3.8 / 3.7 / 3.1 Pro, Anthropic Claude Sonnet & Opus 4.6 (Thinking), OpenAI GPT-4.5 / o3-mini, and local Ollama.
+- **Suite 16 Automated Test Expansion (`tests/run.js`)**:
+  - Added Section [16] covering concurrent subagent dispatching, isolated context budgeting, deterministic conflict detection, priority hierarchy adjudication, atomic memory commitment, fault tolerance with failing agents, and MCP/plugin parallel execution.
+  - Expanded total automated tests from 62 to 69 tests (69 passed, 0 failed, 100% pass rate).
 - **Suite 15 Automated Test Expansion (`tests/run.js`)**:
   - Added Section [15] covering memory taxonomy normalization and classification, context compilation in markdown/system/json modes, token budget capping, intent routing with capability-first invariants, host adapter instantiation, OpenAPI 3.1 generation, and multi-platform configuration exports.
   - Expanded total automated tests from 56 to 62 tests (62 passed, 0 failed, 100% pass rate).

@@ -61,6 +61,7 @@ const api = {
   // Subagents
   listSubagents: () => ipcRenderer.invoke('tidy:subagents:list'),
   runSubagent: (params) => ipcRenderer.invoke('tidy:subagents:run', params),
+  runSubagentParallel: (params) => ipcRenderer.invoke('tidy:subagents:parallel', params),
 
   // Community Skills & Briefs
   listSkills: () => ipcRenderer.invoke('tidy:skills:list'),
@@ -121,7 +122,10 @@ const api = {
     remove: (ideId, name) => ipcRenderer.invoke('tidy:mcp:remove', ideId, name),
     clone: (sourceIdeId, targetIdeId, name, targetName) => ipcRenderer.invoke('tidy:mcp:clone', sourceIdeId, targetIdeId, name, targetName),
     catalog: () => ipcRenderer.invoke('tidy:mcp:catalog'),
-    test: (ideId, name) => ipcRenderer.invoke('tidy:mcp:test', ideId, name)
+    test: (ideId, name) => ipcRenderer.invoke('tidy:mcp:test', ideId, name),
+    prompts: () => ipcRenderer.invoke('tidy:mcp:prompts'),
+    tools: () => ipcRenderer.invoke('tidy:mcp:tools'),
+    testPrompt: (name, args) => ipcRenderer.invoke('tidy:mcp:testPrompt', name, args)
   },
 
   // Shell / OS Operations

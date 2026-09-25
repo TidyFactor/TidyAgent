@@ -20,11 +20,11 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
     ├── v1.4.4 Universal Skills & Agents Studio                ✅ Done (v1.4.4)
     ├── v1.4.5 Knowledge Harvester & Office Suite Integration  ✅ Done (v1.4.5)
     └── v1.5.0 Tidy Sovereign Brain MCP Engine (Suite 14)      ✅ Done (v1.5.0)
-  Phase 4: TidyAgent Sovereign Control Plane & Plugin Engine   🚀 Active Focus (v1.6.0 - v1.7.0)
-    ├── v1.6.0 TidyAgent Control Plane & Context Compiler      🎯 Next Milestone
-    ├── v1.6.5 Skill Lifecycle & Dynamic MCP Router            ⏳ In Pipeline
-    └── v1.7.0 TidyAgent Universal Host Plugin & Adapters      ⏳ In Pipeline
-  Phase 5: Sovereign Office & Commerce Suite Hardening         ⏳ Planned (v1.8.0)
+  Phase 4: TidyAgent Sovereign Control Plane & Plugin Engine   ✅ Done (v1.6.0 - v1.7.0)
+    ├── v1.6.0 TidyAgent Control Plane & Context Compiler      ✅ Done (v1.6.0)
+    ├── v1.6.5 Skill Lifecycle & Dynamic MCP Router            ✅ Done (v1.6.5)
+    └── v1.7.0 Parallel Multi-Agent & Conflict Adjudication    ✅ Done (v1.7.0)
+  Phase 5: Sovereign Office & Commerce Suite Hardening         🚀 Active Focus (v1.8.0)
   Phase 6: Multi-Device Sync & Cross-Platform                  🔮 Vision (v2.0.0)
 ```
 
@@ -177,24 +177,38 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
   - Multi-platform configuration exporter (`exportHostConfiguration`) and CLI command (`tidy plugin`).
 - [x] **Suite 15 Automated Test Runner**: 62 passed tests with 100% pass rate.
 
-#### 📦 `v1.6.5` — Skill Lifecycle Engine & Dynamic MCP Router 🎯 [Next Milestone]
-- [ ] **Skill Lifecycle Engine (`packages/core/src/skill-lifecycle.js`)**:
+#### 📦 `v1.6.5` — Skill Lifecycle Engine & Dynamic MCP Router ✅ (Completed — v1.6.5)
+- [x] **Skill Lifecycle Engine (`packages/core/src/skill-lifecycle.js`)**:
   - Complete lifecycle governance: `discover`, `install`, `enable`, `disable`, `load`, `execute`, `validate`, `update`, `version`.
   - Semantic Capability Matching: Discovers the exact 2-3 relevant skills needed for a prompt instead of polluting the context with 40+ skill manifests.
   - Skills-LAB v2.0 Compliance Verifier with automated test harnesses.
-- [ ] **Dynamic MCP Router (`packages/core/src/mcp-router.js`)**:
+- [x] **Dynamic MCP Router (`packages/core/src/mcp-router.js`)**:
   - Decoupled binding between procedural "How" (Skills) and executable "Tools" (MCP servers).
   - Automatically identifies which MCP tool satisfies a skill step requirement (e.g. `product-image` skill routes to local image tool; `crm` routes to `@tidy/office`).
   - Working context population: Injects tool results directly into ephemeral working context.
 
-#### 📦 `v1.7.0` — TidyAgent Universal Host Plugin & Adapters (`@tidy/plugin`)
-- [ ] **Universal Host Adapter Protocol**:
-  - Decouples TidyAgent from any proprietary vendor: hosts (ChatGPT, Claude Code, Cursor, Codex, Windsurf, Antigravity) act as swappable execution environments.
-  - **ChatGPT Plugin / GPT Action Adapter**: OpenAPI 3.1 schema + OAuth/API key gateway.
-  - **Claude Code / Desktop Adapter**: Native tool manifest and stdio integration.
-  - **IDE Agents Bridge**: Unified context injection for Cursor rules, Codex prompts, and Antigravity skills.
-- [ ] **TidyAgent Distribution Plugin (`packages/plugin`)**:
-  - Lightweight adapter package containing host manifests (`plugin.json`), tool bindings, and skill discovery proxies while delegating all intelligence to `@tidy/core`.
+#### 📦 `v1.7.0` — Parallel Multi-Agent Orchestrator & Conflict Adjudication Engine ✅ (Completed — v1.7.0)
+- [x] **Parallel Subagent Orchestrator (`packages/core/src/parallel-orchestrator.js`)**:
+  - Fork & Join concurrent execution via `Promise.allSettled` with circuit-breaker fault isolation.
+  - Ephemeral Context Sandboxing (`compileContext` per subagent) capping tokens strictly to 800–1200t.
+  - Strict JSON output contract enforcement and zero-slop Chain-of-Thought (CoT) pruning.
+  - Atomic synthesis and reconciliation committing single unified decision nodes into SQLite SSOT.
+- [x] **Conflict Detection & Adjudication Engine (`packages/core/src/conflict-resolver.js`)**:
+  - Multi-tier detection: File mutation collisions (`FILE_MUTATION_COLLISION`), binary verdict discords (`BINARY_VERDICT_DISCORD`), and strategy divergence.
+  - Authoritative Domain Priority Hierarchy (`security_auditor` 100 > `performance` 85 > `architect` 80 > `seo` 70 > `copy` 60).
+  - Semantic LLM Adjudicator pass with fallback deterministic priority resolution.
+  - Auditable concessions tracking (`compromises_made`) persisted in permanent memory.
+- [x] **MCP Tool & Host Adapter Integration**:
+  - Registered `tidy_parallel_dispatch` tool in `@tidy/mcp` (`modules/parallel-tools.js` & `registry.js`).
+  - Added `dispatchParallel` method in `@tidy/plugin` `BaseHostAdapter` across ChatGPT, Claude, Cursor, and Antigravity.
+- [x] **MCP Prompts Fleet Expansion & Slash Commands Engine (`@tidy/mcp`)**:
+  - Expanded Stdio Prompts protocol to 15 canonical prompts (`/parallel`, `/context`, `/intent`, `/memorize`, `/recall`, `/plan`, `/brief`, `/extract`, `/firewall`, `/doctor`, `/search`, `/hygiene`, `/agent`, `/cashflow`, `/dossier`).
+  - IDE slash command palette integration for Google Antigravity, Cursor, and Claude with typed arguments and syntax hints.
+  - Eliminated 24 duplicate shadow entries from `tools/list` (purified from 58 to 34 canonical tools) while preserving 100% backward execution compatibility via aliases.
+- [x] **MCP Studio Interactive Prompts & Tools Console (`apps/desktop`, `apps/web`)**:
+  - Added dedicated `⚡ Prompts` (15 prompts) and `🛠️ Tools` (34 tools) tabs to MCP Studio with 1-click slash command copying (`/cmd`, `/mcp:tidy-brain:cmd`).
+  - Interactive Prompt Compiler & Tester Modal (`mcpPromptTestModal`) for live validation, argument input, and payload inspection before execution.
+- [x] **Suite 16 Automated Test Verification**: 69 passed tests covering concurrency, isolation, MCP prompts, and conflict resolution.
 
 ---
 

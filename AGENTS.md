@@ -91,4 +91,17 @@ When authoring or modifying code in `apps/desktop/`:
    - `packages/plugin` is strictly an adapter/distribution layer (manifests, schemas, RPC wrappers).
    - All state mutations, SQLite queries, context compilation, and skill orchestration MUST be implemented in `@tidy/core`.
 
+---
+
+## 🤖 7. Local Subagent (`@qwen`) Continuous Collaboration Protocol
+
+1. **Persistent Local Subagent Role**:
+   - The registered subagent `@qwen` (Model: `qwen/qwen3.5-9b`, Endpoint: `http://127.0.0.1:1234/v1`) serves as a permanent local co-pilot for technical reviews, code audits, and task decomposition.
+   - When handling substantial architecture, review, or refactoring tasks, the primary agent should engage `@qwen` via `executeSubagent` or `tidy_parallel_dispatch`.
+2. **Reasoning Model Token Budgeting & Context Scaffolding**:
+   - **Token Budget Ceiling**: Enforce an ephemeral budget of 400–1200 tokens (via `options.maxTokens`) to prevent local generation stalls on lengthy reasoning traces.
+   - **Explicit Grounding**: Always inject pertinent file excerpts, schemas, or requirements into the prompt payload. Never expect the offline subagent to infer file contents without grounding.
+   - **Direct Output Format**: Instruct the subagent to be concise and structured to prevent token exhaustion inside chain-of-thought blocks.
+
+
 

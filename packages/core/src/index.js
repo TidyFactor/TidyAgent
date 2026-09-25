@@ -32,6 +32,10 @@ const firewallChecker = require('./firewall-checker');
 const memoryTaxonomy = require('./memory-taxonomy');
 const contextCompiler = require('./context-compiler');
 const intentRouter = require('./intent-router');
+const parallelOrchestrator = require('./parallel-orchestrator');
+const conflictResolver = require('./conflict-resolver');
+const skillLifecycle = require('./skill-lifecycle');
+const mcpRouter = require('./mcp-router');
 
 module.exports = {
   // Database & Storage SSOT
@@ -89,6 +93,10 @@ module.exports = {
   deleteSubagent: subagents.deleteSubagent,
   prepareSubagentContext: subagents.prepareSubagentContext,
   runSubagent: subagents.runSubagent,
+  executeSubagent: subagents.executeSubagent,
+  dispatchParallelTasks: subagents.dispatchParallelTasks,
+  testLocalLlmConnection: subagents.testLocalLlmConnection,
+  discoverAvailableModels: subagents.discoverAvailableModels,
 
   // Community Skills as Managed Agents (Full CRUD)
   parseSkillMd: skillsLoader.parseSkillMd,
@@ -192,7 +200,16 @@ module.exports = {
 
   INTENT_TYPES: intentRouter.INTENT_TYPES,
   CAPABILITY_DIRECTORY: intentRouter.CAPABILITY_DIRECTORY,
-  routeIntent: intentRouter.routeIntent
+  routeIntent: intentRouter.routeIntent,
+
+  // Sovereign Parallel Multi-Agent Engine (v1.7.0)
+  ParallelOrchestrator: parallelOrchestrator.ParallelOrchestrator,
+  ConflictResolver: conflictResolver.ConflictResolver,
+  DOMAIN_PRIORITIES: conflictResolver.DOMAIN_PRIORITIES,
+
+  // Skill Lifecycle & Dynamic MCP Router Engine (v1.6.5 / v1.7.0)
+  SkillLifecycleEngine: skillLifecycle.SkillLifecycleEngine,
+  DynamicMcpRouter: mcpRouter.DynamicMcpRouter
 };
 
 

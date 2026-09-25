@@ -19,8 +19,115 @@ function initDispatcher() {
   populateDispatcherAgents();
 
   const modelSelect = document.getElementById('dispatchModelSelect');
-  modelSelect?.addEventListener('change', updateDispatcherActiveBadges);
+  const btnTestLocal = document.getElementById('btnTestLocalLlm');
+  const localStatusBadge = document.getElementById('localLlmStatusBadge');
+  const cfgEndpoint = document.getElementById('cfgLocalLlmEndpoint');
+  const cfgModel = document.getElementById('cfgLocalLlmModel');
+  const localLlmCard = document.getElementById('localLlmConfigCard');
+
+  // Test Local llama-server / LM Studio ping and enumerate models
+  async function testLocalLlm() {
+    if (!localStatusBadge) return;
+    localStatusBadge.textContent = 'Testing...';
+    localStatusBadge.style.background = 'rgba(255,255,255,0.2)';
+    localStatusBadge.style.color = 'var(--text-secondary)';
+
+    const endpoint = cfgEndpoint?.value?.trim() || 'http://127.0.0.1:8080/v1';
+    try {
+      const res = await fetch(`/api/local-llm/status?endpoint=${encodeURIComponent(endpoint)}`).then(r => r.json());
+      if (res && res.running) {
+        const count = res.models?.length || 0;
+        localStatusBadge.textContent = `🟢 Online (${count > 0 ? count + ' Models' : 'CUDA Active'})`;
+        localStatusBadge.style.background = '#238636';
+        localStatusBadge.style.color = '#ffffff';
+
+        // Auto-populate local models into the dropdown
+        if (res.models && res.models.length > 0) {
+          const localGroup = modelSelect?.querySelector('optgroup[label*="Local"]');
+          if (localGroup) {
+            const currentSelected = modelSelect.value;
+            localGroup.innerHTML = '';
+            res.models.forEach(m => {
+              const mId = typeof m === 'string' ? m : (m.id || 'local-model');
+              const opt = document.createElement('option');
+              opt.value = mId;
+              opt.textContent = `⚡ Local: ${mId}`;
+              if (mId === cfgModel?.value || mId === currentSelected) {
+                opt.selected = true;
+              }
+              localGroup.appendChild(opt);
+            });
+            if (cfgModel && !cfgModel.value && res.models[0]) {
+              cfgModel.value = typeof res.models[0] === 'string' ? res.models[0] : res.models[0].id;
+            }
+          }
+        }
+      } else {
+        localStatusBadge.textContent = '🔴 Offline';
+        localStatusBadge.style.background = '#da3633';
+        localStatusBadge.style.color = '#ffffff';
+      }
+    } catch {
+      localStatusBadge.textContent = '🔴 Offline';
+      localStatusBadge.style.background = '#da3633';
+      localStatusBadge.style.color = '#ffffff';
+    }
+  }
+
+  btnTestLocal?.addEventListener('click', testLocalLlm);
+
+  // Auto-save endpoint when changed
+  cfgEndpoint?.addEventListener('change', () => {
+    const val = cfgEndpoint.value.trim();
+    fetch('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'local_llm_endpoint', value: val })
+    }).catch(() => {});
+  });
+
+  cfgModel?.addEventListener('change', () => {
+    const val = cfgModel.value.trim();
+    fetch('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'local_llm_model', value: val })
+    }).catch(() => {});
+  });
+
+  const customInputBox = document.getElementById('customModelInputBox');
+  const customInput = document.getElementById('customModelIdentifier');
+
+  // Toggle local config card and custom input based on selected model
+  function handleModelChange() {
+    const val = modelSelect?.value;
+    if (customInputBox) {
+      customInputBox.style.display = (val === '__custom__') ? 'block' : 'none';
+      if (val === '__custom__' && customInput) customInput.focus();
+    }
+    if (localLlmCard) {
+      localLlmCard.style.display = (val === 'local-llama' || val === 'ollama-local') ? 'block' : 'none';
+    }
+    if (val === 'local-llama') {
+      testLocalLlm();
+    }
+    updateDispatcherActiveBadges();
+  }
+
+  modelSelect?.addEventListener('change', handleModelChange);
   agentSelect?.addEventListener('change', updateDispatcherActiveBadges);
+
+  // Dynamic discovery of active local models from server
+  fetch('/api/models').then(r => r.json()).then(res => {
+    if (res && res.ok && res.data?.local?.length > 0) {
+      const active = res.data.local.find(m => m.isOnline);
+      if (active) {
+        const opt = modelSelect?.querySelector('option[value="local-llama"]');
+        if (opt) opt.textContent = active.name;
+        if (cfgModel && !cfgModel.value) cfgModel.value = active.id;
+      }
+    }
+  }).catch(() => {});
 
   // Clear Prompt
   btnClear?.addEventListener('click', () => {
@@ -62,7 +169,10 @@ function initDispatcher() {
   btnDispatch?.addEventListener('click', async () => {
     const name = agentSelect?.value;
     const task = promptInput?.value.trim();
-    const model = modelSelect?.value || 'claude-3-5-sonnet';
+    let model = modelSelect?.value || 'antigravity-bridge';
+    if (model === '__custom__') {
+      model = customInput?.value?.trim() || 'custom-model';
+    }
     if (!task) return alert('Task instruction is required.');
 
     const ringProject = document.getElementById('ringProjectContext')?.checked ?? true;
@@ -75,12 +185,33 @@ function initDispatcher() {
     const origHtml = btnDispatch.innerHTML;
     btnDispatch.innerHTML = `<span>Dispatching...</span>`;
 
+    const endpointVal = cfgEndpoint?.value?.trim() || null;
+    const localModelVal = cfgModel?.value?.trim() || null;
+
+    // Auto-save endpoint and model configuration before dispatch
+    if (endpointVal) {
+      fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'local_llm_endpoint', value: endpointVal })
+      }).catch(() => {});
+    }
+    if (localModelVal) {
+      fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'local_llm_model', value: localModelVal })
+      }).catch(() => {});
+    }
+
     const startTime = performance.now();
     try {
       const res = await window.api.runSubagent({
         name,
         task,
         model,
+        endpoint: endpointVal,
+        localModel: localModelVal,
         rings: {
           core: true,
           project: ringProject,

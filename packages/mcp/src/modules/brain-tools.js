@@ -17,7 +17,7 @@ const {
   getDb
 } = core;
 
-const SERVER_VERSION = '1.5.0';
+const SERVER_VERSION = '1.7.0';
 
 function resolveDbPath() {
   const path = require('path');

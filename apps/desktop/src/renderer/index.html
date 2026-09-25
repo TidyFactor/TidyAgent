@@ -1046,17 +1046,58 @@
                 <div class="form-group flex-1" style="margin-bottom: 0;">
                   <label id="labelTargetModel">Engine / Model Provider:</label>
                   <select id="dispatchModelSelect" class="form-select">
-                    <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
-                    <option value="gpt-4o">GPT-4o (OpenAI)</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
-                    <option value="deepseek-r1">DeepSeek R1 / V3</option>
-                    <option value="llama-3.3-70b">Llama 3.3 (Meta)</option>
-                    <option value="mistral-large">Mistral Large (Mistral AI)</option>
-                    <option value="qwen-2.5-coder">Qwen 2.5 Coder (Alibaba)</option>
-                    <option value="ollama-local">Ollama (Local LLM)</option>
+                    <optgroup label="🛸 IDE Direct Passthrough">
+                      <option value="antigravity-bridge" selected>🛸 Host Active Model (Antigravity / Claude Code)</option>
+                    </optgroup>
+                    <optgroup label="⚡ Local Model Server (CUDA GPU)">
+                      <option value="local-llama">⚡ Local llama-server (Gemma-4-12B / :8080)</option>
+                      <option value="ollama-local">🦙 Ollama Local (:11434)</option>
+                    </optgroup>
+                    <optgroup label="🧠 Active 2026 Frontier Models">
+                      <option value="gemini-3.8-flash">Gemini 3.8 Flash (Thinking / Fast)</option>
+                      <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+                      <option value="gemini-3.1-pro">Gemini 3.1 Pro (Deep Reasoning)</option>
+                      <option value="claude-sonnet-4.6-thinking">Claude Sonnet 4.6 (Thinking)</option>
+                      <option value="claude-opus-4.6-thinking">Claude Opus 4.6 (Thinking)</option>
+                      <option value="gpt-4.5">GPT-4.5 (OpenAI)</option>
+                      <option value="o3-mini">o3-mini (High-Compute Math/Code)</option>
+                    </optgroup>
+                    <optgroup label="⚙️ Custom Model">
+                      <option value="__custom__">Custom Model Identifier...</option>
+                    </optgroup>
                   </select>
+                  <div id="customModelInputBox" style="display: none; margin-top: 6px;">
+                    <input type="text" id="customModelIdentifier" class="form-input" style="font-size: 12px; padding: 4px 8px;" placeholder="Type any model identifier (e.g. qwen-2.5-coder, mistral-large)..." />
+                  </div>
                 </div>
               </div>
+
+              <!-- Local Model Server (llama-server / LM Studio) Configuration Card -->
+              <div id="localLlmConfigCard" style="display: block; margin-bottom: 12px; padding: 10px 14px; background: rgba(88, 166, 255, 0.06); border: 1px dashed rgba(88, 166, 255, 0.3); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 12px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+                    <span>⚙️</span> Local Model Server Settings (llama-server / LM Studio)
+                  </span>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="localLlmStatusBadge" style="font-size: 11px; padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.1); color: var(--text-secondary);">Standby</span>
+                    <button type="button" id="btnTestLocalLlm" class="btn btn-xs btn-outline" style="font-size: 11px; padding: 3px 8px; cursor: pointer;">Test Ping</button>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                  <div>
+                    <label style="font-size: 11px; display: block; margin-bottom: 2px; opacity: 0.85;">Endpoint URL (llama-server):</label>
+                    <input type="text" id="cfgLocalLlmEndpoint" class="form-input" style="font-size: 12px; padding: 4px 8px;" value="http://127.0.0.1:8080/v1" placeholder="http://127.0.0.1:8080/v1" />
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; display: block; margin-bottom: 2px; opacity: 0.85;">Model Identifier / GGUF:</label>
+                    <input type="text" id="cfgLocalLlmModel" class="form-input" style="font-size: 12px; padding: 4px 8px;" value="gemma-4-12b" placeholder="gemma-4-12b" />
+                  </div>
+                </div>
+                <div style="margin-top: 6px; font-size: 11px; color: var(--text-secondary); opacity: 0.8;">
+                  💡 Running via CUDA GPU offloading (e.g. <code>llama-server.exe -m ... -ngl 25 -c 4096 --port 8080</code>). Zero external API fees.
+                </div>
+              </div>
+
               <div id="dispatcherActiveBadgesRow" style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;"></div>
 
               <!-- Context Rings Selector -->
@@ -1188,6 +1229,14 @@
                 <button class="btn btn-sm btn-outline" id="mcpBtnViewCatalog">
                   <span data-i18n="mcp.viewCatalog">Catalog</span>
                   <span class="badge badge-primary" id="badgeMcpCatalog" style="margin-inline-start:4px; font-size:10px;">9</span>
+                </button>
+                <button class="btn btn-sm btn-outline" id="mcpBtnViewPrompts">
+                  <span>⚡ Prompts</span>
+                  <span class="badge badge-primary" id="badgeMcpPrompts" style="margin-inline-start:4px; font-size:10px;">16</span>
+                </button>
+                <button class="btn btn-sm btn-outline" id="mcpBtnViewTools">
+                  <span>🛠️ Tools</span>
+                  <span class="badge badge-primary" id="badgeMcpTools" style="margin-inline-start:4px; font-size:10px;">34</span>
                 </button>
               </div>
             </div>
@@ -2554,6 +2603,32 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" data-close="mcpCloneModal" onclick="window.mcpCloseModal('mcpCloneModal')">Cancel</button>
         <button class="btn btn-primary" onclick="window.mcpSubmitClone()">Clone</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: MCP Prompt Interactive Tester -->
+  <div class="modal-backdrop" id="mcpPromptTestModal">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 id="mcpPromptTestTitle">Test MCP Prompt</h3>
+        <button class="modal-close" data-close="mcpPromptTestModal" onclick="window.mcpCloseModal('mcpPromptTestModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="mcpPromptTestName" value="" />
+        <div id="mcpPromptTestDescription" style="font-size:13px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5;"></div>
+        <div id="mcpPromptTestArgsContainer"></div>
+        <div id="mcpPromptTestOutputGroup" style="display:none; margin-top:16px;">
+          <label style="font-weight:600; font-size:12px; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:6px; display:block;">Compiled Prompt Payload:</label>
+          <div style="position:relative;">
+            <pre id="mcpPromptTestOutput" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:6px; padding:12px; font-size:12px; font-family:monospace; max-height:260px; overflow-y:auto; white-space:pre-wrap;"></pre>
+            <button class="btn btn-xs btn-outline" style="position:absolute; top:8px; right:8px;" onclick="window.mcpCopyCommand(this, document.getElementById('mcpPromptTestOutput').textContent)">Copy</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.mcpCloseModal('mcpPromptTestModal')">Close</button>
+        <button class="btn btn-primary" id="btnExecutePromptTest" onclick="window.mcpExecutePromptTest()">Compile & Test</button>
       </div>
     </div>
   </div>

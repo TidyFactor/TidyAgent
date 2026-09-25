@@ -5,7 +5,7 @@
  * for sub-millisecond dispatching without hot-path dynamic resolution.
  *
  * @module @tidy/mcp/registry
- * @version 1.5.0
+ * @version 1.7.0
  */
 
 const { coreTools } = require('./modules/core-tools');
@@ -13,6 +13,7 @@ const { brainTools } = require('./modules/brain-tools');
 const { harvestTools } = require('./modules/harvest-tools');
 const { officeTools } = require('./modules/office-tools');
 const { controlPlaneTools } = require('./modules/control-plane-tools');
+const { parallelTools } = require('./modules/parallel-tools');
 const { resourcesList, handleResourceRead } = require('./modules/resources');
 const { promptsList, handlePromptGet } = require('./modules/prompts');
 
@@ -22,11 +23,14 @@ const allToolModules = [
   ...harvestTools,
   ...brainTools,
   ...officeTools,
-  ...controlPlaneTools
+  ...controlPlaneTools,
+  ...parallelTools
 ];
 
 // Legacy and cross-host tool names mapping to sovereign Tidy tools
 const LEGACY_ALIASES = {
+  'parallel_dispatch': 'tidy_parallel_dispatch',
+  'dispatch_parallel': 'tidy_parallel_dispatch',
   'doctor': 'tidy_doctor',
   'probe_server_health': 'tidy_doctor',
   'search_knowledge_base': 'tidy_search',
@@ -58,15 +62,10 @@ for (const tool of allToolModules) {
   toolHandlers.set(tool.definition.name, tool.handler);
 }
 
-// Expose legacy aliases in TOOLS catalog so IDEs discover them directly via tools/list
+// Register legacy aliases in execution map for cross-host backwards compatibility (without bloating tools/list)
 for (const [aliasName, targetName] of Object.entries(LEGACY_ALIASES)) {
   const target = allToolModules.find(t => t.definition.name === targetName);
   if (target && !toolHandlers.has(aliasName)) {
-    TOOLS.push({
-      ...target.definition,
-      name: aliasName,
-      description: `[Alias for ${targetName}] ${target.definition.description}`
-    });
     toolHandlers.set(aliasName, target.handler);
   }
 }

@@ -259,6 +259,14 @@ window.api = {
       body: JSON.stringify(data)
     }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
   },
+  runSubagentParallel: async (data) => {
+    if (electronApi?.runSubagentParallel) return electronApi.runSubagentParallel(data);
+    return fetch('/api/subagents/parallel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+  },
   listSkills: async () => {
     if (electronApi?.listSkills) return electronApi.listSkills();
     return fetch('/api/skills').then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
@@ -548,6 +556,25 @@ window.api = {
       const eApi = window.tidyApi || electronApi;
       if (eApi?.mcp?.test) return eApi.mcp.test(ideId, name);
       return fetch(`/api/mcp/test?ide=${encodeURIComponent(ideId)}&name=${encodeURIComponent(name)}`).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    prompts: async () => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.prompts) return eApi.mcp.prompts();
+      return fetch('/api/mcp/prompts').then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    tools: async () => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.tools) return eApi.mcp.tools();
+      return fetch('/api/mcp/tools').then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
+    },
+    testPrompt: async (name, args) => {
+      const eApi = window.tidyApi || electronApi;
+      if (eApi?.mcp?.testPrompt) return eApi.mcp.testPrompt(name, args);
+      return fetch('/api/mcp/prompts/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, arguments: args })
+      }).then(r => r.json()).catch(err => ({ ok: false, error: err.message }));
     }
   },
 

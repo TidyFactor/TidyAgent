@@ -26,7 +26,8 @@ const path = require('path');
 const pkg = require('../package.json');
 const { getDb, getStats, resolveDbPath } = require('../scripts/db');
 const { saveMemory, recallMemory, listMemories, forgetMemory, pruneMemories, pruneDecayedMemories } = require('../scripts/memory');
-const { listSubagents, getSubagent, registerSubagent, prepareSubagentContext, runSubagent } = require('../scripts/subagents');
+const { listSubagents, getSubagent, registerSubagent, prepareSubagentContext, runSubagent, executeSubagent } = require('../scripts/subagents');
+const { dispatchParallel, synthesizeAndPersist } = require('../scripts/parallel-orchestrator');
 const { addTask, listTasks, getTask, completeTask, addSnippet, listSnippets, addJournalEntry, listJournal, setSecret, getSecret, listVaultKeys, listInstalledApps } = require('../scripts/apps');
 const { discoverSkills, listRegisteredSkills, registerSkillFromPath, getRegisteredSkill } = require('../scripts/skills-loader');
 const { generateTaskBrief } = require('../scripts/brief-generator');
@@ -118,6 +119,7 @@ Fast Developer One-Liners:
   tidy export              Export vault (Obsidian PARA Markdown or JSON SSOT)
   tidy import <path>       Import external Markdown or JSON vault into SQLite
   tidy prune               Smart cognitive purge of decayed ephemeral records
+  tidy parallel "<obj>"    Parallel multi-agent swarm execution & conflict resolution
 
 Commands:
   init                     Verify or auto-bootstrap SQLite storage
@@ -131,6 +133,10 @@ Commands:
     memory list            List recent memory nodes
     memory forget <id>     Delete a memory node
     memory prune           Clean expired ephemeral records
+  parallel "<objective>"   Parallel multi-agent swarm execution & reconciliation
+    --agents a,b,c         Target subagents to fork (default: auto-detected)
+    --domain <domain>      Scoped workspace domain (dev, marketing, general)
+    --strategy <strategy>  Conflict resolution strategy (priority, semantic, consensus)
   skills                   Manage community skills as subagents
     skills list            List registered skills & agent aliases
     skills scan [dir]      Auto-discover & register skills in workspace/Skills-LAB
@@ -395,6 +401,76 @@ async function main() {
         console.log(`  Memory SSOT: Created node [${execution.memoryNodeId}] (session tier)`);
         console.log(`  ------------------------------------------------------------`);
         console.log(`  ${execution.output}`);
+        break;
+      }
+
+      case 'parallel':
+      case 'orchestrate': {
+        const { flags, positional } = parseFlags(args.slice(1));
+        const objective = positional.join(' ');
+        if (!objective) {
+          console.log(`\n  ⚡ Tidy Parallel Subagent Orchestrator (Fork & Join)`);
+          console.log(`  Usage: tidy parallel "<objective>" [--agents coder,planner] [--domain dev] [--strategy priority]`);
+          console.log(`\n  Example: tidy parallel "Design and implement SQLite WAL checkpointing" --agents architect,coder`);
+          break;
+        }
+
+        const agents = flags.agents ? flags.agents.split(',').map(s => s.trim()) : undefined;
+        const domain = flags.domain || undefined;
+        const conflictStrategy = flags.strategy || 'priority';
+
+        console.log(`\n  ⚡ Dispatching Parallel Multi-Agent Swarm...`);
+        console.log(`  Objective : "${objective}"`);
+        if (agents) console.log(`  Agents    : ${agents.join(', ')}`);
+        if (domain) console.log(`  Domain    : ${domain}`);
+        console.log(`  Strategy  : ${conflictStrategy}`);
+        console.log(`  ------------------------------------------------------------`);
+
+        const { dispatchParallelTasks } = require('../scripts/subagents');
+        const res = await dispatchParallelTasks({ objective, agents, domain });
+        const { batchResults, synthesis } = res;
+
+        console.log(`\n  ✅ Parallel Swarm Execution Completed`);
+        console.log(`     Total Subagents: ${synthesis.orchestration_summary.total_subagents} | Succeeded: ${synthesis.orchestration_summary.succeeded} | Failed: ${synthesis.orchestration_summary.failed}`);
+        console.log(`     Resolution Status: ${synthesis.orchestration_summary.resolution_status}`);
+
+        console.log(`\n  📋 Subagent Deliverables:`);
+        for (const sub of batchResults) {
+          const statusIcon = sub.status === 'fulfilled' ? '🟢' : '🔴';
+          console.log(`\n  ${statusIcon} @${sub.agent} (${sub.role || 'subagent'}) [Budget: ${sub.tokens_allocated || 1200} tokens]`);
+          if (sub.status === 'fulfilled' && sub.data) {
+            if (sub.data.summary) {
+              console.log(`     Summary: ${sub.data.summary}`);
+            }
+            if (sub.data.proposals && Array.isArray(sub.data.proposals)) {
+              console.log(`     Proposals:`);
+              sub.data.proposals.forEach(p => console.log(`       - [${p.domain || 'general'}] ${p.action || 'action'}: ${p.details || JSON.stringify(p)}`));
+            }
+            if (sub.data.files_touched && Array.isArray(sub.data.files_touched)) {
+              console.log(`     Files: ${sub.data.files_touched.join(', ')}`);
+            }
+            if (sub.data.raw_text) {
+              console.log(`     Output: ${sub.data.raw_text.slice(0, 200)}...`);
+            }
+          } else if (sub.status === 'rejected') {
+            console.log(`     Error: ${sub.error}`);
+          }
+        }
+
+        console.log(`\n  ⚖️ Adjudication & Reconciliation:`);
+        console.log(`     Conflicts Detected: ${synthesis.orchestration_summary.conflicts_detected}`);
+        if (synthesis.conflicts_report && synthesis.conflicts_report.conflicts) {
+          synthesis.conflicts_report.conflicts.forEach(c => {
+            console.log(`     - [${c.type}] Between @${c.agents ? c.agents.join(' & @') : 'agents'}: ${c.description || ''}`);
+            console.log(`       Resolution: ${c.resolution || 'Resolved'} (Winner: @${c.winner || 'selected'})`);
+          });
+        }
+        if (synthesis.conflicts_report && synthesis.conflicts_report.compromises_made && synthesis.conflicts_report.compromises_made.length > 0) {
+          console.log(`\n     Compromises Made:`);
+          synthesis.conflicts_report.compromises_made.forEach(comp => console.log(`       * ${comp}`));
+        }
+
+        console.log(`\n  💾 Memory SSOT: Reconciled decision persisted in project memory`);
         break;
       }
 

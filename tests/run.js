@@ -22,6 +22,21 @@ console.log('='.repeat(60));
 let passed = 0;
 let failed = 0;
 
+const asyncQueue = [];
+
+function testAsync(name, fn) {
+  asyncQueue.push(async () => {
+    try {
+      await fn();
+      console.log(`  ✓ ${name}`);
+      passed++;
+    } catch (err) {
+      console.error(`  ❌ ${name}: ${err.message}`);
+      failed++;
+    }
+  });
+}
+
 function test(name, fn) {
   try {
     fn();
@@ -63,8 +78,17 @@ const {
   estimateTokenCount,
   compileContext,
   INTENT_TYPES,
-  routeIntent
+  routeIntent,
+  // Parallel Orchestrator & Conflict Adjudication (v1.7.0)
+  ParallelOrchestrator,
+  ConflictResolver,
+  DOMAIN_PRIORITIES,
+  // Skill Lifecycle & Dynamic MCP Router (v1.6.5)
+  SkillLifecycleEngine,
+  DynamicMcpRouter
 } = require('../packages/core/src');
+
+const { parallelTools } = require('../packages/mcp/src/modules/parallel-tools');
 
 const {
   getHostAdapter,
@@ -988,7 +1012,7 @@ test('Stdio MCP Server: Tools fleet, dynamic resources, and Prompts protocol', (
   // 3. Test handleToolCall for tidy_whoami
   const whoResult = handleToolCall('tidy_whoami', {});
   const whoData = JSON.parse(whoResult.content[0].text);
-  assert.strictEqual(whoData.version, '1.5.0');
+  assert.strictEqual(whoData.version, '1.7.0');
   assert.ok(whoData.sqlite_db);
 
   // 4. Test live dynamic resources
@@ -998,11 +1022,15 @@ test('Stdio MCP Server: Tools fleet, dynamic resources, and Prompts protocol', (
   assert.ok(resTaxonomy.contents[0].text.includes('global'));
 
   // 5. Test MCP Prompts protocol
-  assert.ok(mcpPrompts.length >= 3);
+  assert.ok(mcpPrompts.length >= 15, `Expected at least 15 prompts, got ${mcpPrompts.length}`);
   const promptResult = handlePromptGet('tidy_prompt_task_brief', { title: 'Implement Auth' });
   assert.ok(promptResult.messages[0].content.text.includes('Implement Auth'));
   const shortPrompt = handlePromptGet('brief', { title: 'Implement Auth' });
   assert.ok(shortPrompt.messages[0].content.text.includes('Implement Auth'));
+  const parPrompt = handlePromptGet('parallel', { objective: 'Benchmark DB', agents: 'tester, optimizer' });
+  assert.ok(parPrompt.messages[0].content.text.includes('Benchmark DB'));
+  const ctxPrompt = handlePromptGet('context', { task: 'optimize query' });
+  assert.ok(ctxPrompt.messages[0].content.text.includes('optimize query'));
 });
 
 console.log('\n[15] TidyAgent Sovereign Control Plane & Universal Host Plugin Engine (v1.6.0) Tests');
@@ -1225,19 +1253,206 @@ test('Universal Host Plugin: exportHostConfiguration across all 5 platforms', ()
   assert.ok(agyConfig.geminiRule.includes('GEMINI.md'));
 });
 
-// Cleanup test DB
-try {
-  fs.rmSync(TEST_DIR, { recursive: true, force: true });
-} catch {
-  // Ignore temp cleanup errors on windows locks
-}
 
-console.log('\n' + '=' .repeat(60));
-console.log(`  TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
-console.log('=' .repeat(60));
+console.log('\n[16] Sovereign Parallel Multi-Agent & Conflict Adjudication (v1.7.0) Tests');
 
-if (failed > 0) {
-  process.exit(1);
-} else {
-  console.log('\n🎉 ALL TESTS PASSED SUCCESSFULLY!\n');
-}
+testAsync('Parallel Orchestrator: executes batch tasks concurrently with isolated context', async () => {
+  const orchestrator = new ParallelOrchestrator();
+  const results = await orchestrator.dispatchParallel([
+    { agentName: 'planner', subTask: 'Break down authentication flow' },
+    { agentName: 'coder', subTask: 'Implement token generator' }
+  ]);
+  assert.strictEqual(results.length, 2);
+  assert.strictEqual(results[0].status, 'fulfilled');
+  assert.strictEqual(results[1].status, 'fulfilled');
+  assert.strictEqual(results[0].agent, 'planner');
+  assert.strictEqual(results[1].agent, 'coder');
+  assert.ok(results[0].tokens_allocated <= 1200);
+});
+
+testAsync('Conflict Resolver: detects file mutation collision and verdict discord', async () => {
+  const resolver = new ConflictResolver();
+  const conflicting = {
+    security_auditor: {
+      target_files: ['src/auth.js', 'src/server.js'],
+      verdict: true,
+      recommendation: 'Strict JWT signature verification required'
+    },
+    performance_expert: {
+      target_files: ['src/server.js', 'src/cache.js'],
+      verdict: false,
+      recommendation: 'Disable middleware verification on internal routes'
+    }
+  };
+
+  const conflicts = resolver.detectDirectConflicts(conflicting);
+  assert.strictEqual(conflicts.length, 2);
+  assert.strictEqual(conflicts[0].type, 'FILE_MUTATION_COLLISION');
+  assert.deepStrictEqual(conflicts[0].contested_items, ['src/server.js']);
+  assert.strictEqual(conflicts[1].type, 'BINARY_VERDICT_DISCORD');
+});
+
+testAsync('Conflict Resolver: deterministic priority hierarchy adjudication', async () => {
+  const resolver = new ConflictResolver();
+  const conflicting = {
+    security_auditor: {
+      target_files: ['src/server.js'],
+      verdict: true
+    },
+    performance_expert: {
+      target_files: ['src/server.js'],
+      verdict: false
+    }
+  };
+  const conflicts = resolver.detectDirectConflicts(conflicting);
+  const adjudicated = await resolver.adjudicateSemanticConflicts({
+    objective: 'Harden server auth and latency',
+    subagentOutputs: conflicting,
+    knownConflicts: conflicts
+  });
+
+  assert.strictEqual(adjudicated.resolved, true);
+  assert.strictEqual(adjudicated.dominant_agent, 'security_auditor');
+  assert.strictEqual(adjudicated.method, 'deterministic_priority_hierarchy');
+  assert.strictEqual(adjudicated.compromises_made.length, 2);
+  assert.strictEqual(adjudicated.compromises_made[0].agent, 'performance_expert');
+  assert.strictEqual(adjudicated.compromises_made[0].resolved_by, 'security_auditor');
+});
+
+testAsync('Parallel Orchestrator: synthesizeAndPersist with atomic decision memory', async () => {
+  const orchestrator = new ParallelOrchestrator();
+  const batchResults = await orchestrator.dispatchParallel([
+    { agentName: 'planner', subTask: 'Synthesize project deliverables' }
+  ]);
+
+  const synthesized = await orchestrator.synthesizeAndPersist({
+    originalObjective: 'Deploy high-availability cluster',
+    batchResults,
+    autoCommit: true
+  });
+
+  assert.strictEqual(synthesized.objective, 'Deploy high-availability cluster');
+  assert.strictEqual(synthesized.orchestration_summary.succeeded, 1);
+  assert.strictEqual(synthesized.orchestration_summary.conflicts_detected, 0);
+
+  const recalled = recallMemory({ query: 'Deploy high-availability cluster' });
+  assert.ok(recalled.length > 0);
+  assert.strictEqual(recalled[0].category, 'decisions');
+});
+
+testAsync('Parallel Orchestrator: fault tolerance with failing subagent', async () => {
+  const orchestrator = new ParallelOrchestrator();
+  const results = await orchestrator.dispatchParallel([
+    { agentName: 'planner', subTask: 'Valid subagent task' },
+    { agentName: 'non_existent_subagent', subTask: 'Invalid agent task' }
+  ]);
+
+  assert.strictEqual(results.length, 2);
+  assert.strictEqual(results[0].status, 'fulfilled');
+  assert.strictEqual(results[1].status, 'rejected');
+  assert.ok(results[1].error.includes('not registered'));
+
+  const synthesized = await orchestrator.synthesizeAndPersist({
+    originalObjective: 'Partial failure test',
+    batchResults: results,
+    autoCommit: false
+  });
+  assert.strictEqual(synthesized.orchestration_summary.succeeded, 1);
+  assert.strictEqual(synthesized.orchestration_summary.failed, 1);
+  assert.strictEqual(synthesized.failures[0].agent, 'non_existent_subagent');
+});
+
+testAsync('MCP Parallel Tools: tidy_parallel_dispatch execution', async () => {
+  const tool = parallelTools.find(t => t.definition.name === 'tidy_parallel_dispatch');
+  assert.ok(tool, 'tidy_parallel_dispatch tool must exist');
+
+  const res = await tool.handler({
+    objective: 'Coordinate release deployment',
+    tasks: [
+      { agent: 'planner', task: 'Draft deployment gates' },
+      { agent: 'coder', task: 'Execute build tests' }
+    ]
+  });
+
+  assert.ok(Array.isArray(res.content));
+  assert.ok(res.content[0].text.includes('TidyAgent Parallel Multi-Agent Execution Report'));
+  assert.ok(res.content[0].text.includes('Concurrent Fork & Join (2 Subagents)'));
+});
+
+testAsync('Universal Host Plugin: dispatchParallel across platforms', async () => {
+  const claudeAdapter = getHostAdapter('claude');
+  assert.ok(typeof claudeAdapter.dispatchParallel === 'function');
+
+  const plan = await claudeAdapter.dispatchParallel('Launch marketing campaign', [
+    { agent: 'planner', task: 'Timeline definition' }
+  ], { autoCommit: false });
+
+  assert.strictEqual(plan.objective, 'Launch marketing campaign');
+  assert.strictEqual(plan.orchestration_summary.succeeded, 1);
+});
+
+console.log('\n[17] Skill Lifecycle Engine & Dynamic MCP Router (v1.6.5) Tests');
+test('SkillLifecycleEngine: discover and load skills with frontmatter', () => {
+  const engine = new SkillLifecycleEngine({ skillsDir: path.resolve(__dirname, '../packages/skill') });
+  const loaded = engine.load(path.resolve(__dirname, '../packages/skill'));
+  assert.ok(loaded, 'Skill should load from directory');
+  assert.strictEqual(loaded.name, 'skill');
+  assert.ok(loaded.frontmatter, 'Frontmatter should be parsed');
+});
+
+test('SkillLifecycleEngine: matchCapabilities enforces max 3 skills invariant', () => {
+  const engine = new SkillLifecycleEngine();
+  const match = engine.matchCapabilities('Build a luxury landing page with cinematic video sequence and GSAP');
+  assert.ok(match, 'Capability match object should be returned');
+  assert.strictEqual(match.domain, 'dev');
+  assert.ok(match.matchedSkills.length <= 3, 'Matched skills must be capped at 3');
+  assert.strictEqual(match.invariantPassed, true);
+  assert.ok(match.matchedSkills.includes('tidyfactor-cinematic'));
+});
+
+test('DynamicMcpRouter: resolves appropriate tool for skill step', () => {
+  const router = new DynamicMcpRouter();
+  assert.strictEqual(router.resolveToolForSkillStep('crm', 'create client invoice'), 'tidy_invoice_create');
+  assert.strictEqual(router.resolveToolForSkillStep('memory', 'recall facts from storage'), 'tidy_recall');
+  assert.strictEqual(router.resolveToolForSkillStep('ops', 'system health check doctor'), 'tidy_doctor');
+  assert.strictEqual(router.resolveToolForSkillStep('agent', 'dispatch parallel swarm'), 'tidy_parallel_dispatch');
+});
+
+testAsync('DynamicMcpRouter: executes registered tool and populates working context', async () => {
+  const router = new DynamicMcpRouter();
+  router.registerTool('mock_calculator', async (args) => {
+    return { result: (args.a || 0) + (args.b || 0) };
+  });
+
+  const execRes = await router.executeStep('mock_calculator', { a: 15, b: 25 });
+  assert.strictEqual(execRes.ok, true);
+  assert.strictEqual(execRes.data.result, 40);
+
+  const populatedContext = router.populateWorkingContext({}, execRes);
+  assert.ok(Array.isArray(populatedContext.tool_executions));
+  assert.strictEqual(populatedContext.tool_executions.length, 1);
+  assert.strictEqual(populatedContext.last_tool_output.result, 40);
+});
+
+(async () => {
+  for (const t of asyncQueue) {
+    await t();
+  }
+
+  // Cleanup test DB
+  try {
+    fs.rmSync(TEST_DIR, { recursive: true, force: true });
+  } catch {
+    // Ignore temp cleanup errors on windows locks
+  }
+
+  console.log('\n' + '='.repeat(60));
+  console.log(`  TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
+  console.log('='.repeat(60));
+
+  if (failed > 0) {
+    process.exit(1);
+  } else {
+    console.log('\n🎉 ALL TESTS PASSED SUCCESSFULLY!\n');
+  }
+})();

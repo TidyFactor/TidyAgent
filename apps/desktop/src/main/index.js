@@ -33,6 +33,17 @@ try {
   }
 }
 
+let mcpRegistry = null;
+try {
+  mcpRegistry = require('@tidy/mcp/registry');
+} catch {
+  try {
+    mcpRegistry = require('../../../packages/mcp/src/registry');
+  } catch {
+    mcpRegistry = null;
+  }
+}
+
 let mainWindow = null;
 
 function createWindow() {
@@ -468,9 +479,20 @@ function registerIpcHandlers() {
     }
   });
 
-  handle('subagents:run', async (_, { name, task }) => {
+  handle('subagents:run', async (_, params) => {
     try {
-      const result = core.runSubagent(name, task);
+      const result = core.executeSubagent
+        ? await core.executeSubagent(params)
+        : core.runSubagent(params.name, params.task);
+      return { ok: true, data: result };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('subagents:parallel', async (_, params) => {
+    try {
+      const result = await core.dispatchParallelTasks(params);
       return { ok: true, data: result };
     } catch (err) {
       return { ok: false, error: err.message };
@@ -898,6 +920,34 @@ function registerIpcHandlers() {
   handle('mcp:test', async (_, ideId, name) => {
     try {
       const res = core.testMcpServer(ideId, name);
+      return { ok: true, data: res };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:prompts', async () => {
+    try {
+      if (!mcpRegistry) return { ok: false, error: 'MCP Registry unavailable' };
+      return { ok: true, data: mcpRegistry.PROMPTS };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:tools', async () => {
+    try {
+      if (!mcpRegistry) return { ok: false, error: 'MCP Registry unavailable' };
+      return { ok: true, data: mcpRegistry.TOOLS };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
+  handle('mcp:testPrompt', async (_, name, args) => {
+    try {
+      if (!mcpRegistry) return { ok: false, error: 'MCP Registry unavailable' };
+      const res = mcpRegistry.handlePromptGet(name, args || {});
       return { ok: true, data: res };
     } catch (err) {
       return { ok: false, error: err.message };

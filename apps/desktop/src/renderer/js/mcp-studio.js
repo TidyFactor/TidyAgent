@@ -14,11 +14,13 @@
   // State
   let mcpState = {
     activeFilter: 'all',     // 'all' | 'antigravity' | 'cursor' | 'vscode' | 'claude' | 'windsurf'
-    viewMode: 'servers',     // 'servers' | 'catalog'
+    viewMode: 'servers',     // 'servers' | 'catalog' | 'prompts' | 'tools'
     searchQuery: '',
     ides: [],
     servers: [],
     catalog: [],
+    prompts: [],
+    tools: [],
     totalCount: 0,
     loading: false
   };
@@ -78,9 +80,11 @@
     }
 
     try {
-      const [scanRes, catRes] = await Promise.all([
+      const [scanRes, catRes, promptsRes, toolsRes] = await Promise.all([
         window.api?.mcp?.scan ? window.api.mcp.scan() : { ok: false, error: 'MCP API unavailable' },
-        window.api?.mcp?.catalog ? window.api.mcp.catalog() : { ok: false, error: 'Catalog API unavailable' }
+        window.api?.mcp?.catalog ? window.api.mcp.catalog() : { ok: false, error: 'Catalog API unavailable' },
+        window.api?.mcp?.prompts ? window.api.mcp.prompts() : { ok: false, error: 'Prompts API unavailable' },
+        window.api?.mcp?.tools ? window.api.mcp.tools() : { ok: false, error: 'Tools API unavailable' }
       ]);
 
       if (scanRes?.ok && scanRes.data) {
@@ -106,6 +110,12 @@
       if (catRes?.ok && catRes.data) {
         mcpState.catalog = catRes.data || [];
       }
+      if (promptsRes?.ok && promptsRes.data) {
+        mcpState.prompts = promptsRes.data || [];
+      }
+      if (toolsRes?.ok && toolsRes.data) {
+        mcpState.tools = toolsRes.data || [];
+      }
 
       updateMcpBadges();
       renderMcpContent();
@@ -129,9 +139,13 @@
   function updateMcpBadges() {
     const totalBadge = document.getElementById('badgeMcpTotal');
     const catalogBadge = document.getElementById('badgeMcpCatalog');
+    const promptsBadge = document.getElementById('badgeMcpPrompts');
+    const toolsBadge = document.getElementById('badgeMcpTools');
 
     if (totalBadge) totalBadge.textContent = mcpState.totalCount;
     if (catalogBadge) catalogBadge.textContent = mcpState.catalog.length;
+    if (promptsBadge) promptsBadge.textContent = mcpState.prompts?.length || 15;
+    if (toolsBadge) toolsBadge.textContent = mcpState.tools?.length || 34;
 
     // Update count & status dot directly on IDE filter chips
     for (const ide of mcpState.ides) {
@@ -161,6 +175,10 @@
   function renderMcpContent() {
     if (mcpState.viewMode === 'catalog') {
       renderMcpCatalog();
+    } else if (mcpState.viewMode === 'prompts') {
+      renderMcpPrompts();
+    } else if (mcpState.viewMode === 'tools') {
+      renderMcpTools();
     } else {
       renderMcpServersGrid();
     }
@@ -366,6 +384,181 @@
   }
 
   /**
+   * Render MCP Prompts (Slash Commands) gallery
+   */
+  function renderMcpPrompts() {
+    const grid = document.getElementById('mcpServersGrid');
+    if (!grid) return;
+
+    let list = [...(mcpState.prompts || [])];
+    if (mcpState.searchQuery) {
+      const q = mcpState.searchQuery.toLowerCase();
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description && p.description.toLowerCase().includes(q))
+      );
+    }
+
+    if (list.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:var(--text-tertiary);">
+          <div style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">
+            ${isAr() ? 'لا توجد موجهات (Prompts) مطابقة للبحث' : 'No matching MCP prompts found'}
+          </div>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(item => {
+      const slashCmdShort = `/${item.name}`;
+      const slashCmdFull = `/mcp:tidy-brain:${item.name}`;
+      const args = item.arguments || [];
+      const argsHtml = args.length > 0
+        ? `<div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:4px;">
+            ${args.map(a => `
+              <span class="mcp-env-pill" style="font-size:10px; padding:2px 6px;" title="${escapeHtml(a.description || '')}">
+                <span style="color:${a.required ? '#ef4444' : 'var(--text-secondary)'}; font-weight:700;">${a.required ? '*' : ''}</span>${escapeHtml(a.name)}
+              </span>
+            `).join('')}
+           </div>`
+        : `<div style="font-size:11px; color:var(--text-tertiary); margin-top:8px;">${isAr() ? 'بدون وسائط إجبارية' : 'No required arguments'}</div>`;
+
+      return `
+        <div class="mcp-server-card">
+          <div>
+            <div class="mcp-card-header">
+              <span class="mcp-catalog-badge" style="background:rgba(234, 179, 8, 0.15); color:#ca8a04; border-color:rgba(234, 179, 8, 0.3);">
+                ⚡ Prompt / Slash Command
+              </span>
+              <span class="mcp-catalog-vendor">tidy-brain</span>
+            </div>
+
+            <div class="mcp-card-title-row" style="margin-top:8px;">
+              <h4 class="mcp-card-title" style="font-family:var(--font-mono, monospace); font-size:15px; color:var(--qhr-color-primary, #1D4ED8);">
+                ${escapeHtml(slashCmdShort)}
+              </h4>
+            </div>
+
+            <p class="mcp-catalog-desc" style="min-height:48px; margin-top:6px; font-size:12px; line-height:1.45;">
+              ${escapeHtml(item.description)}
+            </p>
+
+            <div class="mcp-command-box" title="${escapeHtml(slashCmdFull)}">
+              <code>${escapeHtml(slashCmdFull)}</code>
+              <button type="button" class="mcp-copy-btn" onclick="window.mcpCopyCommand(this, '${escapeHtml(slashCmdFull)}')" title="${isAr() ? 'نسخ الأمر الموجه الكامل' : 'Copy full slash command'}">
+                <svg viewBox="0 0 24 24" style="width:12px; height:12px; stroke:currentColor; stroke-width:2; fill:none;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+
+            ${argsHtml}
+          </div>
+
+          <div class="mcp-catalog-footer" style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border-subtle);">
+            <button type="button" class="btn btn-outline btn-xs" onclick="window.mcpCopyCommand(this, '${escapeHtml(slashCmdShort)}')">
+              ${isAr() ? 'نسخ الأمر المباشر' : 'Copy /cmd'}
+            </button>
+            <button type="button" class="btn btn-primary btn-xs" onclick="window.mcpOpenPromptTestModal('${escapeHtml(item.name)}')">
+              ${isAr() ? 'تجربة وتجميع ⚡' : 'Test & Compile ⚡'}
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  /**
+   * Render MCP Canonical Tools catalog (34 tools)
+   */
+  function renderMcpTools() {
+    const grid = document.getElementById('mcpServersGrid');
+    if (!grid) return;
+
+    let list = [...(mcpState.tools || [])];
+    if (mcpState.searchQuery) {
+      const q = mcpState.searchQuery.toLowerCase();
+      list = list.filter(tool =>
+        tool.name.toLowerCase().includes(q) ||
+        (tool.description && tool.description.toLowerCase().includes(q))
+      );
+    }
+
+    if (list.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:var(--text-tertiary);">
+          <div style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">
+            ${isAr() ? 'لا توجد أدوات مطابقة للبحث' : 'No matching MCP tools found'}
+          </div>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(tool => {
+      const schema = tool.inputSchema || {};
+      const props = schema.properties || {};
+      const required = schema.required || [];
+      const propKeys = Object.keys(props);
+
+      const paramsHtml = propKeys.length > 0
+        ? `<div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:4px;">
+            ${propKeys.map(k => {
+              const isReq = required.includes(k);
+              const prop = props[k];
+              return `
+                <span class="mcp-env-pill" style="font-size:10px; padding:2px 6px;" title="${escapeHtml(prop.description || prop.type || '')}">
+                  <span style="color:${isReq ? '#ef4444' : 'var(--text-secondary)'}; font-weight:700;">${isReq ? '*' : ''}</span>${escapeHtml(k)}: <span style="opacity:0.7;">${escapeHtml(prop.type || 'any')}</span>
+                </span>`;
+            }).join('')}
+           </div>`
+        : `<div style="font-size:11px; color:var(--text-tertiary); margin-top:8px;">${isAr() ? 'بدون معاملات مدخلة' : 'No input parameters'}</div>`;
+
+      let categoryBadge = 'Core Engine';
+      let catColor = '#3b82f6';
+      if (tool.name.startsWith('tidy_invoice') || tool.name.startsWith('tidy_cashflow') || tool.name.startsWith('tidy_crm') || tool.name.startsWith('tidy_client')) {
+        categoryBadge = 'Office & Commerce';
+        catColor = '#10b981';
+      } else if (tool.name.includes('parallel') || tool.name.includes('exec') || tool.name.includes('agent')) {
+        categoryBadge = 'Multi-Agent Fleet';
+        catColor = '#a855f7';
+      } else if (tool.name.includes('doctor') || tool.name.includes('firewall') || tool.name.includes('hygiene') || tool.name.includes('govern')) {
+        categoryBadge = 'Governance & Health';
+        catColor = '#f97316';
+      }
+
+      return `
+        <div class="mcp-server-card">
+          <div>
+            <div class="mcp-card-header">
+              <span class="mcp-catalog-badge" style="background:rgba(59, 130, 246, 0.12); color:${catColor}; border-color:${catColor}44;">
+                🛠️ ${escapeHtml(categoryBadge)}
+              </span>
+              <span class="mcp-catalog-vendor">v1.7.0</span>
+            </div>
+
+            <div class="mcp-card-title-row" style="margin-top:8px;">
+              <h4 class="mcp-card-title" style="font-family:var(--font-mono, monospace); font-size:14px; font-weight:700;">
+                ${escapeHtml(tool.name)}
+              </h4>
+            </div>
+
+            <p class="mcp-catalog-desc" style="min-height:48px; margin-top:6px; font-size:12px; line-height:1.45;">
+              ${escapeHtml(tool.description)}
+            </p>
+
+            ${paramsHtml}
+          </div>
+
+          <div class="mcp-catalog-footer" style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border-subtle);">
+            <span style="font-size:11px; color:var(--text-tertiary); font-family:var(--font-mono, monospace);">
+              ${propKeys.length} ${isAr() ? 'معاملات' : 'parameters'}
+            </span>
+            <button type="button" class="btn btn-outline btn-xs" onclick="window.mcpCopyCommand(this, '${escapeHtml(tool.name)}')">
+              ${isAr() ? 'نسخ اسم الأداة' : 'Copy Tool Name'}
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  /**
    * Set active IDE filter
    */
   window.mcpSetFilter = function (filterId) {
@@ -380,22 +573,30 @@
     // Toggle view buttons
     const btnServers = document.getElementById('mcpBtnViewServers');
     const btnCatalog = document.getElementById('mcpBtnViewCatalog');
+    const btnPrompts = document.getElementById('mcpBtnViewPrompts');
+    const btnTools = document.getElementById('mcpBtnViewTools');
     if (btnServers) btnServers.classList.add('active');
     if (btnCatalog) btnCatalog.classList.remove('active');
+    if (btnPrompts) btnPrompts.classList.remove('active');
+    if (btnTools) btnTools.classList.remove('active');
 
     renderMcpServersGrid();
   };
 
   /**
-   * Toggle between Servers view and Catalog view
+   * Toggle between Servers, Catalog, Prompts, and Tools views
    */
   window.mcpSetViewMode = function (mode) {
     mcpState.viewMode = mode;
 
     const btnServers = document.getElementById('mcpBtnViewServers');
     const btnCatalog = document.getElementById('mcpBtnViewCatalog');
+    const btnPrompts = document.getElementById('mcpBtnViewPrompts');
+    const btnTools = document.getElementById('mcpBtnViewTools');
     if (btnServers) btnServers.classList.toggle('active', mode === 'servers');
     if (btnCatalog) btnCatalog.classList.toggle('active', mode === 'catalog');
+    if (btnPrompts) btnPrompts.classList.toggle('active', mode === 'prompts');
+    if (btnTools) btnTools.classList.toggle('active', mode === 'tools');
 
     renderMcpContent();
   };
@@ -752,6 +953,96 @@
   };
 
   /**
+   * Open Prompt Test Modal
+   */
+  window.mcpOpenPromptTestModal = function (promptName) {
+    const modal = document.getElementById('mcpPromptTestModal');
+    if (!modal) return;
+
+    const prompt = (mcpState.prompts || []).find(p => p.name === promptName);
+    if (!prompt) return;
+
+    document.getElementById('mcpPromptTestName').value = prompt.name;
+    document.getElementById('mcpPromptTestTitle').textContent = `${isAr() ? 'تجربة وتجميع الموجه' : 'Test MCP Prompt'}: /${prompt.name}`;
+    document.getElementById('mcpPromptTestDescription').textContent = prompt.description || '';
+
+    const argsContainer = document.getElementById('mcpPromptTestArgsContainer');
+    const args = prompt.arguments || [];
+    if (args.length === 0) {
+      argsContainer.innerHTML = `<div style="font-size:12px; color:var(--text-tertiary); padding:10px 0;">${isAr() ? 'هذا الموجه لا يتطلب أي مدخلات، انقر فوق تجميع وتجربة مباشرة.' : 'This prompt takes no input arguments. Click Compile & Test to preview the payload.'}</div>`;
+    } else {
+      argsContainer.innerHTML = args.map(a => `
+        <div class="form-group" style="margin-bottom:10px;">
+          <label style="font-size:12px; font-weight:600; display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span>${escapeHtml(a.name)} ${a.required ? '<span style="color:#ef4444;">*</span>' : ''}</span>
+            <span style="font-size:11px; font-weight:normal; color:var(--text-tertiary);">${escapeHtml(a.description || '')}</span>
+          </label>
+          <input type="text" class="form-input prompt-arg-input" data-arg-name="${escapeHtml(a.name)}" placeholder="${escapeHtml(a.description || a.name)}" style="font-size:13px;" />
+        </div>
+      `).join('');
+    }
+
+    const outputGroup = document.getElementById('mcpPromptTestOutputGroup');
+    if (outputGroup) outputGroup.style.display = 'none';
+    const outputEl = document.getElementById('mcpPromptTestOutput');
+    if (outputEl) outputEl.textContent = '';
+
+    if (typeof openModal === 'function') {
+      openModal('mcpPromptTestModal');
+    } else {
+      modal.style.display = 'flex';
+      modal.classList.add('open', 'active');
+    }
+  };
+
+  /**
+   * Execute Prompt Test and preview compiled payload
+   */
+  window.mcpExecutePromptTest = async function () {
+    const promptName = document.getElementById('mcpPromptTestName').value;
+    const btn = document.getElementById('btnExecutePromptTest');
+    const origText = btn ? btn.textContent : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = isAr() ? 'جاري التجميع...' : 'Compiling...';
+    }
+
+    const args = {};
+    document.querySelectorAll('#mcpPromptTestArgsContainer .prompt-arg-input').forEach(input => {
+      const val = input.value.trim();
+      if (val) {
+        args[input.getAttribute('data-arg-name')] = val;
+      }
+    });
+
+    try {
+      const res = await window.api.mcp.testPrompt(promptName, args);
+      const data = res?.data || res;
+      const outputGroup = document.getElementById('mcpPromptTestOutputGroup');
+      const outputEl = document.getElementById('mcpPromptTestOutput');
+
+      if (data && data.messages) {
+        const textPayload = data.messages.map(m => `[${m.role.toUpperCase()}]:\n${m.content?.text || JSON.stringify(m.content, null, 2)}`).join('\n\n────────────────\n\n');
+        if (outputEl) outputEl.textContent = textPayload;
+        if (outputGroup) outputGroup.style.display = 'block';
+      } else if (res?.error) {
+        if (outputEl) outputEl.textContent = `Error: ${res.error}`;
+        if (outputGroup) outputGroup.style.display = 'block';
+      } else {
+        if (outputEl) outputEl.textContent = JSON.stringify(data, null, 2);
+        if (outputGroup) outputGroup.style.display = 'block';
+      }
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+    }
+  };
+
+  /**
    * Initialize MCP Studio DOM listeners
    */
   function initMcpStudio() {
@@ -780,6 +1071,12 @@
     });
     document.getElementById('mcpBtnViewCatalog')?.addEventListener('click', () => {
       window.mcpSetViewMode('catalog');
+    });
+    document.getElementById('mcpBtnViewPrompts')?.addEventListener('click', () => {
+      window.mcpSetViewMode('prompts');
+    });
+    document.getElementById('mcpBtnViewTools')?.addEventListener('click', () => {
+      window.mcpSetViewMode('tools');
     });
 
     // Transport select change

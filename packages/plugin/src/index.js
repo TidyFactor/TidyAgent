@@ -82,6 +82,28 @@ class BaseHostAdapter {
   }
 
   /**
+   * Concurrently dispatch tasks across isolated subagents with conflict adjudication
+   * @param {string} objective
+   * @param {Array<object>} tasks
+   * @param {object} [options={}]
+   * @returns {Promise<object>} Synthesized non-conflicting plan
+   */
+  async dispatchParallel(objective, tasks, options = {}) {
+    if (!core || !core.ParallelOrchestrator) {
+      throw new Error('Tidy Core Parallel Orchestrator not available in host adapter runtime');
+    }
+    const orchestrator = new core.ParallelOrchestrator(options);
+    const batchResults = await orchestrator.dispatchParallel(tasks, options.llmCaller);
+    return orchestrator.synthesizeAndPersist({
+      originalObjective: objective,
+      batchResults,
+      contextId: options.contextId || null,
+      llmCaller: options.llmCaller || null,
+      autoCommit: options.autoCommit !== false
+    });
+  }
+
+  /**
    * Classify memory snippet into 8 canonical taxonomies
    * @param {string} text
    * @param {Array<string>} tags
