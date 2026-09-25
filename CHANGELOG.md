@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Tidy Studio Desktop Visual Showcase & Screenshots Suite (`@tidy/desktop`, `docs/`)**:
+  - Captured and integrated 11 real high-resolution screenshots for all 14 desktop views (`overview.png`, `skills-studio.png`, `memory-explorer.png`, `harvester.png`, `dispatcher.png`, `mcp-studio.png`, `tasks-board.png`, `crm-pipeline.png`, `invoices-billing.png`, `cashflow.png`, `hud-floating.png`).
+  - Created standalone comprehensive Arabic architecture and operations guide for Tidy Studio (`docs/apps/desktop-app.ar.md`).
+  - Added dedicated visual desktop showcase sections with screenshot tables in root `README.md`, `docs/i18n/README.ar.md`, `apps/desktop/README.md`, and `docs/user_manual.ar.md`.
+  - Linked Tidy Studio guide in VitePress documentation portal sidebar (`docs/.vitepress/config.mjs`) and Documentation Hub (`docs/README.md`).
+
 ### Changed
 - **GitHub Repository Governance & Health Optimization (`tidyfactor-github`)**:
   - Migrated repository canonical URLs across package manifests, CLI headers, and documentation to `https://github.com/TidyFactor/TidyAgent`.

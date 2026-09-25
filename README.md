@@ -47,6 +47,60 @@ Give **Google Antigravity, Claude Code, Cursor, OpenAI Codex, or Windsurf** a de
 
 ---
 
+## 🖥️ Flagship Desktop Management Studio (`@tidy/desktop`)
+
+Tidy features a first-class, sovereign desktop management suite built natively for Windows x64 using **Electron**. It provides an ultra-responsive visual control center directly wired into the local SQLite Single Source of Truth (`~/.tidy/tidy.db`), eliminating the need for terminal commands when reviewing decisions, drafting skills, or inspecting finances.
+
+<div align="center">
+
+### 📸 Tidy Studio Visual Interface & Capabilities
+
+| **1. Overview & Health Telemetry** | **2. Universal Skills & Agents Studio** |
+|:---:|:---:|
+| ![Tidy Studio Overview](docs/public/screenshots/desktop/overview.png) | ![Skills & Agents Studio](docs/public/screenshots/desktop/skills-studio.png) |
+| *Real-time SQLite WAL stats, memory metrics, and quick capture* | *Monospaced editor, AST sync, 15-rule validator, live preview* |
+
+| **3. FTS5 BM25 Memory Explorer** | **4. Knowledge Harvester Studio** |
+|:---:|:---:|
+| ![Memory Explorer](docs/public/screenshots/desktop/memory-explorer.png) | ![Knowledge Harvester](docs/public/screenshots/desktop/harvester.png) |
+| *Decay-scored instant search across 3-Ring context* | *2-Pane master-detail ingestion of agent rules & brains* |
+
+| **5. Sovereign B2B CRM Pipeline** | **6. Invoicing & Live Cashflow** |
+|:---:|:---:|
+| ![CRM Pipeline](docs/public/screenshots/desktop/crm-pipeline.png) | ![Invoices & Billing](docs/public/screenshots/desktop/invoices-billing.png) |
+| *Deal stages, client dossiers, and budget trackers* | *Automated tax invoicing and real-time P&L statement* |
+
+</div>
+
+### 🌟 Desktop App Highlights (14 Built-in Tabs)
+1. **Overview**: Executive dashboard with live SQLite telemetry, system health, and quick-action memory capture.
+2. **Skills & Agents Studio**: Built-in IDE scanner, code editor with syntax tree synchronization, and Skills-LAB 15-rule compliance engine.
+3. **Memory Explorer**: Visual FTS5 BM25 search interface with mathematical decay indicators and importance star filters.
+4. **Knowledge Harvester**: Dual-pane browser to scan, preview, and ingest knowledge items from `~/.gemini/` and IDE sessions.
+5. **Agent Runner**: Autonomous subagent dispatcher (`@coder`, `@planner`, `@marketing`, `@doc`) with 3-Ring Task Brief generation.
+6. **MCP Studio**: Complete visual catalog of all 29 MCP tools and 9 dynamic resources with JSON-RPC tester.
+7. **Task Kanban Board**: Organize pending, in-progress, and completed tasks with subagent assignment.
+8. **Code Snippets Vault**: Monospaced syntax-highlighted code vault with one-click copy.
+9. **Daily Journal**: Private developer reflection and continuous session logging.
+10. **Encrypted Vault**: High-security local credential store with zero cloud transmission.
+11. **B2B CRM**: Lead pipelines, client records, and proposal budgets.
+12. **Invoicing & Billing**: Multi-item tax invoices with payment status toggles.
+13. **Cashflow Statement**: Automated P&L financial statements with real-time margins.
+14. **Settings & Health**: SQLite database compaction (`VACUUM`), WAL checkpoints, and domain switching.
+
+### ⚡ Global Floating HUD (`Alt + Space`)
+Summon Tidy anywhere in Windows with `Alt + Space`. The frameless HUD provides rapid memory search, quick fact capture, and task generation without switching windows or interrupting your coding flow.
+
+```bash
+# Launch Desktop Studio in Development
+npm run desktop
+
+# Build Windows x64 Native Installer (.exe)
+npm run desktop:build
+```
+
+---
+
 ## 🛠️ Quick Start & Usage
 
 > 💡 **For the comprehensive command reference and end-to-end workflows, see the [📖 User Manual](docs/user_manual.ar.md).**

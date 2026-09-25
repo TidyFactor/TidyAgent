@@ -61,9 +61,10 @@ export default defineConfig({
             text: '💼 التطبيقات وحزم العمل',
             collapsed: false,
             items: [
-              { text: 'تطبيقات الإنتاجية الدقيقة', link: '/apps/productivity.ar' },
+              { text: 'استوديو سطح المكتب السيادي (Tidy Studio)', link: '/apps/desktop-app.ar' },
+              { text: 'نافذة المساعد الشفافة (HUD)', link: '/apps/desktop-hud.ar' },
               { text: 'حزمة الأعمال (@tidy/office)', link: '/apps/office-suite.ar' },
-              { text: 'تطبيق سطح المكتب (HUD)', link: '/apps/desktop-hud.ar' }
+              { text: 'تطبيقات الإنتاجية الدقيقة', link: '/apps/productivity.ar' }
             ]
           },
           {

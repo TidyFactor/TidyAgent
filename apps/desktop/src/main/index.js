@@ -58,6 +58,61 @@ function createWindow() {
   // Load renderer
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
+  if (process.env.TIDY_CAPTURE === '1') {
+    const fs = require('fs');
+    const outDir = path.resolve(__dirname, '../../../../docs/public/screenshots/desktop');
+    if (!fs.existsSync(outDir)) {
+      fs.mkdirSync(outDir, { recursive: true });
+    }
+
+    mainWindow.webContents.on('did-finish-load', async () => {
+      console.log('[CAPTURE] Window loaded, preparing automated screenshots...');
+      await new Promise(r => setTimeout(r, 2500));
+
+      const tabs = [
+        { tab: 'overview', file: 'overview.png' },
+        { tab: 'subagents', file: 'skills-studio.png' },
+        { tab: 'memory', file: 'memory-explorer.png' },
+        { tab: 'harvester', file: 'harvester.png' },
+        { tab: 'dispatcher', file: 'dispatcher.png' },
+        { tab: 'mcp', file: 'mcp-studio.png' },
+        { tab: 'tasks', file: 'tasks-board.png' },
+        { tab: 'crm', file: 'crm-pipeline.png' },
+        { tab: 'invoices', file: 'invoices-billing.png' },
+        { tab: 'cashflow', file: 'cashflow.png' }
+      ];
+
+      for (const item of tabs) {
+        console.log(`[CAPTURE] Capturing view: ${item.tab} -> ${item.file}`);
+        try {
+          await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("${item.tab}");`);
+        } catch (e) {
+          console.error('[CAPTURE] Error switching tab:', e);
+        }
+        await new Promise(r => setTimeout(r, 1200));
+        const image = await mainWindow.webContents.capturePage();
+        const targetPath = path.join(outDir, item.file);
+        fs.writeFileSync(targetPath, image.toPNG());
+        console.log(`[CAPTURE] Saved: ${targetPath}`);
+      }
+
+      // Capture HUD simulation
+      console.log('[CAPTURE] Capturing HUD...');
+      mainWindow.setSize(920, 580);
+      mainWindow.center();
+      try {
+        await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("overview");`);
+      } catch (e) {}
+      await new Promise(r => setTimeout(r, 800));
+      const hudImg = await mainWindow.webContents.capturePage();
+      fs.writeFileSync(path.join(outDir, 'hud-floating.png'), hudImg.toPNG());
+      console.log('[CAPTURE] Saved hud-floating.png');
+
+      console.log('[CAPTURE] All 11 screenshots generated successfully!');
+      app.quit();
+    });
+  }
+
   // Open external links in user's default browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);

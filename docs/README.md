@@ -13,6 +13,11 @@ docs/
 ├── README.md                          <-- (أنت هنا) الفهرس الشامل والملاحم التوثيقية
 ├── PROJECT_STATUS.ar.md               <-- تقرير الحالة الفنية الشامل ومسارات SemVer القادمة
 ├── user_manual.ar.md                  <-- دليل المستخدم والتشغيل الكامل (CLI, MCP, GUI, Micro-Apps)
+├── apps/                              <-- توثيق التطبيقات والمكاتب الرسومية
+│   ├── desktop-app.ar.md              <-- دليل استوديو سطح المكتب السيادي (Tidy Studio) ومعرض الشاشات
+│   ├── desktop-hud.ar.md              <-- دليل نافذة المساعد الشفافة العائمة (HUD)
+│   ├── office-suite.ar.md             <-- دليل جناح إدارة الأعمال والمكتب (CRM & Billing)
+│   └── productivity.ar.md             <-- دليل تطبيقات الإنتاجية المصغرة (Tasks, Snippets...)
 ├── specs/                             <-- المواصفات الفنية والمعمارية العميقة
 │   ├── architecture_spec.ar.md        <-- المواصفات الهندسية للنواة ونموذج الحلقات الثلاث
 │   ├── pocketoffice_migration_and_design_system.ar.md <-- دمج مكتسبات PocketOffice وثيمات Qahera
@@ -34,6 +39,7 @@ docs/
 ## 🧭 مسارات القراءة الموصى بها (Reading Pathways)
 
 ### 1. لمطوري التطبيقات والمستخدمين اليوميين:
+* استكشف [دليل استوديو سطح المكتب السيادي Tidy Studio](apps/desktop-app.ar.md) لمعاينة واجهات التطبيق الـ 14 وشاشة الـ HUD بالاختصار `Alt+Space`.
 * ابدأ بـ [دليل الاستخدام الشامل](user_manual.ar.md): يغطي كافة أوامر الطرفية السريعة (`tidy q`، `tidy m`، `tidy task`)، إعداد خادم الـ MCP مع IDEs، واستخدام شاشة الـ HUD الطافية.
 * تصفح [النسخة العربية لملف التعريف](i18n/README.ar.md) للاطلاع على الملخص العام.
 
