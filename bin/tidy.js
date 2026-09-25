@@ -51,6 +51,18 @@ try {
   }
 }
 
+// Dynamically resolve @tidy/plugin universal adapter pack if present
+let plugin = null;
+try {
+  plugin = require('@tidy/plugin');
+} catch {
+  try {
+    plugin = require('../scripts/plugin');
+  } catch {
+    plugin = null;
+  }
+}
+
 const args = process.argv.slice(2);
 const command = args[0] || 'help';
 
@@ -1123,6 +1135,56 @@ async function main() {
         if (result.errors.length > 0) {
           console.log(`  Warnings/Errors    : ${result.errors.length}`);
           result.errors.forEach(e => console.log(`    - ${e}`));
+        }
+        break;
+      }
+
+      case 'plugin':
+      case 'adapter': {
+        if (!plugin) {
+          console.error('\n  Error: @tidy/plugin pack is not loaded. Install or link @tidy/plugin.');
+          process.exit(1);
+        }
+        const sub = args[1] || 'list';
+        const parsed = parseFlags(args.slice(2));
+        const token = parsed.flags.token || 'YOUR_SOVEREIGN_TOKEN';
+        const serverUrl = parsed.flags.url || 'https://tidyfactor.com/api/mcp/sse';
+        const useLocal = Boolean(parsed.flags.local);
+
+        if (sub === 'list') {
+          console.log('\n  🔌 TidyAgent Universal Host Adapters & Plugins:');
+          console.log('  ------------------------------------------------');
+          const hosts = plugin.listSupportedHosts();
+          hosts.forEach(h => console.log(`  - ${h.padEnd(14)}: tidy plugin ${h}`));
+          console.log('\n  OpenAPI 3.1 Spec : tidy plugin openapi');
+          console.log('  ChatGPT Manifest : tidy plugin chatgpt-manifest');
+          console.log('');
+          break;
+        }
+
+        if (sub === 'openapi') {
+          console.log(JSON.stringify(plugin.generateOpenApiSpec({ serverUrl: parsed.flags.url }), null, 2));
+          break;
+        }
+
+        if (sub === 'chatgpt-manifest') {
+          console.log(JSON.stringify(plugin.generateAiPluginManifest({ baseUrl: parsed.flags.url }), null, 2));
+          break;
+        }
+
+        try {
+          const config = plugin.exportHostConfiguration(sub, {
+            token,
+            serverUrl,
+            useLocal,
+            task: parsed.flags.task || 'General Development & Coding'
+          });
+          console.log(`\n  🔌 TidyAgent Host Configuration for: [${sub.toUpperCase()}]`);
+          console.log('  ========================================================\n');
+          console.log(JSON.stringify(config, null, 2));
+          console.log('\n  ========================================================\n');
+        } catch (err) {
+          console.error(`  Error: ${err.message}`);
         }
         break;
       }

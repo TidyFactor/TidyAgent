@@ -52,8 +52,28 @@ const {
   testMcpServer,
   scanAllMcpServers,
   setConfigPathOverride,
-  clearConfigPathOverrides
+  clearConfigPathOverrides,
+  // Control Plane APIs (v1.6.0)
+  MEMORY_TAXONOMIES,
+  normalizeTaxonomy,
+  isValidTaxonomy,
+  classifyMemoryTaxonomy,
+  listTaxonomies,
+  TIER_NAMES,
+  estimateTokenCount,
+  compileContext,
+  INTENT_TYPES,
+  routeIntent
 } = require('../packages/core/src');
+
+const {
+  getHostAdapter,
+  listSupportedHosts,
+  getPluginManifest,
+  generateOpenApiSpec,
+  generateAiPluginManifest,
+  exportHostConfiguration
+} = require('../packages/plugin/src');
 
 console.log('\n[1] Database Bootstrap & Schema Tests');
 test('Database initializes with tables and WAL mode', () => {
@@ -983,6 +1003,226 @@ test('Stdio MCP Server: Tools fleet, dynamic resources, and Prompts protocol', (
   assert.ok(promptResult.messages[0].content.text.includes('Implement Auth'));
   const shortPrompt = handlePromptGet('brief', { title: 'Implement Auth' });
   assert.ok(shortPrompt.messages[0].content.text.includes('Implement Auth'));
+});
+
+console.log('\n[15] TidyAgent Sovereign Control Plane & Universal Host Plugin Engine (v1.6.0) Tests');
+
+test('Memory Taxonomy: normalization, aliases, classification, and schema specs', () => {
+  // 1. Authoritative 8 taxonomies list
+  const allTaxonomies = listTaxonomies();
+  assert.strictEqual(allTaxonomies.length, 8, 'Must declare exactly 8 canonical taxonomies');
+
+  // 2. Normalization & Aliases
+  assert.strictEqual(normalizeTaxonomy('adr'), 'decisions');
+  assert.strictEqual(normalizeTaxonomy('rule'), 'lessons');
+  assert.strictEqual(normalizeTaxonomy('gotcha'), 'lessons');
+  assert.strictEqual(normalizeTaxonomy('style'), 'preferences');
+  assert.strictEqual(normalizeTaxonomy('brand'), 'assets');
+  assert.strictEqual(normalizeTaxonomy('deliverable'), 'previous_outputs');
+  assert.strictEqual(normalizeTaxonomy('truth'), 'facts');
+  assert.strictEqual(normalizeTaxonomy('client'), 'relationships');
+
+  // 3. Validation
+  assert.ok(isValidTaxonomy('facts'));
+  assert.ok(isValidTaxonomy('decisions'));
+  assert.ok(isValidTaxonomy('negative constraint'));
+  assert.strictEqual(isValidTaxonomy('unknown_garbage_xyz'), false);
+
+  // 4. Heuristic Classification
+  assert.strictEqual(classifyMemoryTaxonomy('ممنوع نهائيا تشغيل المتصفح'), 'lessons');
+  assert.strictEqual(classifyMemoryTaxonomy('Never execute destructive operations without preview'), 'lessons');
+  assert.strictEqual(classifyMemoryTaxonomy('قرار معماري: اعتماد SQLite WAL mode'), 'decisions');
+  assert.strictEqual(classifyMemoryTaxonomy('Brand color palette: primary #003366'), 'assets');
+  assert.strictEqual(classifyMemoryTaxonomy('API reference endpoint https://api.tidyfactor.com'), 'references');
+  assert.strictEqual(classifyMemoryTaxonomy('Approved deliverable invoice #INV-2026-001'), 'previous_outputs');
+  assert.strictEqual(classifyMemoryTaxonomy('Normal empirical fact about server node'), 'facts');
+});
+
+test('Context Compiler: 5-tier assembly, token budgeting, and zero-slop formatting', () => {
+  // 1. Token estimation
+  const count = estimateTokenCount('TidyAgent Sovereign Control Plane Engine');
+  assert.ok(count > 0 && count < 25);
+
+  // 2. 5-Tier Assembly (Markdown format)
+  const compiledMd = compileContext({
+    tiers: {
+      global: 'Principal: Wael | Tone: Concise Expert',
+      project: 'Workspace: TidyAgent Core | Domain: general',
+      task: 'Build 5-tier context compiler engine',
+      session: 'Session checkpoint: tests pass',
+      working: 'Active file: packages/core/src/context-compiler.js'
+    },
+    maxTokens: 3000,
+    format: 'markdown'
+  });
+
+  assert.ok(compiledMd.compiledPrompt.includes('Tier 1: Global Context'));
+  assert.ok(compiledMd.compiledPrompt.includes('Tier 2: Project Context'));
+  assert.ok(compiledMd.compiledPrompt.includes('Tier 3: Task Context'));
+  assert.ok(compiledMd.compiledPrompt.includes('Tier 4: Session Context'));
+  assert.ok(compiledMd.compiledPrompt.includes('Tier 5: Working Context'));
+  assert.strictEqual(compiledMd.format, 'markdown');
+  assert.ok(compiledMd.totalEstimatedTokens > 0);
+  assert.ok(compiledMd.tokenBreakdown.task.allocatedBudget > 0);
+
+  // 3. System Prompt Format
+  const compiledSys = compileContext({
+    tiers: {
+      global: 'Persona: Principal Wael',
+      task: 'Execute code refactor'
+    },
+    format: 'system_prompt'
+  });
+  assert.ok(compiledSys.compiledPrompt.includes('=== TIDYAGENT COMPILED CONTEXT (ZERO-SLOP RUNTIME) ==='));
+  assert.ok(compiledSys.compiledPrompt.includes('[TIER 1: GLOBAL CONSTRAINTS & PERSONA]'));
+  assert.ok(compiledSys.compiledPrompt.includes('[TIER 3: ACTIVE TASK & OBJECTIVE]'));
+
+  // 4. JSON Format
+  const compiledJson = compileContext({
+    tiers: { task: 'JSON export test' },
+    format: 'json'
+  });
+  const parsed = JSON.parse(compiledJson.compiledPrompt);
+  assert.strictEqual(parsed.version, '1.6.0');
+  assert.strictEqual(parsed.compiler, 'TidyAgent Context Compiler');
+  assert.ok(parsed.tiers.task.includes('JSON export test'));
+
+  // 5. Budget enforcement & safe truncation
+  const veryLongText = 'repeating statement with excessive length. '.repeat(500);
+  const constrained = compileContext({
+    tiers: { task: veryLongText },
+    maxTokens: 50 // Very small budget
+  });
+  assert.ok(constrained.compiledPrompt.includes('truncated by Tidy Context Compiler'));
+});
+
+test('Intent Router: capability-first matching, max 3 skills invariant, and MCP tool routing', () => {
+  // 1. Marketing Intent & Capability Routing
+  const marketingRoute = routeIntent('اعمل اعلان لمنتج Livianaturals مع الحفاظ على شكل العبوة وكتابة كوبي تسويقي');
+  assert.strictEqual(marketingRoute.intentType, INTENT_TYPES.MARKETING_COPY);
+  assert.strictEqual(marketingRoute.domain, 'marketing');
+  assert.ok(marketingRoute.targetSkills.length <= 3, 'Capability-First Invariant: maximum 3 skills');
+  assert.ok(marketingRoute.targetSkills.includes('tidyfactor-marketing'));
+  assert.ok(marketingRoute.recommendedTools.includes('tidy_recall'));
+
+  // 2. Sysadmin Ops Intent
+  const opsRoute = routeIntent('افحص حالة سيرفر cpanel والذاكرة ومشاكل الـ firewall في الخادم');
+  assert.strictEqual(opsRoute.intentType, INTENT_TYPES.SYSADMIN_OPS);
+  assert.strictEqual(opsRoute.domain, 'ops');
+  assert.ok(opsRoute.targetSkills.includes('ops-cpanel'));
+  assert.ok(opsRoute.recommendedTools.includes('tidy_doctor'));
+
+  // 3. Invoicing & Commerce Intent
+  const invoiceRoute = routeIntent('انشئ فاتورة جديدة بقيمة 1500 دولار للعميل شركة الأمل واضفها في كشف التدفق النقدي cashflow');
+  assert.strictEqual(invoiceRoute.intentType, INTENT_TYPES.INVOICING_COMMERCE);
+  assert.ok(invoiceRoute.recommendedTools.includes('tidy_invoice_create'));
+  assert.ok(invoiceRoute.recommendedTools.includes('tidy_cashflow_summary'));
+});
+
+test('Universal Host Plugin & Adapters (@tidy/plugin): manifest and multi-host adapters', () => {
+  // 1. Manifest
+  const manifest = getPluginManifest();
+  assert.strictEqual(manifest.name_for_model, 'tidyagent');
+  assert.strictEqual(manifest.version, '1.6.0');
+  assert.ok(manifest.capabilities.context_compiler);
+  assert.ok(manifest.capabilities.memory_taxonomy);
+
+  // 2. Supported Hosts
+  const hosts = listSupportedHosts();
+  assert.ok(hosts.includes('chatgpt'));
+  assert.ok(hosts.includes('claude'));
+  assert.ok(hosts.includes('cursor'));
+  assert.ok(hosts.includes('codex'));
+  assert.ok(hosts.includes('antigravity'));
+
+  // 3. Claude Code Adapter
+  const claudeAdapter = getHostAdapter('claude');
+  const claudePrompt = claudeAdapter.formatPrompt('Implement feature', {
+    tiers: { task: 'Add OAuth2 verification' }
+  });
+  assert.strictEqual(claudePrompt.prompt, 'Implement feature');
+  assert.ok(claudePrompt.system.includes('Tier 3: Task Context'));
+  assert.strictEqual(claudePrompt.metadata.host, 'claude');
+
+  // 4. Cursor Bridge Adapter
+  const cursorAdapter = getHostAdapter('cursor');
+  const ruleContent = cursorAdapter.generateRuleContent({
+    tiers: { task: 'Project Rule' }
+  });
+  assert.ok(ruleContent.includes('---'));
+  assert.ok(ruleContent.includes('alwaysApply: true'));
+  assert.ok(ruleContent.includes('TidyAgent Sovereign Control Plane Context'));
+
+  // 5. ChatGPT Plugin Adapter
+  const gptAdapter = getHostAdapter('chatgpt');
+  const gptMsg = gptAdapter.formatPrompt('Optimize DB', {
+    tiers: { task: 'Index optimization' }
+  });
+  assert.strictEqual(gptMsg.role, 'system');
+  assert.strictEqual(gptMsg.user_message, 'Optimize DB');
+
+  // 6. Antigravity IDE Adapter
+  const agyAdapter = getHostAdapter('antigravity');
+  const agyContext = agyAdapter.formatContext('تصميم واجهة مستخدم فاخرة', {
+    tiers: { task: 'Design luxury UI' }
+  });
+  assert.ok(agyContext.compiledMarkdown.includes('Tier 3: Task Context'));
+  assert.ok(Array.isArray(agyContext.targetSkills));
+  assert.ok(Array.isArray(agyContext.recommendedTools));
+
+  // 7. Parameter Normalization & Detailed Classification
+  const flatCompiled = claudeAdapter.compile({ task: 'Build microservice', domain: 'dev' });
+  assert.ok(flatCompiled.compiledPrompt.includes('Tier 3: Task Context'));
+  assert.ok(flatCompiled.totalEstimatedTokens > 0);
+
+  const detailedClassification = claudeAdapter.classifyDetails('قرار معماري: استخدام SQLite WAL mode');
+  assert.strictEqual(detailedClassification.taxonomy, 'decisions');
+  assert.strictEqual(detailedClassification.canonical_taxonomy, 'decisions');
+  assert.ok(detailedClassification.confidence >= 0.7);
+  assert.ok(detailedClassification.rationale.length > 0);
+  assert.strictEqual(detailedClassification.metadata.defaultTier, 'core');
+});
+
+test('Universal Host Plugin: OpenAPI 3.1 & AI Plugin Manifest Generation', () => {
+  const spec = generateOpenApiSpec({ serverUrl: 'https://test.tidyfactor.com' });
+  assert.strictEqual(spec.openapi, '3.1.0');
+  assert.ok(spec.paths['/api/v1/context/compile']);
+  assert.ok(spec.paths['/api/v1/intent/route']);
+  assert.ok(spec.paths['/api/v1/taxonomy/classify']);
+  assert.ok(spec.paths['/api/mcp/sse']);
+  assert.strictEqual(spec.servers[0].url, 'https://test.tidyfactor.com');
+
+  const aiPlugin = generateAiPluginManifest({ baseUrl: 'https://test.tidyfactor.com' });
+  assert.strictEqual(aiPlugin.schema_version, 'v1');
+  assert.strictEqual(aiPlugin.name_for_model, 'tidyagent');
+  assert.ok(aiPlugin.api.url.includes('/.well-known/openapi.json'));
+});
+
+test('Universal Host Plugin: exportHostConfiguration across all 5 platforms', () => {
+  // 1. Claude
+  const claudeConfig = exportHostConfiguration('claude', { token: 'tok_123' });
+  assert.ok(claudeConfig.desktopConfig.mcpServers.tidy.url.includes('tok_123'));
+  assert.ok(claudeConfig.claudeMd.includes('CLAUDE.md'));
+
+  // 2. Cursor
+  const cursorConfig = exportHostConfiguration('cursor', { useLocal: true });
+  assert.ok(cursorConfig.mcpConfig.mcpServers['tidy-brain'].command);
+  assert.ok(cursorConfig.ruleContent.includes('alwaysApply: true'));
+
+  // 3. ChatGPT
+  const chatgptConfig = exportHostConfiguration('chatgpt');
+  assert.ok(chatgptConfig.openapi);
+  assert.ok(chatgptConfig.aiPlugin);
+  assert.ok(chatgptConfig.customGptPrompt.includes('TidyAgent Sovereign Assistant'));
+
+  // 4. Codex
+  const codexConfig = exportHostConfiguration('codex');
+  assert.ok(codexConfig.codexConfig.mcpServers.tidy);
+
+  // 5. Antigravity
+  const agyConfig = exportHostConfiguration('antigravity', { token: 'tok_agy' });
+  assert.ok(agyConfig.mcpConfig.mcpServers['tidyfactor-brain'].url.includes('tok_agy'));
+  assert.ok(agyConfig.geminiRule.includes('GEMINI.md'));
 });
 
 // Cleanup test DB

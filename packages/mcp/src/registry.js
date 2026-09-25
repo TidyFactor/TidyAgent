@@ -12,6 +12,7 @@ const { coreTools } = require('./modules/core-tools');
 const { brainTools } = require('./modules/brain-tools');
 const { harvestTools } = require('./modules/harvest-tools');
 const { officeTools } = require('./modules/office-tools');
+const { controlPlaneTools } = require('./modules/control-plane-tools');
 const { resourcesList, handleResourceRead } = require('./modules/resources');
 const { promptsList, handlePromptGet } = require('./modules/prompts');
 
@@ -20,10 +21,11 @@ const allToolModules = [
   ...coreTools,
   ...harvestTools,
   ...brainTools,
-  ...officeTools
+  ...officeTools,
+  ...controlPlaneTools
 ];
 
-// Legacy tool names mapping to sovereign Tidy tools
+// Legacy and cross-host tool names mapping to sovereign Tidy tools
 const LEGACY_ALIASES = {
   'doctor': 'tidy_doctor',
   'probe_server_health': 'tidy_doctor',
@@ -39,7 +41,13 @@ const LEGACY_ALIASES = {
   'switch_workspace_context': 'tidy_switch_context',
   'recall_transcripts': 'tidy_transcripts',
   'audit_storage_hygiene': 'tidy_hygiene',
-  'whoami': 'tidy_whoami'
+  'whoami': 'tidy_whoami',
+  'context_compile': 'tidy_context_compile',
+  'compile_context': 'tidy_context_compile',
+  'intent_route': 'tidy_intent_route',
+  'route_intent': 'tidy_intent_route',
+  'taxonomy_classify': 'tidy_taxonomy_classify',
+  'classify_taxonomy': 'tidy_taxonomy_classify'
 };
 
 const TOOLS = [];

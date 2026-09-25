@@ -12,6 +12,7 @@
 
 const crypto = require('crypto');
 const { getDb } = require('./db');
+const { normalizeTaxonomy } = require('./memory-taxonomy');
 
 // Half-life Lambda values by tier for Ebbinghaus Decay curve (in 1/hours)
 const TIER_LAMBDAS = {
@@ -21,13 +22,27 @@ const TIER_LAMBDAS = {
   ephemeral: 0.05    // ~14 hours half-life (13.8 hours)
 };
 
-// Category boost multipliers for cognitive significance
+// Category boost multipliers for cognitive significance (8-Taxonomy aligned)
 const CATEGORY_BOOSTS = {
+  lesson: 1.30,
+  lessons: 1.30,
   rule: 1.25,
   decision: 1.20,
+  decisions: 1.20,
+  preference: 1.15,
+  preferences: 1.15,
+  asset: 1.10,
+  assets: 1.10,
   pattern: 1.10,
+  reference: 1.05,
+  references: 1.05,
+  relationship: 1.05,
+  relationships: 1.05,
   fact: 1.00,
-  preference: 1.00,
+  facts: 1.00,
+  output: 1.00,
+  outputs: 1.00,
+  previous_outputs: 1.00,
   task: 0.90
 };
 
@@ -113,10 +128,20 @@ function saveMemory(optionsOrContent, maybeOptions = {}) {
   }
 
   const id = generateId('mem');
-  const validCategories = ['fact', 'decision', 'pattern', 'preference', 'task', 'rule'];
   const validTiers = ['core', 'project', 'session', 'ephemeral'];
+  const validCategories = [
+    'fact', 'decision', 'pattern', 'preference', 'task', 'rule',
+    'facts', 'decisions', 'preferences', 'assets', 'references',
+    'previous_outputs', 'lessons', 'relationships',
+    'asset', 'reference', 'lesson', 'relationship', 'output', 'outputs'
+  ];
 
-  const normalizedCategory = validCategories.includes(category) ? category : 'fact';
+  let normalizedCategory = 'fact';
+  if (category && validCategories.includes(category)) {
+    normalizedCategory = category;
+  } else if (category) {
+    normalizedCategory = normalizeTaxonomy(category);
+  }
   const normalizedTier = validTiers.includes(tier) ? tier : 'project';
   const cleanSummary = summary ? summary.trim() : content.trim().substring(0, 120);
   const cleanImportance = Math.max(1, Math.min(5, Number(importance) || 3));
@@ -349,14 +374,22 @@ function updateMemory(id, { content, summary = null, tier = null, category = nul
     throw new Error(`Memory node not found: ${id}`);
   }
 
-  const validCategories = ['fact', 'decision', 'pattern', 'preference', 'task', 'rule'];
   const validTiers = ['core', 'project', 'session', 'ephemeral'];
 
   const updatedContent = (content !== undefined && content !== null) ? content.trim() : existing.content;
   if (!updatedContent) {
     throw new Error('Memory content cannot be empty.');
   }
-  const updatedCategory = (category && validCategories.includes(category)) ? category : existing.category;
+  const validCategories = [
+    'fact', 'decision', 'pattern', 'preference', 'task', 'rule',
+    'facts', 'decisions', 'preferences', 'assets', 'references',
+    'previous_outputs', 'lessons', 'relationships',
+    'asset', 'reference', 'lesson', 'relationship', 'output', 'outputs'
+  ];
+  let updatedCategory = existing.category;
+  if (category !== null && category !== undefined) {
+    updatedCategory = validCategories.includes(category) ? category : normalizeTaxonomy(category);
+  }
   const updatedTier = (tier && validTiers.includes(tier)) ? tier : existing.tier;
   const updatedSummary = (summary !== null && summary !== undefined) ? summary.trim() : (content ? updatedContent.substring(0, 120) : existing.summary);
   const updatedImportance = (importance !== null && importance !== undefined) ? Math.max(1, Math.min(5, Number(importance) || 3)) : existing.importance;

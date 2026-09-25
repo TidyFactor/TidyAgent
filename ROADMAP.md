@@ -146,21 +146,22 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
                       TidyFactor Core
 ```
 
-#### 📦 `v1.6.0` — TidyAgent Control Plane, Context Compiler & Structured Memory 🎯 [Next Milestone]
-- [ ] **Context Compiler Engine (`packages/core/src/context-compiler.js`)**:
+#### 📦 `v1.6.0` — TidyAgent Control Plane, Context Compiler & Structured Memory ✅ (Completed — v1.6.0)
+- [x] **Context Compiler Engine (`packages/core/src/context-compiler.js`)**:
   - Compiles 5 distinct context tiers into a precise, zero-slop prompt payload:
     - **Global Context**: User persona, core values, system invariants (~150 tokens).
     - **Project Context**: Active workspace rules, brand guidelines, architectural decisions (~300 tokens).
     - **Task Context**: Current user objective, explicit constraints, target outcomes.
     - **Session Context**: Active dialogue thread, verified checkpoints, execution history.
     - **Working Context**: Ephemeral candidate assets, code diffs, reviewer critique stamps.
-  - Eliminates context bloat: Delivers strictly what the model needs for the current atomic step.
-- [ ] **Intent Router (`packages/core/src/intent-router.js`)**:
+  - Eliminates context bloat: Delivers strictly what the model needs for the current atomic step with deterministic token budgeting.
+- [x] **Intent Router (`packages/core/src/intent-router.js`)**:
   - Deconstructs raw user requests into structured intent contracts:
     - Target domain (`dev`, `marketing`, `office`, `design`, `ops`).
-    - Required capabilities and matching skills.
+    - Capability-First matching capping loaded skills to top 2-3 relevant skills.
     - Context parameters and reference requirements.
-- [ ] **Structured 8-Taxonomy Memory Manager (`packages/core/src/memory-taxonomy.js`)**:
+    - Dynamic MCP tool recommendations based on active intent.
+- [x] **Structured 8-Taxonomy Memory Manager (`packages/core/src/memory-taxonomy.js`)**:
   - Elevates memory beyond linear chat logs into 8 dedicated node types:
     - `Facts` (Empirical knowledge and environment specifications).
     - `Decisions` (Architectural and business decisions with rationales).
@@ -170,8 +171,13 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
     - `Previous Outputs` (Validated code, copy, invoices, or diagrams).
     - `Lessons` (Learned negative constraints, debugging solutions).
     - `Relationships` (Graph links between clients, projects, skills, and tools).
+- [x] **Universal Host Plugin Foundation & Multi-Host Adapters (`packages/plugin`)**:
+  - Scaffolded `@tidy/plugin` v1.6.0 with `plugin.json` manifest and robust adapters for ChatGPT, Claude, Cursor, Codex, and Antigravity.
+  - OpenAPI 3.1.0 and ai-plugin.json specification generators (`openapi-generator.js`).
+  - Multi-platform configuration exporter (`exportHostConfiguration`) and CLI command (`tidy plugin`).
+- [x] **Suite 15 Automated Test Runner**: 62 passed tests with 100% pass rate.
 
-#### 📦 `v1.6.5` — Skill Lifecycle Engine & Dynamic MCP Router
+#### 📦 `v1.6.5` — Skill Lifecycle Engine & Dynamic MCP Router 🎯 [Next Milestone]
 - [ ] **Skill Lifecycle Engine (`packages/core/src/skill-lifecycle.js`)**:
   - Complete lifecycle governance: `discover`, `install`, `enable`, `disable`, `load`, `execute`, `validate`, `update`, `version`.
   - Semantic Capability Matching: Discovers the exact 2-3 relevant skills needed for a prompt instead of polluting the context with 40+ skill manifests.

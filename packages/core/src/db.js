@@ -162,7 +162,12 @@ function initDatabase(customPath) {
       id TEXT PRIMARY KEY,
       context_id TEXT REFERENCES contexts(id) ON DELETE CASCADE,
       tier TEXT NOT NULL CHECK (tier IN ('core', 'project', 'session', 'ephemeral')),
-      category TEXT NOT NULL CHECK (category IN ('fact', 'decision', 'pattern', 'preference', 'task', 'rule')),
+      category TEXT NOT NULL CHECK (category IN (
+        'fact', 'decision', 'pattern', 'preference', 'task', 'rule',
+        'facts', 'decisions', 'preferences', 'assets', 'references',
+        'previous_outputs', 'lessons', 'relationships',
+        'asset', 'reference', 'lesson', 'relationship', 'output', 'outputs'
+      )),
       content TEXT NOT NULL,
       summary TEXT,
       importance INTEGER DEFAULT 3 CHECK (importance BETWEEN 1 AND 5),

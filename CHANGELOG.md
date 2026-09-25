@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **TidyAgent Sovereign Control Plane Implementation (`@tidy/core`)**:
+  - Implemented **Structured 8-Taxonomy Memory Engine** (`packages/core/src/memory-taxonomy.js` & `scripts/memory-taxonomy.js`): Standardized 8 node taxonomies (`facts`, `decisions`, `preferences`, `assets`, `references`, `previous_outputs`, `lessons`, `relationships`), heuristic intent/constraint classifier (`classifyMemoryTaxonomy`), alias normalizer (`normalizeTaxonomy`), and cognitive boost multipliers (`CATEGORY_BOOSTS` in `packages/core/src/memory.js`).
+  - Implemented **5-Tier Context Compiler Engine** (`packages/core/src/context-compiler.js` & `scripts/context-compiler.js`): Deterministic zero-slop context assembly across 5 tiers (Global, Project, Task, Session, Working) with token budget allocation (`estimateTokenCount`), budget truncation, and output renderers (`markdown`, `system_prompt`, `json`).
+  - Implemented **Intent Router & Capability Discovery Engine** (`packages/core/src/intent-router.js` & `scripts/intent-router.js`): Capability-First routing capping loaded skills to top 2-3 relevant skills instead of 45+ manifests, with dynamic MCP tool recommendation for domain tasks.
+- **TidyAgent Universal Host Plugin & Adapters Package (`@tidy/plugin`)**:
+  - Scaffolding and hardening of the 6th official package in the monorepo (`packages/plugin/package.json` v1.6.0).
+  - Authored Universal Plugin Manifest (`packages/plugin/plugin.json`) compliant with MCP and OpenAPI standards.
+  - Implemented standards-compliant **OpenAPI 3.1.0 and ai-plugin.json Generator** (`packages/plugin/src/openapi-generator.js`) supporting full CRUD schemas for context compilation, intent routing, taxonomy classification, and SSE endpoints.
+  - Implemented comprehensive Host Adapters (`ChatGPTPluginAdapter`, `ClaudeCodeAdapter`, `CursorBridgeAdapter`, `OpenAICodexAdapter`, `AntigravityIdeAdapter`) with 1-click configuration and rule file exporters (`exportHostConfiguration`).
+  - Added CLI Subcommand `tidy plugin` (`list`, `claude`, `cursor`, `chatgpt`, `codex`, `antigravity`, `openapi`, `chatgpt-manifest`) for instant developer config generation.
+  - Hardened packaging metadata with npm `"files"` whitelist, modern subpath `"exports"` map (`.`, `./openapi`, `./plugin.json`), and automated `"test"` script.
+  - Added **Parameter Normalization Layer** across `BaseHostAdapter.compile` and `@tidy/core` `compileContext`: automatically folding flat parameters (`task`, `project`, `domain`, `working`) into the canonical 5-Tier context hierarchy with zero token leakage.
+  - Added `classifyDetails` method to host adapters providing confidence scoring and metadata rationale, with fortified MCP tool resilience (`tidy_taxonomy_classify`).
+- **Suite 15 Automated Test Expansion (`tests/run.js`)**:
+  - Added Section [15] covering memory taxonomy normalization and classification, context compilation in markdown/system/json modes, token budget capping, intent routing with capability-first invariants, host adapter instantiation, OpenAPI 3.1 generation, and multi-platform configuration exports.
+  - Expanded total automated tests from 56 to 62 tests (62 passed, 0 failed, 100% pass rate).
 - **TidyAgent Sovereign Control Plane & Universal Plugin Architecture (`ARCHITECTURE.md`, `ROADMAP.md`, `AGENTS.md`)**:
   - Formalized architectural doctrine: **TidyFactor** (ecosystem of modular capabilities) vs. **TidyAgent** (sovereign Control Plane and orchestrator runtime).
   - Defined the 6 Cognitive Pillars of TidyAgent Brain: Intent Router, Skill Lifecycle & Semantic Discovery, 5-Tier Context Manager, Context Compiler, Structured 8-Taxonomy Memory Manager, and Dynamic MCP Router.

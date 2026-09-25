@@ -1,0 +1,71 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "tidyagent",
+  "name_for_human": "TidyAgent Sovereign Control Plane",
+  "description_for_model": "TidyAgent orchestrates TidyFactor capabilities across any AI host. Manages 5-Tier Context Compilation, 8-Taxonomy Memory, dynamic skill discovery, and MCP execution.",
+  "description_for_human": "Sovereign runtime, memory operating layer, and skill orchestrator for AI agents.",
+  "version": "1.6.0",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "stdio_jsonrpc",
+    "protocol": "mcp-2024-11-05",
+    "command": "tidy",
+    "args": ["mcp"]
+  },
+  "capabilities": {
+    "context_compiler": {
+      "version": "1.6.0",
+      "tiers": ["global", "project", "task", "session", "working"],
+      "default_max_tokens": 4000
+    },
+    "memory_taxonomy": {
+      "version": "1.6.0",
+      "taxonomies": [
+        "facts",
+        "decisions",
+        "preferences",
+        "assets",
+        "references",
+        "previous_outputs",
+        "lessons",
+        "relationships"
+      ]
+    },
+    "intent_router": {
+      "version": "1.6.0",
+      "capability_first": true,
+      "max_skills_per_request": 3
+    }
+  },
+  "supported_hosts": [
+    {
+      "id": "chatgpt",
+      "adapter": "ChatGPTPluginAdapter",
+      "mode": "manifest_rpc"
+    },
+    {
+      "id": "claude",
+      "adapter": "ClaudeCodeAdapter",
+      "mode": "system_prompt_mcp"
+    },
+    {
+      "id": "cursor",
+      "adapter": "CursorBridgeAdapter",
+      "mode": "mcp_rules"
+    },
+    {
+      "id": "codex",
+      "adapter": "OpenAICodexAdapter",
+      "mode": "stdio_mcp"
+    },
+    {
+      "id": "antigravity",
+      "adapter": "AntigravityIdeAdapter",
+      "mode": "native_customization"
+    }
+  ],
+  "contact_email": "support@tidyfactor.com",
+  "legal_info_url": "https://tidyfactor.com/legal"
+}

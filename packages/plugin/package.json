@@ -1,0 +1,42 @@
+{
+  "name": "@tidy/plugin",
+  "version": "1.6.0",
+  "description": "Universal Host Plugin & Multi-Agent Distribution Layer for TidyAgent (ChatGPT, Claude Code, OpenAI Codex, Cursor, Antigravity)",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "files": [
+    "src",
+    "plugin.json",
+    "README.md"
+  ],
+  "exports": {
+    ".": "./src/index.js",
+    "./openapi": "./src/openapi-generator.js",
+    "./plugin.json": "./plugin.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node ../../tests/run.js"
+  },
+  "keywords": [
+    "tidy",
+    "tidyagent",
+    "plugin",
+    "adapter",
+    "chatgpt",
+    "claude",
+    "cursor",
+    "codex",
+    "antigravity",
+    "control-plane",
+    "runtime"
+  ],
+  "author": "TidyFactor Team",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "peerDependencies": {
+    "@tidy/core": ">=1.6.0"
+  }
+}

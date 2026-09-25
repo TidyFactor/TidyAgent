@@ -29,6 +29,9 @@ const atomicKi = require('./atomic-ki');
 const transcriptForensics = require('./transcript-forensics');
 const storageHygiene = require('./storage-hygiene');
 const firewallChecker = require('./firewall-checker');
+const memoryTaxonomy = require('./memory-taxonomy');
+const contextCompiler = require('./context-compiler');
+const intentRouter = require('./intent-router');
 
 module.exports = {
   // Database & Storage SSOT
@@ -171,6 +174,25 @@ module.exports = {
   recallSessionTranscripts: transcriptForensics.recallSessionTranscripts,
   auditStorageHygiene: storageHygiene.auditStorageHygiene,
   checkContextualFirewall: firewallChecker.checkContextualFirewall,
-  getSkillManifest: skillsLoader.getSkillManifest
+  getSkillManifest: skillsLoader.getSkillManifest,
+
+  // TidyAgent Sovereign Control Plane Engine (v1.6.0)
+  MEMORY_TAXONOMIES: memoryTaxonomy.MEMORY_TAXONOMIES,
+  normalizeTaxonomy: memoryTaxonomy.normalizeTaxonomy,
+  isValidTaxonomy: memoryTaxonomy.isValidTaxonomy,
+  getTaxonomyMetadata: memoryTaxonomy.getTaxonomyMetadata,
+  listTaxonomies: memoryTaxonomy.listTaxonomies,
+  classifyMemoryTaxonomy: memoryTaxonomy.classifyMemoryTaxonomy,
+
+  TIER_NAMES: contextCompiler.TIER_NAMES,
+  DEFAULT_TIER_PERCENTAGES: contextCompiler.DEFAULT_TIER_PERCENTAGES,
+  estimateTokenCount: contextCompiler.estimateTokenCount,
+  truncateToTokenBudget: contextCompiler.truncateToTokenBudget,
+  compileContext: contextCompiler.compileContext,
+
+  INTENT_TYPES: intentRouter.INTENT_TYPES,
+  CAPABILITY_DIRECTORY: intentRouter.CAPABILITY_DIRECTORY,
+  routeIntent: intentRouter.routeIntent
 };
+
 
