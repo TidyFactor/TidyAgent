@@ -1,6 +1,6 @@
 {
   "name": "@tidy/office",
-  "version": "1.0.0",
+  "version": "1.8.0",
   "description": "Sovereign Personal & Small Business Office Suite Pack for Tidy Ecosystem (CRM, Invoicing, Proposals, Cashflow, Calendar)",
   "main": "src/index.js",
   "type": "commonjs",

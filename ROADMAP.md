@@ -24,8 +24,8 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
     ├── v1.6.0 TidyAgent Control Plane & Context Compiler      ✅ Done (v1.6.0)
     ├── v1.6.5 Skill Lifecycle & Dynamic MCP Router            ✅ Done (v1.6.5)
     └── v1.7.0 Parallel Multi-Agent & Conflict Adjudication    ✅ Done (v1.7.0)
-  Phase 5: Sovereign Office & Commerce Suite Hardening         🚀 Active Focus (v1.8.0)
-  Phase 6: Multi-Device Sync & Cross-Platform                  🔮 Vision (v2.0.0)
+  Phase 5: Sovereign Office & Commerce Suite Hardening         ✅ Done (v1.8.0)
+  Phase 6: Multi-Device Sync & Cross-Platform                  🚀 Active Focus (v2.0.0)
 ```
 
 ---
@@ -212,13 +212,13 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 
 ---
 
-### Phase 5: Sovereign Office & Commerce Suite Hardening (`@tidy/office`) ⏳ (Planned — `v1.8.0`)
+### Phase 5: Sovereign Office & Commerce Suite Hardening (`@tidy/office`) ✅ (Completed — `v1.8.0`)
 - [x] Full B2B CRM Pipeline (Clients, Leads, Stages, Contacts, Activity log).
 - [x] Automated itemized invoicing with tax calculation, discounts, and payment status.
 - [x] Real-time cashflow telemetry & P&L statements (Revenue, Expenses, Net Profit, Margin).
-- [ ] Commercial Proposals & Quotations Builder (Scope of work, milestone timelines, approvals).
-- [ ] Product & Service Catalog (Standardized SKUs, multi-currency pricing, unit types).
-- [ ] Automated PDF Export Engine with customizable branded templates.
+- [x] Commercial Proposals & Quotations Builder (Scope of work, milestone timelines, approvals).
+- [x] Product & Service Catalog (Standardized SKUs, multi-currency pricing, unit types).
+- [x] Automated PDF Export Engine with customizable branded templates.
 
 ---
 

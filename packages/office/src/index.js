@@ -20,6 +20,7 @@ const expenses = require('./expenses');
 const calendar = require('./calendar');
 const evidenceCompiler = require('./evidence-compiler');
 const importer = require('./importer');
+const pdfExport = require('./pdf-export');
 
 // Auto-initialize schema when pack is loaded
 try {
@@ -81,5 +82,12 @@ module.exports = {
   compileClientDossier: evidenceCompiler.compileClientDossier,
 
   // Importer
-  importFromPocketOffice: importer.importFromPocketOffice
+  importFromPocketOffice: importer.importFromPocketOffice,
+
+  // PDF & Printable Document Export Engine (v1.8.0)
+  THEMES: pdfExport.THEMES,
+  formatMoney: pdfExport.formatMoney,
+  renderInvoiceHtml: pdfExport.renderInvoiceHtml,
+  renderProposalHtml: pdfExport.renderProposalHtml,
+  exportDocumentToFile: pdfExport.exportDocumentToFile
 };

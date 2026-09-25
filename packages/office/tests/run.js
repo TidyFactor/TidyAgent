@@ -235,6 +235,43 @@ test('Importer: can import sample data from PocketOffice data folder', () => {
   }
 });
 
+// 9. Automated PDF & Printable Document Export Tests (v1.8.0)
+console.log('\n[9] Automated PDF & Printable Document Export Tests (v1.8.0)');
+const { renderInvoiceHtml, renderProposalHtml, exportDocumentToFile } = require('../src/index');
+
+test('PDF Export: renders standalone printable HTML for invoice', () => {
+  const html = renderInvoiceHtml(testInvoiceId, { theme: 'luxury' });
+  assert.ok(html.includes('<!DOCTYPE html>'));
+  assert.ok(html.includes('INVOICE #'));
+  assert.ok(html.includes('@media print'));
+  assert.ok(html.includes('Ahmed Al-Mansoor'));
+});
+
+test('PDF Export: renders standalone printable HTML for proposal', () => {
+  const html = renderProposalHtml(testProposalId, { theme: 'modern' });
+  assert.ok(html.includes('<!DOCTYPE html>'));
+  assert.ok(html.includes('Commercial Proposal:'));
+  assert.ok(html.includes('Deliverables'));
+  assert.ok(html.includes('Authorized Signature'));
+});
+
+test('PDF Export: exports document to file on disk', () => {
+  const tmpFile = path.join(os.tmpdir(), `test_export_${Date.now()}.html`);
+  const res = exportDocumentToFile({
+    type: 'invoice',
+    id: testInvoiceId,
+    outputPath: tmpFile,
+    theme: 'corporate'
+  });
+
+  assert.strictEqual(res.success, true);
+  assert.ok(fs.existsSync(tmpFile));
+  assert.ok(res.bytes > 500);
+
+  // Cleanup
+  try { fs.unlinkSync(tmpFile); } catch {}
+});
+
 console.log('\n============================================================');
 console.log(`  OFFICE SUITE TEST RESULTS: ${passedCount} PASSED, ${failedCount} FAILED`);
 console.log('============================================================\n');
@@ -244,4 +281,5 @@ if (failedCount > 0) {
 } else {
   console.log('🎉 ALL @tidy/office TESTS PASSED SUCCESSFULLY!\n');
 }
+
 

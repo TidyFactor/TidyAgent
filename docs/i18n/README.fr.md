@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🤖 Tidy `v1.1.0`
+# 🤖 Tidy `v1.8.0`
 ### Agent Assistant Personnel Souverain avec Mémoire Persistante SQLite et Serveur MCP Stdio Local
 
 [ English ](README.md) • [ العربية ](README.ar.md) • [ Español ](README.es.md) • [ Deutsch ](README.de.md) • **[ Français ](README.fr.md)** • [ Português ](README.pt.md) • [ 中文 ](README.zh.md) • [ فارسی ](README.fa.md)
 
-[![npm version](https://img.shields.io/badge/version-1.1.0-blue.svg?style=for-the-badge)](package.json)
+[![npm version](https://img.shields.io/badge/version-1.8.0-blue.svg?style=for-the-badge)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Ecosystem](https://img.shields.io/badge/TidyFactor-Skills--LAB-purple.svg?style=for-the-badge)](https://github.com/TidyFactor)
 [![Compatibility](https://img.shields.io/badge/Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Codex-orange.svg?style=for-the-badge)](../../packages/skill/SKILL.md)
@@ -19,14 +19,16 @@
 **Tidy** est une couche d'assistance personnelle souveraine basée sur une base de données SQLite locale unique servant de Source Unique de Vérité (SSOT) permanente.
 
 ### Fonctionnalités Clés
-1. **Démarrage Zéro-Configuration**: Utilise le moteur natif `node:sqlite` (Node.js >= 22). Zéro dépendance C++ externe, zéro compilation node-gyp. Création automatique de `~/.tidy/tidy.db` avec mode WAL, clés étrangères, 8 tables et index FTS5.
+1. **Démarrage Zéro-Configuration**: Utilise le moteur natif `node:sqlite` (Node.js >= 22). Zéro dépendance C++ externe, zéro compilation node-gyp. Création automatique de `~/.tidy/tidy.db` avec mode WAL, clés étrangères, tables d'affaires et index FTS5.
 2. **Architecture de Contexte à 3 Anneaux**:
    - **Ring 0 (Profil Souverain)**: Identité de l'utilisateur et posture de l'assistant (~150 tokens).
    - **Ring 1 (Pare-feu de Domaine)**: Isolation stricte entre les contextes `dev`, `marketing` et `personal`.
    - **Ring 2 (Mémoire de Travail Dynamique)**: Recherche FTS5 BM25 pour les décisions et règles.
 3. **CLI Hybride à Double Mode**: Assistant interactif élégant avec `@clack/prompts` et mode scriptable pour l'automatisation.
 4. **4 Micro-Applications Intégrées**: `tasks` (gestionnaire de tâches), `snippets` (extraits de code), `journal` (journal de bord), `vault` (coffre-fort de secrets).
-5. **Serveur MCP Stdio Local**: Protocole JSON-RPC 2.0 avec 8 outils et 3 ressources en direct (`tidy://profile`, `tidy://context/current`, `tidy://tasks/pending`).
+5. **Essaim Multi-Agents Parallèle (v1.7.0)**: Exécution simultanée de sous-agents spécialisés dans des bacs à sable isolés avec arbitrage automatique des conflits (`tidy_parallel_dispatch`).
+6. **Suite Bureautique et Commerciale Souveraine (v1.8.0 - `@tidy/office`)**: CRM B2B local, propositions commerciales, facturation détaillée, télémétrie de trésorerie (P&L), et moteur d'exportation de documents PDF autonome à 4 thèmes de luxe (Modern, Minimal, Luxury, Corporate).
+7. **Serveur MCP Stdio Local (40 Outils)**: Protocole JSON-RPC 2.0 avec 40 outils de production, 9 ressources en direct et zéro télémétrie cloud.
 
 ---
 

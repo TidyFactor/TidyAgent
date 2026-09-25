@@ -6,7 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-09-26
+
 ### Added
+- **Sovereign Office & Commerce Suite Hardening (`@tidy/office` v1.8.0)**:
+  - Implemented **Automated PDF & Printable Document Export Engine** (`packages/office/src/pdf-export.js`): Generates standalone, responsive, print-ready HTML/PDF documents with 4 branded themes (`modern`, `minimal`, `luxury`, `corporate`), multi-currency formatting, itemized tables, notes, and `@media print` CSS.
+  - Implemented **Commercial Proposals & Quotations Builder** (`packages/office/src/proposals.js`): Creates structured B2B proposals with scope of work, deliverable milestones, terms agreement, and 1-click conversion to active itemized invoices (`convertProposalToInvoice`).
+  - Implemented **Product & Service Catalog** (`packages/office/src/products.js`): Standardized SKU matrix, multi-currency pricing, and recurring billing cycles (`one_time`, `monthly`, `quarterly`, `yearly`).
+  - Expanded **MCP Office Tools Fleet** (`packages/mcp/src/modules/office-tools.js`): Added `tidy_proposal_create`, `tidy_proposal_list`, `tidy_proposal_convert`, `tidy_product_list`, `tidy_product_add`, and `tidy_document_export` to the standard tool catalog.
+  - Expanded automated test coverage across `@tidy/office` (17 passed tests) and root monorepo runner (`tests/run.js` Section [7], 74 passed tests).
 - **Skill Lifecycle Engine & Dynamic MCP Router (`@tidy/core`)**:
   - Implemented **Skill Lifecycle Engine** (`packages/core/src/skill-lifecycle.js`): Complete lifecycle governance (`discover`, `install`, `enable`, `disable`, `load`, `validate`, and semantic capability matching) capping loaded skills strictly to the top 2-3 matches without context bloat.
   - Implemented **Dynamic MCP Router** (`packages/core/src/mcp-router.js`): Decoupled procedural "How" (Skills) from executable "Tools" (MCP servers), with automated intent-based tool resolution, safe execution envelopes, and ephemeral working context population.

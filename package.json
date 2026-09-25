@@ -1,6 +1,6 @@
 {
   "name": "tidy-agent",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Sovereign Personal Assistant Agent with persistent SQLite Memory, CLI engine, and local Stdio MCP Server",
   "main": "index.js",
   "bin": {

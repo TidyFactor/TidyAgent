@@ -338,6 +338,9 @@ test('MCP Server: dynamically exposes Office Suite tools and cashflow resource',
   assert.ok(TOOLS.find(t => t.name === 'tidy_invoice_create'), 'tidy_invoice_create tool should be registered');
   assert.ok(TOOLS.find(t => t.name === 'tidy_cashflow_summary'), 'tidy_cashflow_summary tool should be registered');
   assert.ok(TOOLS.find(t => t.name === 'tidy_client_dossier'), 'tidy_client_dossier tool should be registered');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_proposal_create'), 'tidy_proposal_create tool should be registered');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_product_list'), 'tidy_product_list tool should be registered');
+  assert.ok(TOOLS.find(t => t.name === 'tidy_document_export'), 'tidy_document_export tool should be registered');
   assert.ok(RESOURCES.find(r => r.uri === 'tidy://office/cashflow'), 'tidy://office/cashflow resource should be registered');
 });
 
@@ -347,6 +350,31 @@ test('CLI Suite: bin/tidy.js executes crm and cashflow subcommands successfully'
   assert.ok(outCrm.includes('CRM Clients'));
   const outCashflow = execSync(`node bin/tidy.js cashflow`, { env: { ...process.env, TIDY_DB: TEST_DB } }).toString();
   assert.ok(outCashflow.includes('Financial Cashflow & Operations Overview'));
+});
+
+test('Office Suite (v1.8.0): proposals, products catalog, and branded document export', () => {
+  const office = require('../packages/office/src/index');
+  const prod = office.addProduct({
+    name: 'Full-Stack Agent Architecture Sprint',
+    sku: 'SRV-AGENT-01',
+    unitPrice: 5000,
+    currency: 'USD'
+  });
+  assert.ok(prod.id);
+  assert.strictEqual(prod.sku, 'SRV-AGENT-01');
+
+  const prop = office.createProposal({
+    title: 'Enterprise AI Agent Rollout',
+    items: [{ name: prod.name, unitPrice: prod.unit_price, qty: 1 }],
+    scopeOfWork: 'Design and deploy sovereign local AI agent with persistent SQLite memory.'
+  });
+  assert.ok(prop.id);
+  assert.strictEqual(prop.total_amount, 5000);
+
+  const html = office.renderProposalHtml(prop, { theme: 'luxury' });
+  assert.ok(html.includes('Enterprise AI Agent Rollout'));
+  assert.ok(html.includes('PROPOSAL #'));
+  assert.ok(html.includes('@media print'));
 });
 
 console.log('\n[8] Cognitive Memory & Domain Firewall Tests');
