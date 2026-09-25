@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **TidyAgent Sovereign Control Plane & Universal Plugin Architecture (`ARCHITECTURE.md`, `ROADMAP.md`, `AGENTS.md`)**:
+  - Formalized architectural doctrine: **TidyFactor** (ecosystem of modular capabilities) vs. **TidyAgent** (sovereign Control Plane and orchestrator runtime).
+  - Defined the 6 Cognitive Pillars of TidyAgent Brain: Intent Router, Skill Lifecycle & Semantic Discovery, 5-Tier Context Manager, Context Compiler, Structured 8-Taxonomy Memory Manager, and Dynamic MCP Router.
+  - Specified the **Context Compiler Engine** assembling zero-slop token payloads across 5 tiers (Global, Project, Task, Session, Working).
+  - Established host-decoupled architecture treating ChatGPT, Claude, Cursor, Codex, and Antigravity as swappable execution adapters.
+  - Defined the `@tidy/plugin` (`packages/plugin`) distribution adapter doctrine separating distribution packages from sovereign core intelligence.
+  - Updated strategic product roadmap with Phase 4 (`v1.6.0` – `v1.7.0`) as the immediate active milestone.
 - **Tidy Studio Desktop Visual Showcase & Screenshots Suite (`@tidy/desktop`, `docs/`)**:
   - Captured and integrated 11 real high-resolution screenshots for all 14 desktop views (`overview.png`, `skills-studio.png`, `memory-explorer.png`, `harvester.png`, `dispatcher.png`, `mcp-studio.png`, `tasks-board.png`, `crm-pipeline.png`, `invoices-billing.png`, `cashflow.png`, `hud-floating.png`).
   - Created standalone comprehensive Arabic architecture and operations guide for Tidy Studio (`docs/apps/desktop-app.ar.md`).

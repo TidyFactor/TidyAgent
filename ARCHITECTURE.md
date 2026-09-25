@@ -186,11 +186,156 @@ tidy-agent (root)
 
 ---
 
-## 🚀 7. Core OS Services Architecture (Phase 3 Roadmap: v1.4.3 – v1.5.0)
+## 🚀 7. Core OS Services Architecture (v1.4.3 – v1.5.0)
 
 To support dynamic micro-apps, plugins, and third-party extensions without code duplication, `@tidy/core` provides four foundational platform services:
 1. **Settings & Governance Provider (`system_config`)**: Central key-value store for application variables, active theme (`zeitoun`, `newcairo`, etc.), language (`ar`/`en`), currency, and user profile metadata.
 2. **Multi-Database Pool Engine**: Runtime abstraction allowing dynamic creation, backup, and switching between multiple SQLite databases (`Switch Active SSOT`).
 3. **AI Services Router (BYOK & Local AI)**: Multi-provider abstraction managing API credentials (OpenAI, Anthropic, Gemini, DeepSeek, Groq) alongside zero-leakage local execution (Ollama, LM Studio).
 4. **Plugin & Extension Lifecycle**: Event hooks and schema registration interfaces (`registerSchema`) enabling modular business packs to mount without altering core kernel code.
+
+---
+
+## 🧠 8. TidyAgent Sovereign Control Plane & Orchestration Architecture (`v1.6.0+`)
+
+TidyAgent transcends traditional single-model chatbots or isolated MCP servers. It operates as the **Sovereign Agent Control Plane & Runtime** for the entire TidyFactor ecosystem, decoupling cognitive intelligence from proprietary LLM vendors and treating AI models as interchangeable reasoning engines.
+
+### 🏛️ Core Architectural Distinction
+
+> **TidyFactor = The Sovereign Ecosystem of Modular Capabilities**  
+> (Community skills, 15 structural rules, CDL workflows, and design systems)  
+> 
+> **TidyAgent = The Sovereign Agent Control Plane & Runtime**  
+> (The orchestrator that plans, routes, compiles context, discovers skills, executes MCP tools, and validates results)
+
+```text
+                                TidyAgent
+                          ┌─────────────────┐
+                          │ Agent Runtime   │
+                          │ Planning        │
+                          │ Routing         │
+                          │ Context         │
+                          │ Memory          │
+                          │ Skill Manager   │
+                          └────────┬────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+                 Skills           MCP          Context
+                    │              │              │
+            ┌───────┼───────┐      │       ┌──────┼──────┐
+            │       │       │      │       │      │      │
+          Design Marketing Docs   Tools   Project Memory References
+            │       │       │      │       │      │      │
+            └───────┴───────┴──────┴───────┴──────┴──────┘
+                                   │
+                            TidyFactor Core
+```
+
+---
+
+### 🧩 The 6 Cognitive Pillars of TidyAgent Brain
+
+```text
+User Request
+     │
+     ▼
+[ 1. Intent Router ] ───► Deconstructs intent & required capabilities
+     │
+     ▼
+[ 2. Skill Discovery ] ─► Semantic matching: loads 2-3 relevant skills (not 45)
+     │
+     ▼
+[ 3. Context Manager ] ─► 5-Tier isolation: Global, Project, Task, Session, Working
+     │
+     ▼
+[ 4. Context Compiler] ─► Deterministic compilation into zero-slop token payload
+     │
+     ▼
+[ 5. MCP Router ] ──────► Binds procedural "How" (Skills) with executable "Tools" (MCP)
+     │
+     ▼
+[ Host Execution ] ────► Dispatches to Host (Claude, ChatGPT, Codex, Antigravity)
+     │
+     ▼
+[ 6. Memory Manager ] ──► Synthesizes outcome into 8-taxonomy structured memory
+```
+
+#### 1. Intent Router
+Instead of dumping the entire conversation history into an LLM, the Intent Router extracts the precise execution contract:
+- **Intent Type**: e.g., `product_ad`, `api_refactor`, `invoice_issuance`.
+- **Target Skills**: Minimum viable set of required procedural capabilities.
+- **Context Constraints**: Brand guidelines, active client ID, or repo invariants.
+
+#### 2. Skill Lifecycle & Semantic Discovery
+TidyAgent acts as a **Skill Governor**, managing skills across their complete lifecycle:
+$$\text{Lifecycle} = \{\text{discover}, \text{install}, \text{enable}, \text{disable}, \text{load}, \text{execute}, \text{validate}, \text{update}, \text{version}\}$$
+- **Capability-First / Token-Efficient**: For a repository of 50 skills, semantic routing loads only the exact 2 or 3 skills needed for the active task.
+
+#### 3. 5-Tier Context Hierarchy
+Context is strictly partitioned into five isolated tiers, preventing domain contamination:
+1. **Global Context**: User persona, core values, system invariants (~150 tokens).
+2. **Project Context**: Active workspace rules, brand guidelines, architectural decisions (~300 tokens).
+3. **Task Context**: Current user objective, explicit constraints, target outcomes.
+4. **Session Context**: Active dialogue thread, verified checkpoints, execution history.
+5. **Working Context**: Ephemeral candidate assets, code diffs, reviewer critique stamps.
+
+#### 4. The Context Compiler Engine
+The Context Compiler sits between raw storage and the LLM reasoning engine. Rather than streaming raw memory dumps, it compiles the minimum necessary instructions:
+$$\text{Compiled Prompt} = \text{Compiler}(\text{Project Identity}, \text{Active Task}, \text{Skill Workflow}, \text{Tool Schemas}, \text{Relevant Memory})$$
+- Enforces strict token budgets and guarantees zero-slop outputs.
+
+#### 5. Structured 8-Taxonomy Memory Manager
+Memory is structured into 8 queryable domain types rather than unstructured chat transcripts:
+- **`Facts`**: Empirical environment specifications and verified truths.
+- **`Decisions`**: Architectural decisions with explicit rationale and trade-offs.
+- **`Preferences`**: Principal stylistic, coding, and workflow preferences.
+- **`Assets`**: Brand guidelines, SVGs, color tokens, and approved templates.
+- **`References`**: External API contracts, benchmark implementations, and docs.
+- **`Previous Outputs`**: Approved deliverables (code snippets, copy, invoices).
+- **`Lessons`**: Negative constraints learned from past errors and debugging.
+- **`Relationships`**: Graph edges connecting entities, projects, skills, and tools.
+
+#### 6. Dynamic MCP Router
+Decouples procedural knowledge ("How to do it" in Skills) from executable capabilities ("Tools to do it" in MCP):
+```text
+             TidyAgent
+                 │
+          ┌──────┴──────┐
+          │             │
+        Skill           MCP
+          │             │
+     "How" (Logic)   "Tools" (Execution)
+          │             │
+          └──────┬──────┘
+                 │
+            Atomic Task
+```
+
+---
+
+### 🌐 Universal Host Decoupling & Plugin Distribution Doctrine
+
+TidyAgent is strictly **host-agnostic**:
+```text
+                    TIDYFACTOR
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+          TidyAgent          TidyFactor Skills
+              │                   │
+     ┌────────┼────────┐          │
+     │        │        │          │
+   Brain    Context   MCP       Registry
+     │        │        │          │
+     └────────┴────────┴──────────┘
+                        │
+                  Host Adapters
+             ┌──────────┼──────────┐
+          ChatGPT     Claude      Codex
+```
+
+- **`TidyAgent Core` (`@tidy/core`)**: The permanent sovereign engine housing Brain, Context Compiler, Memory SSOT, and Policy Engine.
+- **`TidyAgent Plugin` (`packages/plugin`)**: The lightweight adapter and distribution package (manifests, JSON schemas, and RPC proxies) enabling any AI host (ChatGPT, Claude, Cursor, Antigravity) to mount TidyAgent as its central control plane.
+
 

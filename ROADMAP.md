@@ -15,16 +15,17 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
   Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
   Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
   Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2)
-  Phase 1: Foundation (Core, CLI, MCP & Skill)                 ✅ Done (v1.1)
-  Phase 2: Management GUI (Electron Windows & Web Console)     ✅ Done (v1.3)
-  Phase 2.5: Cognitive Memory & Portability Engine             ✅ Done (v1.4.2)
-  Phase 3: Cognitive OS Services & Platform Hubs (v1.4.3-v1.5) 🚀 In Progress
+  Phase 3: Cognitive OS Services & Sovereign Brain MCP         ✅ Done (v1.5.0)
     ├── v1.4.3 Core Governance & Settings Engine               ✅ Done (v1.4.3)
     ├── v1.4.4 Universal Skills & Agents Studio                ✅ Done (v1.4.4)
-    ├── v1.4.5 Knowledge Harvester & Agent Brain Extractor     ✅ Done (v1.4.5)
-    └── v1.5.0 Tidy Sovereign Brain MCP Engine (Brain Replace) 🎯 Next Milestone
-  Phase 4: Sovereign Office & Commerce Suite (v1.6.0)          ⏳ Planned
-  Phase 5: Multi-Device Sync & Cross-Platform (v2.0.0)         🔮 Vision
+    ├── v1.4.5 Knowledge Harvester & Office Suite Integration  ✅ Done (v1.4.5)
+    └── v1.5.0 Tidy Sovereign Brain MCP Engine (Suite 14)      ✅ Done (v1.5.0)
+  Phase 4: TidyAgent Sovereign Control Plane & Plugin Engine   🚀 Active Focus (v1.6.0 - v1.7.0)
+    ├── v1.6.0 TidyAgent Control Plane & Context Compiler      🎯 Next Milestone
+    ├── v1.6.5 Skill Lifecycle & Dynamic MCP Router            ⏳ In Pipeline
+    └── v1.7.0 TidyAgent Universal Host Plugin & Adapters      ⏳ In Pipeline
+  Phase 5: Sovereign Office & Commerce Suite Hardening         ⏳ Planned (v1.8.0)
+  Phase 6: Multi-Device Sync & Cross-Platform                  🔮 Vision (v2.0.0)
 ```
 
 ---
@@ -100,61 +101,111 @@ Tidy empowers developers, knowledge workers, and AI agents with a **single, loca
 - [x] **Cross-Studio Interoperability**: Direct 1-click bridge routing items to Universal Skills & Agents Studio editor.
 - [x] **Full MCP, IPC and REST Parity**: Added `tidy_harvest_scan`, `tidy_harvest_read`, `tidy_harvest_import` tools to MCP and endpoints across Desktop IPC and Web REST.
 
-#### 📦 `v1.5.0` — Tidy Sovereign Brain MCP Engine (Full Replacement for tidyfactor-brain) 🎯 [Next Immediate Release]
-- [ ] **System Health Doctor (`tidy_doctor` / `doctor`)**: Diagnostic audit across SQLite SSOT, WAL mode, 4-tier knowledge count, storage footprint, and registered skills.
-- [ ] **Hybrid 4-Tier Knowledge Search (`tidy_search_knowledge_base` / `search_knowledge_base`)**: Dual search querying both SQLite SSOT memory (BM25 FTS5) AND 4-tier disk knowledge (`~/.gemini/knowledge/**`) with taxonomy filtering (`global`, `tech`, `projects`, `session`).
-- [ ] **Atomic Knowledge Extraction (`tidy_extract_knowledge_item` / `extract_knowledge_item`)**: Creates and persists compliant atomic KIs into 4-tier storage with mandatory negative constraints, writing to disk and dual-indexing into SQLite memory.
-- [ ] **Forensic Transcript Scanner (`tidy_recall_transcripts` / `recall_transcripts`)**: On-demand search through session transcripts (`brain/**/transcript.jsonl`) without active context bloat.
-- [ ] **Storage Hygiene & Cache Purge (`tidy_storage_hygiene` / `audit_storage_hygiene`)**: Audits disk consumption of recordings, sessions, and temp artifacts in `.gemini/antigravity-ide` with dry-run safety and pruning.
-- [ ] **Contextual Firewall Checker (`tidy_check_firewall` / `check_contextual_firewall`)**: Inspects prompts and text for domain contamination between Dev, Marketing, and Ops modes.
-- [ ] **Skill Manifest Deep Inspector (`tidy_get_skill_manifest` / `get_skill_manifest`)**: Deep manifest inspection returning parsed commands, workflows, subsystems, and 15-rule audit score.
-- [ ] **Conversational Audio Overview Synthesizer (`tidy_audio_overview` / `generate_audio_overview`)**: Generates 2-host conversational podcast script (NotebookLM style).
-- [ ] **Zero-Breaking Backward-Compatibility Aliases Layer**: Supports both `tidy_*` and legacy `tidyfactor-brain` tool names transparently.
-- [ ] **Full Desktop IPC & Web REST Parity**: Exposes all new brain services to Desktop Management GUI and Web Console.
-
-#### 📦 `v1.4.6` — Cognitive Memory, Advanced Search & Rich Text Editor
-- [ ] Full-featured Markdown/Text editor with syntax highlighting, live preview, auto-save, and tag extraction.
-- [ ] Enhanced FTS5 BM25 search with hybrid filtering, query operators, and visual memory inspector.
-
-#### 📦 `v1.4.7` — Core Productivity Micro-Apps Hardening
-- [ ] **Snippets Vault**: Syntax-highlighted code vault with tags, language filter, 1-click copy, and IDE export.
-- [ ] **Journal & Daily Reflections**: Structured timeline reflections linked to memory nodes and daily activity logs.
-- [ ] **Vault & Secret Credentials**: Secure masked credential storage with AES-GCM encryption, reveal controls, and zero cloud leaks.
-
-#### 📦 `v1.4.8` — Multi-Workspace, Multi-Database Engine & Sovereign Backup Center
-- [ ] Dynamic workspace creation, editing, switching, and domain isolation.
-- [ ] Multi-database pool: Create new SQLite databases, switch active SSOT at runtime, and isolate contexts per client/project.
-- [ ] 1-click SQLite snapshot backup with checksum verification and auto-recovery.
-- [ ] Bi-directional JSON SSOT package import/export and Obsidian PARA Markdown vault sync.
-
-#### 📦 `v1.4.9` — System Audit Logs & Plugin / Module Lifecycle Manager
-- [ ] Real-time stream of engine operations, subagent invocations, database mutations, and security events.
-- [ ] Standardized plugin architecture allowing core services to register, load, sandbox, and hot-reload third-party or custom modules.
-
-#### 📦 `v1.4.10` — AI Services & Provider Center (BYOK & Local AI)
-- [ ] **BYOK (Bring Your Own Key)**: Native management and latency benchmarking for OpenAI, Anthropic, Gemini, DeepSeek, and Groq.
-- [ ] **Local AI Provider**: Zero-leakage local LLM execution via Ollama, LM Studio, and Llama.cpp.
-- [ ] Model routing, token cost estimation, and fallback failover tiers.
-
-#### 🏁 `v1.5.0` — Tidy Cognitive OS Unified Platform Release
-- [ ] Final integration, stress testing, end-to-end regression validation across CLI, MCP, Desktop, and Web.
-- [ ] Zero-drift documentation sync across all localized versions.
+#### 📦 `v1.5.0` — Tidy Sovereign Brain MCP Engine (Suite 14) ✅ (Completed — v1.5.0)
+- [x] **System Health Doctor (`tidy_doctor` / `doctor`)**: Diagnostic audit across SQLite SSOT, WAL mode, 4-tier knowledge count, storage footprint, and registered skills.
+- [x] **Hybrid 4-Tier Knowledge Search (`tidy_search` / `search_knowledge_base`)**: Dual search querying both SQLite SSOT memory (BM25 FTS5) AND 4-tier disk knowledge (`~/.gemini/knowledge/**`) with taxonomy filtering (`global`, `tech`, `projects`, `session`).
+- [x] **Atomic Knowledge Extraction (`tidy_extract` / `extract_knowledge_item`)**: Creates and persists compliant atomic KIs into 4-tier storage with mandatory negative constraints, writing to disk and dual-indexing into SQLite memory.
+- [x] **Forensic Transcript Scanner (`tidy_transcripts` / `recall_transcripts`)**: On-demand search through session transcripts (`brain/**/transcript.jsonl`) without active context bloat.
+- [x] **Storage Hygiene & Cache Purge (`tidy_hygiene` / `audit_storage_hygiene`)**: Audits disk consumption of recordings, sessions, and temp artifacts with dry-run safety and pruning.
+- [x] **Contextual Firewall Checker (`tidy_firewall` / `check_contextual_firewall`)**: Inspects prompts and text for domain contamination between Dev, Marketing, and Ops modes.
+- [x] **Skill Manifest Deep Inspector (`tidy_manifest` / `get_skill_manifest`)**: Deep manifest inspection returning parsed commands, workflows, subsystems, and 15-rule audit score.
+- [x] **Zero-Breaking Backward-Compatibility Aliases Layer**: Supports both `tidy_*` and legacy `tidyfactor-brain` tool names transparently.
+- [x] **Full Desktop IPC & Web REST Parity**: Exposes all brain services to Desktop Management GUI and Web Console.
+- [x] **Suite 14 Automated Test Runner**: 56 passed tests with 100% pass rate.
 
 ---
 
-### Phase 4: Sovereign Office & Commerce Suite (`@tidy/office`) ⏳ (Planned — `v1.6.0`)
-- [ ] Full B2B CRM Pipeline (Clients, Leads, Stages, Contacts, Activity log).
-- [ ] Company Profile & Branding (Issuer credentials, VAT/tax numbers, payment accounts).
-- [ ] Product & Service Catalog (Standardized SKUs, multi-currency pricing, unit types).
+### Phase 4: TidyAgent Sovereign Control Plane & Universal Plugin Engine 🚀 (Active Focus — `v1.6.0` – `v1.7.0`)
+
+> **Architectural Doctrine**:
+> - **TidyFactor**: The sovereign ecosystem of modular capabilities (Skills, structural invariants, and CDL workflows).
+> - **TidyAgent**: The Agent Control Plane, Runtime, and Orchestrator that plans, routes, compiles context, and executes these capabilities across any AI host.
+> - **TidyAgent Brain**: The cognitive operating layer that decouples the agent from individual LLM vendors, treating models as swappable reasoning engines.
+
+```text
+                         TidyAgent
+                    ┌─────────────────┐
+                    │ Agent Runtime   │
+                    │ Planning        │
+                    │ Routing         │
+                    │ Context         │
+                    │ Memory          │
+                    │ Skill Manager   │
+                    └────────┬────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+           Skills           MCP          Context
+              │              │              │
+      ┌───────┼───────┐      │       ┌──────┼──────┐
+      │       │       │      │       │      │      │
+    Design Marketing Docs   Tools   Project Memory References
+      │       │       │      │       │      │      │
+      └───────┴───────┴──────┴───────┴──────┴──────┘
+                             │
+                      TidyFactor Core
+```
+
+#### 📦 `v1.6.0` — TidyAgent Control Plane, Context Compiler & Structured Memory 🎯 [Next Milestone]
+- [ ] **Context Compiler Engine (`packages/core/src/context-compiler.js`)**:
+  - Compiles 5 distinct context tiers into a precise, zero-slop prompt payload:
+    - **Global Context**: User persona, core values, system invariants (~150 tokens).
+    - **Project Context**: Active workspace rules, brand guidelines, architectural decisions (~300 tokens).
+    - **Task Context**: Current user objective, explicit constraints, target outcomes.
+    - **Session Context**: Active dialogue thread, verified checkpoints, execution history.
+    - **Working Context**: Ephemeral candidate assets, code diffs, reviewer critique stamps.
+  - Eliminates context bloat: Delivers strictly what the model needs for the current atomic step.
+- [ ] **Intent Router (`packages/core/src/intent-router.js`)**:
+  - Deconstructs raw user requests into structured intent contracts:
+    - Target domain (`dev`, `marketing`, `office`, `design`, `ops`).
+    - Required capabilities and matching skills.
+    - Context parameters and reference requirements.
+- [ ] **Structured 8-Taxonomy Memory Manager (`packages/core/src/memory-taxonomy.js`)**:
+  - Elevates memory beyond linear chat logs into 8 dedicated node types:
+    - `Facts` (Empirical knowledge and environment specifications).
+    - `Decisions` (Architectural and business decisions with rationales).
+    - `Preferences` (Principal stylistic, tool, and communication preferences).
+    - `Assets` (Brand artifacts, SVGs, color palettes, templates).
+    - `References` (External APIs, canonical documentation, benchmark projects).
+    - `Previous Outputs` (Validated code, copy, invoices, or diagrams).
+    - `Lessons` (Learned negative constraints, debugging solutions).
+    - `Relationships` (Graph links between clients, projects, skills, and tools).
+
+#### 📦 `v1.6.5` — Skill Lifecycle Engine & Dynamic MCP Router
+- [ ] **Skill Lifecycle Engine (`packages/core/src/skill-lifecycle.js`)**:
+  - Complete lifecycle governance: `discover`, `install`, `enable`, `disable`, `load`, `execute`, `validate`, `update`, `version`.
+  - Semantic Capability Matching: Discovers the exact 2-3 relevant skills needed for a prompt instead of polluting the context with 40+ skill manifests.
+  - Skills-LAB v2.0 Compliance Verifier with automated test harnesses.
+- [ ] **Dynamic MCP Router (`packages/core/src/mcp-router.js`)**:
+  - Decoupled binding between procedural "How" (Skills) and executable "Tools" (MCP servers).
+  - Automatically identifies which MCP tool satisfies a skill step requirement (e.g. `product-image` skill routes to local image tool; `crm` routes to `@tidy/office`).
+  - Working context population: Injects tool results directly into ephemeral working context.
+
+#### 📦 `v1.7.0` — TidyAgent Universal Host Plugin & Adapters (`@tidy/plugin`)
+- [ ] **Universal Host Adapter Protocol**:
+  - Decouples TidyAgent from any proprietary vendor: hosts (ChatGPT, Claude Code, Cursor, Codex, Windsurf, Antigravity) act as swappable execution environments.
+  - **ChatGPT Plugin / GPT Action Adapter**: OpenAPI 3.1 schema + OAuth/API key gateway.
+  - **Claude Code / Desktop Adapter**: Native tool manifest and stdio integration.
+  - **IDE Agents Bridge**: Unified context injection for Cursor rules, Codex prompts, and Antigravity skills.
+- [ ] **TidyAgent Distribution Plugin (`packages/plugin`)**:
+  - Lightweight adapter package containing host manifests (`plugin.json`), tool bindings, and skill discovery proxies while delegating all intelligence to `@tidy/core`.
+
+---
+
+### Phase 5: Sovereign Office & Commerce Suite Hardening (`@tidy/office`) ⏳ (Planned — `v1.8.0`)
+- [x] Full B2B CRM Pipeline (Clients, Leads, Stages, Contacts, Activity log).
+- [x] Automated itemized invoicing with tax calculation, discounts, and payment status.
+- [x] Real-time cashflow telemetry & P&L statements (Revenue, Expenses, Net Profit, Margin).
 - [ ] Commercial Proposals & Quotations Builder (Scope of work, milestone timelines, approvals).
-- [ ] Itemized Invoicing & Payment Receipts (Multi-currency, tax calculation, PDF export, luxury printable preview).
-- [ ] Cashflow & Expense Telemetry (Operating expenses, burn rate, net profit analytics).
+- [ ] Product & Service Catalog (Standardized SKUs, multi-currency pricing, unit types).
+- [ ] Automated PDF Export Engine with customizable branded templates.
 
 ---
 
-### Phase 5: Sovereign Multi-Device Sync & Cross-Platform 🔮 (`v2.0.0`)
+### Phase 6: Sovereign Multi-Device Sync & Cross-Platform 🔮 (`v2.0.0`)
 - [ ] Local-First LibSQL / Litestream replication and CRDT changesets for zero-cloud lock-in sync.
 - [ ] Cloud Companion MCP Server with encrypted token authentication for remote AI agents.
 - [ ] Native macOS (Universal `.dmg`) and Linux (`.AppImage` / `.deb`) desktop builds.
 - [ ] Mobile Companion Apps (iOS & Android) with local voice-to-memory dictation (Whisper).
+
 

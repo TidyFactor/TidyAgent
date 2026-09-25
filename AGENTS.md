@@ -17,12 +17,16 @@ The repository is strictly partitioned into distinct packages and applications:
    - Houses `@clack/prompts` and `picocolors` interactive terminal wizards, plus scriptable subcommand execution.
 3. **`packages/mcp` (`@tidy/mcp`)**: Model Context Protocol integration.
    - Stdio JSON-RPC 2.0 server exposing 8 tools and 3 dynamic live resources (`tidy://profile`, `tidy://context/current`, `tidy://tasks/pending`) to IDE agents.
-4. **`packages/skill` (`@tidy/skill`)**: TidyFactor Community Skill.
+4. **`packages/office` (`@tidy/office`)**: Sovereign Office & Commerce Suite.
+   - Houses B2B CRM pipeline, itemized invoicing, expense and cashflow telemetry, and client dossier synthesizer.
+5. **`packages/skill` (`@tidy/skill`)**: TidyFactor Community Skill.
    - The official TidyFactor Skills-LAB skill compliant with the 15 Structural Rules, SemVer SSOT, and bilingual documentation.
-5. **`apps/desktop`**: Electron Desktop Management GUI.
+6. **`packages/plugin` (`@tidy/plugin`)**: Universal Host Plugin & Adapters.
+   - Distribution package and host adapter layer (ChatGPT Plugin, Claude Code adapter, Cursor/Codex bridge) exposing TidyAgent capabilities to external AI hosts.
+7. **`apps/desktop`**: Electron Desktop Management GUI.
    - Native Windows x64 management dashboard (cross-platform ready for macOS and Linux).
    - Strict security architecture: `contextIsolation: true`, `nodeIntegration: false`, typed IPC messaging.
-6. **`apps/web`**: Web Management Console.
+8. **`apps/web`**: Web Management Console.
    - Server-backed web GUI dashboard for browser-based access and remote workspace inspection.
 
 ---
@@ -69,5 +73,22 @@ When authoring or modifying code in `apps/desktop/`:
    - Any external projects, reference models, or sample codebases shared or mounted in the workspace are strictly for **learning and reference patterns**.
    - Agents must **NEVER modify, mutate, or write to external reference projects**.
 3. **Primary Mission**:
-   - The primary objective is governing, maintaining, and advancing **Tidy as an Agent with persistent memory and skills** (`@tidy/core`, `@tidy/cli`, `@tidy/mcp`, `@tidy/skill`, `apps/desktop`, `apps/web`), its tools, marketing pages, and documentation.
+   - The primary objective is governing, maintaining, and advancing **Tidy as an Agent with persistent memory and skills** (`@tidy/core`, `@tidy/cli`, `@tidy/mcp`, `@tidy/skill`, `packages/office`, `packages/plugin`, `apps/desktop`, `apps/web`), its tools, marketing pages, and documentation.
+
+---
+
+## 🧠 6. TidyAgent Control Plane & Context Invariants
+
+1. **Host-Decoupled Philosophy**:
+   - Never couple agent reasoning, memory persistence, or skill execution to a specific proprietary host (ChatGPT, Claude, Codex, Cursor).
+   - Hosts are treated strictly as interchangeable execution environments/adapters. Core logic must reside in `@tidy/core`.
+2. **Context Compilation Discipline**:
+   - Never stream uncompiled raw conversation logs, entire database dumps, or dozens of skill manifests into an LLM context window.
+   - All prompts must be passed through the **Context Compiler**, which filters across the 5 Tiers (Global, Project, Task, Session, Working) to assemble the minimal necessary tokens.
+3. **Structured 8-Taxonomy Memory Contract**:
+   - Memory is never an unstructured chat transcript. All persisted nodes must be categorized into the 8 taxonomies: `Facts`, `Decisions`, `Preferences`, `Assets`, `References`, `Previous Outputs`, `Lessons`, or `Relationships`.
+4. **Plugin vs. Core Boundary Doctrine**:
+   - `packages/plugin` is strictly an adapter/distribution layer (manifests, schemas, RPC wrappers).
+   - All state mutations, SQLite queries, context compilation, and skill orchestration MUST be implemented in `@tidy/core`.
+
 
