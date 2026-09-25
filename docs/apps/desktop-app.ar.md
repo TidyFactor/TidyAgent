@@ -13,49 +13,49 @@
 ### 1. لوحة المتابعة والمؤشرات الحيوية (Overview & Telemetry)
 *متابعة حالة قاعدة البيانات، مساحة التخزين المستهلكة، نمط WAL، وعدادات الذاكرة، مع شريط الالتقاط السريع.*
 
-![لوحة التحكم العامة](../public/screenshots/desktop/overview.png)
+![لوحة التحكم العامة](../public/screenshots/desktop/ar/overview.png)
 
 ---
 
 ### 2. استوديو المهارات والوكلاء الشامل (Universal Skills & Agents Studio)
 *اكتشاف المهارات عبر كافة بيئات التطوير (Claude Code, Cursor, Antigravity, Windsurf)، محرر نصوص مونو-سبيس، شجرة AST متزامنة، وفاحص الامتثال لـ 15 قاعدة من معايير Skills-LAB.*
 
-![استوديو المهارات والوكلاء](../public/screenshots/desktop/skills-studio.png)
+![استوديو المهارات والوكلاء](../public/screenshots/desktop/ar/skills-studio.png)
 
 ---
 
 ### 3. مستكشف الذاكرة المعرفية (Memory Explorer — FTS5 BM25)
 *محرك بحث نصوص فائق السرعة، مع خوارزمية التراجع الزمني التلقائي (Decay Scoring) ومؤشرات النجوم وتصفية المجالات.*
 
-![مستكشف الذاكرة](../public/screenshots/desktop/memory-explorer.png)
+![مستكشف الذاكرة](../public/screenshots/desktop/ar/memory-explorer.png)
 
 ---
 
 ### 4. استوديو حصاد واستخراج المعارف (Knowledge Harvester Studio)
 *لوحتان مستقلتان (Master-Detail) لفحص عقول الوكلاء وملفات `~/.gemini/knowledge/**`، ومعاينة الماركداون الحية، والابتلاع الذري.*
 
-![استوديو حصاد المعارف](../public/screenshots/desktop/harvester.png)
+![استوديو حصاد المعارف](../public/screenshots/desktop/ar/harvester.png)
 
 ---
 
 ### 5. إدارة الصفقات والعملاء (Sovereign B2B CRM Pipeline)
 *تنظيم العملاء ومراحل الصفقات، تدوين الملاحظات التراكمية، واستخراج ملفات العملاء الاستخباراتية بالذكاء الاصطناعي.*
 
-![خط أنابيب العملاء](../public/screenshots/desktop/crm-pipeline.png)
+![خط أنابيب العملاء](../public/screenshots/desktop/ar/crm-pipeline.png)
 
 ---
 
 ### 6. الفواتير والتدفقات النقدية (Invoices & Live Cashflow)
 *إصدار فواتير مجزأة مع حساب آلي للضرائب والخصومات، وتتبع كشف الأرباح والخسائر وهامش الربحية اللحظي.*
 
-![الفواتير والتدفق المالي](../public/screenshots/desktop/invoices-billing.png)
+![الفواتير والتدفق المالي](../public/screenshots/desktop/ar/invoices-billing.png)
 
 ---
 
 ### 7. نافذة المساعد الشفافة العائمة (Global Floating HUD)
 *استدعاء فوري في أقل من 10ms عبر الاختصار `Alt + Space` للبحث السريع في الذاكرة وتدوين القرارات وتفويض المهام.*
 
-![نافذة المساعد العائمة](../public/screenshots/desktop/hud-floating.png)
+![نافذة المساعد العائمة](../public/screenshots/desktop/ar/hud-floating.png)
 
 </div>
 

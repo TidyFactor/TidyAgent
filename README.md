@@ -72,6 +72,8 @@ Tidy features a first-class, sovereign desktop management suite built natively f
 
 </div>
 
+> 🌐 **Bilingual Interface**: Tidy Studio dynamically supports 8 languages with full RTL/LTR switching. The screenshots above showcase the **English (LTR)** interface. For the native **Arabic (RTL)** gallery, see [دليل استوديو سطح المكتب بالعربية](docs/apps/desktop-app.ar.md) or browse [docs/public/screenshots/desktop/ar/](docs/public/screenshots/desktop/ar/).
+
 ### 🌟 Desktop App Highlights (14 Built-in Tabs)
 1. **Overview**: Executive dashboard with live SQLite telemetry, system health, and quick-action memory capture.
 2. **Skills & Agents Studio**: Built-in IDE scanner, code editor with syntax tree synchronization, and Skills-LAB 15-rule compliance engine.

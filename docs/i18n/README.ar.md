@@ -56,17 +56,17 @@
 
 | **1. لوحة المتابعة والمؤشرات الحيوية** | **2. استوديو المهارات والوكلاء الشامل** |
 |:---:|:---:|
-| ![لوحة التحكم](../public/screenshots/desktop/overview.png) | ![استوديو المهارات](../public/screenshots/desktop/skills-studio.png) |
+| ![لوحة التحكم](../public/screenshots/desktop/ar/overview.png) | ![استوديو المهارات](../public/screenshots/desktop/ar/skills-studio.png) |
 | *إحصائيات WAL اللحظية، مؤشرات الذاكرة، والالتقاط السريع* | *محرر أكواد مونو-سبيس، مزامنة AST، وفحص القواعد الـ 15* |
 
 | **3. مستكشف الذاكرة FTS5 BM25** | **4. استوديو حصاد واستخراج المعارف** |
 |:---:|:---:|
-| ![مستكشف الذاكرة](../public/screenshots/desktop/memory-explorer.png) | ![حصاد المعارف](../public/screenshots/desktop/harvester.png) |
+| ![مستكشف الذاكرة](../public/screenshots/desktop/ar/memory-explorer.png) | ![حصاد المعارف](../public/screenshots/desktop/ar/harvester.png) |
 | *بحث لحظي عبر الحلقات الثلاث مع خوارزمية التراجع الزمني* | *لوحتان لفحص عقول الوكلاء وحصاد المعارف بضغطة زر* |
 
 | **5. خط أنابيب العملاء (CRM)** | **6. الفواتير والتدفق المالي اللحظي** |
 |:---:|:---:|
-| ![إدارة العملاء](../public/screenshots/desktop/crm-pipeline.png) | ![الفواتير والتدفق المالي](../public/screenshots/desktop/invoices-billing.png) |
+| ![إدارة العملاء](../public/screenshots/desktop/ar/crm-pipeline.png) | ![الفواتير والتدفق المالي](../public/screenshots/desktop/ar/invoices-billing.png) |
 | *متابعة الصفقات، ميزانيات المشاريع، والملفات الاستخباراتية* | *إصدار الفواتير الآلية وحساب الضرائب وكشف الأرباح* |
 
 </div>

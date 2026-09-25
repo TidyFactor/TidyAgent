@@ -60,13 +60,16 @@ function createWindow() {
 
   if (process.env.TIDY_CAPTURE === '1') {
     const fs = require('fs');
-    const outDir = path.resolve(__dirname, '../../../../docs/public/screenshots/desktop');
-    if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, { recursive: true });
+    const baseDir = path.resolve(__dirname, '../../../../docs/public/screenshots/desktop');
+    const arDir = path.join(baseDir, 'ar');
+    const enDir = path.join(baseDir, 'en');
+
+    for (const d of [baseDir, arDir, enDir]) {
+      if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
     }
 
     mainWindow.webContents.on('did-finish-load', async () => {
-      console.log('[CAPTURE] Window loaded, preparing automated screenshots...');
+      console.log('[CAPTURE] Window loaded, preparing dual-locale screenshots (English & Arabic)...');
       await new Promise(r => setTimeout(r, 2500));
 
       const tabs = [
@@ -82,33 +85,70 @@ function createWindow() {
         { tab: 'cashflow', file: 'cashflow.png' }
       ];
 
+      // 1. Capture Arabic Screenshots (RTL)
+      console.log('[CAPTURE] >>> Capturing Arabic (RTL) Screenshots...');
+      try {
+        await mainWindow.webContents.executeJavaScript(`(async () => { if (typeof applyLanguage === 'function') await applyLanguage('ar'); })()`);
+      } catch (e) {
+        console.error('[CAPTURE] Error applying Arabic locale:', e);
+      }
+      await new Promise(r => setTimeout(r, 1500));
+
       for (const item of tabs) {
-        console.log(`[CAPTURE] Capturing view: ${item.tab} -> ${item.file}`);
         try {
           await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("${item.tab}");`);
-        } catch (e) {
-          console.error('[CAPTURE] Error switching tab:', e);
-        }
-        await new Promise(r => setTimeout(r, 1200));
+        } catch (e) {}
+        await new Promise(r => setTimeout(r, 1000));
         const image = await mainWindow.webContents.capturePage();
-        const targetPath = path.join(outDir, item.file);
-        fs.writeFileSync(targetPath, image.toPNG());
-        console.log(`[CAPTURE] Saved: ${targetPath}`);
+        fs.writeFileSync(path.join(arDir, item.file), image.toPNG());
+        console.log(`[CAPTURE AR] Saved: ar/${item.file}`);
       }
 
-      // Capture HUD simulation
-      console.log('[CAPTURE] Capturing HUD...');
       mainWindow.setSize(920, 580);
       mainWindow.center();
       try {
         await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("overview");`);
       } catch (e) {}
       await new Promise(r => setTimeout(r, 800));
-      const hudImg = await mainWindow.webContents.capturePage();
-      fs.writeFileSync(path.join(outDir, 'hud-floating.png'), hudImg.toPNG());
-      console.log('[CAPTURE] Saved hud-floating.png');
+      const arHud = await mainWindow.webContents.capturePage();
+      fs.writeFileSync(path.join(arDir, 'hud-floating.png'), arHud.toPNG());
 
-      console.log('[CAPTURE] All 11 screenshots generated successfully!');
+      // Reset window size for English captures
+      mainWindow.setSize(1280, 840);
+      mainWindow.center();
+
+      // 2. Capture English Screenshots (LTR)
+      console.log('[CAPTURE] >>> Capturing English (LTR) Screenshots...');
+      try {
+        await mainWindow.webContents.executeJavaScript(`(async () => { if (typeof applyLanguage === 'function') await applyLanguage('en'); })()`);
+      } catch (e) {
+        console.error('[CAPTURE] Error applying English locale:', e);
+      }
+      await new Promise(r => setTimeout(r, 1500));
+
+      for (const item of tabs) {
+        try {
+          await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("${item.tab}");`);
+        } catch (e) {}
+        await new Promise(r => setTimeout(r, 1000));
+        const image = await mainWindow.webContents.capturePage();
+        const pngBuf = image.toPNG();
+        fs.writeFileSync(path.join(enDir, item.file), pngBuf);
+        fs.writeFileSync(path.join(baseDir, item.file), pngBuf); // default root screenshots are English
+        console.log(`[CAPTURE EN] Saved: en/${item.file} and base/${item.file}`);
+      }
+
+      mainWindow.setSize(920, 580);
+      mainWindow.center();
+      try {
+        await mainWindow.webContents.executeJavaScript(`if (typeof switchTab === 'function') switchTab("overview");`);
+      } catch (e) {}
+      await new Promise(r => setTimeout(r, 800));
+      const enHud = await mainWindow.webContents.capturePage();
+      fs.writeFileSync(path.join(enDir, 'hud-floating.png'), enHud.toPNG());
+      fs.writeFileSync(path.join(baseDir, 'hud-floating.png'), enHud.toPNG());
+
+      console.log('[CAPTURE] Complete! All Arabic and English screenshots generated successfully.');
       app.quit();
     });
   }

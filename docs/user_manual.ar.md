@@ -369,11 +369,11 @@ node bin/tidy.js import-pocketoffice --source ./path/to/PocketOffice-Data
 
 | لوحة التحكم والمؤشرات الحيوية | استوديو المهارات والوكلاء الشامل |
 |:---:|:---:|
-| ![لوحة التحكم](public/screenshots/desktop/overview.png) | ![استوديو المهارات](public/screenshots/desktop/skills-studio.png) |
+| ![لوحة التحكم](public/screenshots/desktop/ar/overview.png) | ![استوديو المهارات](public/screenshots/desktop/ar/skills-studio.png) |
 
 | مستكشف الذاكرة المعرفية FTS5 | استوديو حصاد واستخراج المعارف |
 |:---:|:---:|
-| ![مستكشف الذاكرة](public/screenshots/desktop/memory-explorer.png) | ![حصاد المعارف](public/screenshots/desktop/harvester.png) |
+| ![مستكشف الذاكرة](public/screenshots/desktop/ar/memory-explorer.png) | ![حصاد المعارف](public/screenshots/desktop/ar/harvester.png) |
 
 </div>
 
