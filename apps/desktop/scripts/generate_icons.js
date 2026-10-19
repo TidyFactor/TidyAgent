@@ -118,9 +118,9 @@ function createIco(pngBuffer, size = 64) {
   return Buffer.concat([header, entry, pngBuffer]);
 }
 
-// Generate files
-const pngBuffer = createPng(64, 64);
-const icoBuffer = createIco(pngBuffer, 64);
+// Generate files (256x256 required by Windows / electron-builder)
+const pngBuffer = createPng(256, 256);
+const icoBuffer = createIco(pngBuffer, 256);
 
 const pngPath = path.join(ASSETS_DIR, 'icon.png');
 const icoPath = path.join(ASSETS_DIR, 'icon.ico');

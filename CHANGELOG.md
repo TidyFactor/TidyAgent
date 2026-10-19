@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Desktop Application Windows x64 Executable Packaging (`apps/desktop`)**:
+  - Configured `electron-builder` file mapping to bundle monorepo kernel packages (`@tidy/core`, `@tidy/office`, `@tidy/mcp`) directly into `node_modules` inside `app.asar`.
+  - Pinned exact Electron runtime version (`44.2.0`) in `apps/desktop/package.json` and build metadata for reproducible packaging.
+  - Upgraded icon generator script (`apps/desktop/scripts/generate_icons.js`) to generate high-resolution 256x256 Windows ICO and PNG assets required by `electron-builder`.
+  - Added root monorepo build scripts (`npm run desktop:build`, `npm run desktop:build:portable`, `npm run desktop:build:nsis`).
+  - Successfully produced Windows x64 standalone portable executable: `apps/desktop/dist/Tidy-Studio-Portable-1.4.5.exe`.
+
 ## [1.8.0] - 2026-09-26
 
 ### Added

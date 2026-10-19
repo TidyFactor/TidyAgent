@@ -13,10 +13,11 @@
   "license": "Apache-2.0",
   "author": "TidyFactor Team",
   "devDependencies": {
-    "electron": "^44.2.0",
+    "electron": "44.2.0",
     "electron-builder": "^26.15.3"
   },
   "build": {
+    "electronVersion": "44.2.0",
     "appId": "com.tidyfactor.tidy",
     "productName": "Tidy Studio",
     "win": {
@@ -51,6 +52,35 @@
     "directories": {
       "output": "dist",
       "buildResources": "assets"
-    }
+    },
+    "files": [
+      "package.json",
+      "src/**/*",
+      "assets/**/*",
+      {
+        "from": "../../packages/core",
+        "to": "node_modules/@tidy/core",
+        "filter": [
+          "**/*",
+          "!**/tests/**"
+        ]
+      },
+      {
+        "from": "../../packages/office",
+        "to": "node_modules/@tidy/office",
+        "filter": [
+          "**/*",
+          "!**/tests/**"
+        ]
+      },
+      {
+        "from": "../../packages/mcp",
+        "to": "node_modules/@tidy/mcp",
+        "filter": [
+          "**/*",
+          "!**/tests/**"
+        ]
+      }
+    ]
   }
 }
